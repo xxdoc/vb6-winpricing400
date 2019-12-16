@@ -1,0 +1,9 @@
+Line 31: Class prjFarmManagem.uctlTextLookup of control uctlTypeLookup was not a loaded control class.
+Line 40: Class prjFarmManagem.uctlTextBox of control txtEmpName was not a loaded control class.
+Line 49: Class prjFarmManagem.uctlTextBox of control txtEmpCode was not a loaded control class.
+Line 37: The property name _ExtentX in uctlTypeLookup is invalid.
+Line 38: The property name _ExtentY in uctlTypeLookup is invalid.
+Line 46: The property name _ExtentX in txtEmpName is invalid.
+Line 47: The property name _ExtentY in txtEmpName is invalid.
+Line 55: The property name _ExtentX in txtEmpCode is invalid.
+Line 56: The property name _ExtentY in txtEmpCode is invalid.

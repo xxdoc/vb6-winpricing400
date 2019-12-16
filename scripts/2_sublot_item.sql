@@ -1,0 +1,14 @@
+CREATE TABLE SUBLOT_ITEM
+(
+   SUBLOT_ITEM_ID        ID_TYPE NOT NULL,
+   LOT_ITEM_ID           ID_TYPE NOT NULL,
+   FROM_LOT_ID           ID_TYPE,
+   SUBLOT_AMT            MONEY_TYPE,
+   PREVIOUS_AMT          MONEY_TYPE,
+   NEXT_AMT              MONEY_TYPE,
+
+   CREATE_DATE           DATE_TYPE NOT NULL,
+   CREATE_BY             ID_TYPE NOT NULL,
+   MODIFY_DATE           DATE_TYPE NOT NULL,
+   MODIFY_BY             ID_TYPE NOT NULL
+);

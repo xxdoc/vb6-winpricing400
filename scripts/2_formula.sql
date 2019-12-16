@@ -1,0 +1,20 @@
+CREATE TABLE FORMULA
+(
+   FORMULA_ID            ID_TYPE NOT NULL,
+   FORMULA_CODE          CODE_TYPE,
+   FORMULA_NAME          NAME_TYPE,
+   FORMULA_DATE          DATE_TYPE,
+   FORMULA_TYPE          ID_TYPE,
+   PART_ITEM_ID          ID_TYPE,
+   MANUAL_FLAG           FLAG_TYPE,
+   LOSS_PERCENT          MONEY_TYPE,
+   OVERHEAD_MARKUP       MONEY_TYPE,
+   CAN_MARKUP            MONEY_TYPE,
+   RMC                   MONEY_TYPE,
+   PMC                   MONEY_TYPE,
+
+   CREATE_DATE           DATE_TYPE NOT NULL,
+   CREATE_BY             ID_TYPE NOT NULL,
+   MODIFY_DATE           DATE_TYPE NOT NULL,
+   MODIFY_BY             ID_TYPE NOT NULL
+);

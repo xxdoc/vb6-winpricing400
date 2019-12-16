@@ -1,0 +1,7 @@
+Line 21: Class Threed.SSFrame of control SSFrame1 was not a loaded control class.
+Line 78: Class Threed.SSPanel of control pnlHeader was not a loaded control class.
+Line 149: Class Threed.SSCommand of control cmdSelectAll was not a loaded control class.
+Line 162: Class Threed.SSCommand of control cmdSelect was not a loaded control class.
+Line 175: Class Threed.SSCommand of control cmdSearch was not a loaded control class.
+Line 212: Class Threed.SSCommand of control cmdOK was not a loaded control class.
+Line 225: Class Threed.SSCommand of control cmdExit was not a loaded control class.

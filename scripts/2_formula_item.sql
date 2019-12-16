@@ -1,0 +1,22 @@
+CREATE TABLE FORMULA_ITEM
+(
+   FORMULA_ITEM_ID       ID_TYPE NOT NULL,
+   FORMULA_ID            ID_TYPE,
+   COMPONENT_ID          ID_TYPE,
+   PART_ITEM_ID          ID_TYPE,
+   ITEM_TYPE             CODE_TYPE,
+   PRICE_TYPE            CODE_TYPE,
+   ITEM_PERCENT          PERCENT_TYPE,
+   ITEM_AVG_COST         MONEY_TYPE,
+   ITEM_LAST_COST        MONEY_TYPE,
+   ITEM_USER_COST        MONEY_TYPE,
+   ITEM_DESC             DESC_TYPE,
+   INSERT_FLAG           FLAG_TYPE,
+   INSERT_TEXT           DESC_TYPE,
+   ITEM_SEQ              ID_TYPE,
+
+   CREATE_DATE           DATE_TYPE NOT NULL,
+   CREATE_BY             ID_TYPE NOT NULL,
+   MODIFY_DATE           DATE_TYPE NOT NULL,
+   MODIFY_BY             ID_TYPE NOT NULL
+);

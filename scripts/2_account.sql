@@ -1,0 +1,20 @@
+CREATE TABLE ACCOUNT
+(
+   ACCOUNT_ID            ID_TYPE NOT NULL,
+   ACCOUNT_NO            CODE_TYPE NOT NULL,
+   CUSTOMER_ID           ID_TYPE NOT NULL,
+   ACCOUNT_TYPE          ID_TYPE,
+   ACCOUNT_STATUS        ID_TYPE,
+   NOTE                  DESC_TYPE,
+   DEALER_CODE           ID_TYPE,
+   CHANNEL_ID            ID_TYPE,
+   CREDIT                CREDIT_TYPE,
+   ENABLE_FLAG           FLAG_TYPE,
+   MASTER_FLAG           FLAG_TYPE,
+
+
+   CREATE_DATE           DATE_TYPE NOT NULL,
+   CREATE_BY             ID_TYPE NOT NULL,
+   MODIFY_DATE           DATE_TYPE NOT NULL,
+   MODIFY_BY             ID_TYPE NOT NULL
+)

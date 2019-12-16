@@ -1,0 +1,99 @@
+VERSION 5.00
+Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
+Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
+Begin VB.Form frmTextBoxLookup 
+   BackColor       =   &H80000000&
+   BorderStyle     =   1  'Fixed Single
+   ClientHeight    =   6825
+   ClientLeft      =   45
+   ClientTop       =   330
+   ClientWidth     =   7275
+   Icon            =   "frmTextBoxLookup.frx":0000
+   KeyPreview      =   -1  'True
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   6825
+   ScaleWidth      =   7275
+   StartUpPosition =   1  'CenterOwner
+   Begin Threed.SSFrame SSFrame1 
+      Height          =   6855
+      Left            =   0
+      TabIndex        =   2
+      Top             =   0
+      Width           =   7335
+      _ExtentX        =   12938
+      _ExtentY        =   12091
+      _Version        =   131073
+      PictureBackgroundStyle=   2
+      Begin Threed.SSPanel pnlHeader 
+         Height          =   705
+         Left            =   0
+         TabIndex        =   3
+         Top             =   0
+         Width           =   7245
+         _ExtentX        =   12779
+         _ExtentY        =   1244
+         _Version        =   131073
+         PictureBackgroundStyle=   2
+      End
+      Begin GridEX20.GridEX GridEX1 
+         Height          =   5445
+         Left            =   60
+         TabIndex        =   1
+         Top             =   1350
+         Width           =   7185
+         _ExtentX        =   12674
+         _ExtentY        =   9604
+         Version         =   "2.0"
+         BoundColumnIndex=   ""
+         ReplaceColumnIndex=   ""
+         TabKeyBehavior  =   1
+         MethodHoldFields=   -1  'True
+         AllowColumnDrag =   0   'False
+         AllowEdit       =   0   'False
+         BorderStyle     =   3
+         GroupByBoxVisible=   0   'False
+         DataMode        =   99
+         HeaderFontName  =   "AngsanaUPC"
+         HeaderFontBold  =   -1  'True
+         HeaderFontSize  =   14.25
+         HeaderFontWeight=   700
+         FontSize        =   9.75
+         BackColorBkg    =   16777215
+         ColumnHeaderHeight=   480
+         IntProp1        =   0
+         IntProp2        =   0
+         IntProp7        =   0
+         ColumnsCount    =   2
+         Column(1)       =   "frmTextBoxLookup.frx":27A2
+         Column(2)       =   "frmTextBoxLookup.frx":286A
+         FormatStylesCount=   5
+         FormatStyle(1)  =   "frmTextBoxLookup.frx":290E
+         FormatStyle(2)  =   "frmTextBoxLookup.frx":2A6A
+         FormatStyle(3)  =   "frmTextBoxLookup.frx":2B1A
+         FormatStyle(4)  =   "frmTextBoxLookup.frx":2BCE
+         FormatStyle(5)  =   "frmTextBoxLookup.frx":2CA6
+         ImageCount      =   0
+         PrinterProperties=   "frmTextBoxLookup.frx":2D5E
+      End
+      Begin prjFarmManagement.uctlTextBox txtSearchText 
+         Height          =   435
+         Left            =   1680
+         TabIndex        =   0
+         Top             =   840
+         Width           =   4545
+         _ExtentX        =   13309
+         _ExtentY        =   767
+      End
+      Begin VB.Label lblSearchText 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Label1"
+         Height          =   435
+         Left            =   30
+         TabIndex        =   4
+         Top             =   900
+         Width           =   1635
+      End
+   End
+End

@@ -1,0 +1,1806 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "CLotItemWH"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private m_Conn As ADODB.Connection
+
+Public AddEditMode As SHOW_MODE_TYPE
+Public QueryFlag As Long
+Public OrderBy As Long
+Public OrderType As Long
+Public Flag As String
+Public Flag2 As String
+' End of generic data member
+
+Public LOT_ITEM_WH_ID As Long
+Public INVENTORY_WH_DOC_ID As Long
+Public PART_ITEM_ID As Long
+Public LOCATION_ID As Long
+Public LOCATION_REST_ID As Long
+Public LOCATION_LOSE_ID As Long
+Public FEATURE_ID As Long
+Public ACTUAL_UNIT_PRICE As Double
+Public INCLUDE_UNIT_PRICE As Double
+Public PREVIOUS_PRICE As Double
+Public PREVIOUS_AMOUNT As Double
+Public NEW_PRICE As Double
+Public TX_AMOUNT As Double
+Public NEW_AMOUNT As Double
+Public TRANSACTION_SEQ As Long
+Public GUI_ID As Long
+Public CALCULATE_FLAG As String
+Public FATHER_NO As String
+Public MOTHER_NO As String
+Public TOTAL_WEIGHT As Double
+Public TOTAL_ACTUAL_PRICE As Double
+Public TOTAL_INCLUDE_PRICE As Double
+Public TX_TYPE As String
+Public LEFT_AMOUNT As Double
+Public LOT_MANUAL As String
+Public MULTIPLIER As Long
+Public LAYOUT_ID As Long
+Public LINK_ID As Long
+Public PACKAGING_AMT As Double
+Public ENTRY_WEIGHT As Double
+Public EXIT_WEIGHT As Double
+Public EXPORT_AMOUNT As Double
+Public WEIGHT_AMOUNT As Double
+Public PACKAGE_WEIGHT As Double
+Public OTHER_WEIGHT As Double
+Public PERCENT_HUMID As Double
+Public HUMID_WEIGHT As Double
+Public PACKAGING_ID As Long
+Public SUPPLIER_WEIGHT As Double
+Public CALCULATE_TYPE As Long
+Public PACKAGE_AMOUNT As Double
+Public ACTUAL_PKG_AMOUNT As Double
+Public PUREXP_ID1 As Long
+Public PUREXP_ID2 As Long
+Public EXPENSE1 As Double
+Public EXPENSE2 As Double
+Public RAW_PRICE As Double
+Public DISCOUNT_AMT As Double
+Public RAW_TOT_PRICE As Double
+Public ITEM_DESC As String
+Public TO_DEPARTMENT As Long
+Public EXTRA_NAME As String
+Public SALE_TOT_PRICE As Double
+Public CALCULATE_WEIGHT As Double
+Public TOTAL_NEW_PRICE As Double
+Public BAG_RETURN As String
+Public ADJUST_FLAG As String
+Public AUTO_PRICE As String
+Public ACTUAL_AMOUNT As Double
+Public ACTUAL_PRICE As Double
+Public CURRENT_AMOUNT As Double
+Public CURRENT_PRICE As Double
+Public NEED_TOTAL_AMOUNT As Double
+Public NEED_TOTAL_PRICE As Double
+Public NEED_AVG_PRICE As Double
+Public MANUAL_PRICE As String
+Public DOCUMENT_TYPE_SET As String
+Public CUSTOMER_TYPE As Long
+Public CUSTOMER_NAME As String
+
+
+'Public CURRENT_AMOUNT As Double
+Public BALANCE_AMOUNT As Double
+Public ALL_IMPORT_AMT As Double
+Public ALL_EXPORT_AMT As Double
+Public EXPORT_AVG_PRICE As Double
+Public EXPORT_TOTAL_PRICE As Double
+Public IMPORT_AMOUNT As Double
+
+Public PRODUCT_ID As Long
+Public PRODUCT_NO As String
+Public PRODUCT_NAME As String
+Public PART_NO As String
+Public PART_DESC As String
+Public PART_TYPE As Long
+Public PART_TYPE_NAME As String
+Public PART_TYPE_NO As String
+Public PART_TYPE_ID As Long
+Public LOCATION_NO As String
+Public LOCATION_NAME As String
+Public LOCATION_NAME_IN As String
+Public LOCATION_NAME_OUT As String
+Public LOCATION_NAME_IN_BAL As String
+Public LOCATION_NAME_OUT_BAL  As String
+Public OLD_TX_AMOUNT As Double
+Public OLD_LOCATION_ID As Long
+Public PIG_TYPE As String
+Public UNIT_NAME As String
+Public DOCUMENT_DATE As Date
+Public COMMIT_FLAG As String
+Public DOCUMENT_TYPE As Long
+Public PIG_FLAG As String
+Public SUM_ALL_IMPORT_AMT As Double
+Public SUM_ALL_IMPORT As Double
+Public SALE_FLAG As String
+Public DOCUMENT_NO As String
+Public SUPPLIER_ID As Long
+Public QUE_NO As String
+Public RECEIVE_NAME As String
+Public TRUCK_NO As String
+Public SUPPLIER_CODE As String
+Public SUPPLIER_NAME As String
+Public SUPPLIER_TYPE As Long
+Public RAW_COST As Double
+Public EXPENSE_COST  As Double
+Public PROCESS_ID As Long
+Public EXPENSE_TYPE As Long
+Public SENDER_NAME As String
+Public PROJECT_NAME_ID As Long
+
+Public FROM_TX_TYPE As String
+Public FROM_DATE As Date
+Public TO_DATE As Date
+Public TO_DATE1 As Date
+Public FROM_PACK_DATE As Date
+Public TO_PACK_DATE As Date
+Public ENTRY_DATE As Date
+Public EXIT_DATE As Date
+Public USED_AMOUNT As Double
+Public FROM_LOCATION As String
+Public TO_LOCATION As String
+Public FROM_LOCATION_ID As Long
+Public TO_LOCATION_ID As Long
+Public PRIORITY1 As Long
+Public PACKAGING_CODE As String
+Public PUREXP_NO1 As String
+Public PUREXP_NO2 As String
+Public PUREXP_NAME1 As String
+Public PUREXP_NAME2 As String
+Public EXPENSE_RATE1 As Double
+Public EXPENSE_RATE2 As Double
+Public PART_GROUP_ID As Long
+Public EXPENSE_NAME As String
+Public DEP_NAME As String
+Public DEP_NO As String
+Public DO_NO As String
+Public PO_ID As Long
+Public ITEM_DESC_ID As Long
+Public ITEM_DESC_NO As String
+Public ITEM_DESC_NAME As String
+Public PROJECT_ID  As Long
+Public PROJECT_NAME As String
+
+Public DEPARTMENT_NAME As String
+Public CSTTYPE_NAME As String
+Public PR_NO As String
+Public YYYYMM  As String
+Public HiFlag As Boolean
+
+'Public LOT_ID As Long
+Public LOT_DOC_ID As Long
+Public LOT_ID As Long
+Public LOT_DOC_ID_REF As Long
+Public LOT_NO As String
+Public BIN_NO As Long
+Public BIN_NAME As String
+Public LOCK_NO As Long
+Public LOCK_NAME As String
+Public HEAD_PACK_NO As Long
+Public HEAD_PACK_NAME As String
+Public PALLET_NO As Long
+Public PALLET_NAME As String
+Public GOOD_AMOUNT As Double
+'Public BALANCE_AMOUNT As Double
+Public PAYOFF_AMOUNT As Long
+Public WEIGHT_PER_PACK As Double
+Public MIX_DATE As Date
+Public START_DATE As Date
+Public BL_START_DATE As Date
+Public BARCODE_NO As String
+Public BILL_DESC As String
+Public FULL_PALLET_FROM As Long
+Public FULL_PALLET_TO As Long
+Public FULL_UNIT_PER_PALLET As Long
+Public SCRAP_PALLET As Long
+Public SCRAP_UNIT_PER_PALLET As Long
+Public PACK_AMOUNT As Double
+
+Public TX_TYPE_I  As String
+Public BIN_NAME_I As String
+Public LOCK_NAME_I As String
+
+Public PRODUCT_TYPE_ID As Long
+Public PRODUCT_TYPE_NAME As String
+Public LOSE_AMOUNT As Double
+Public REST_AMOUNT As Double
+Public PACK_DATE As Date
+Public TIME_PACK_BEGIN As Date
+Public TIME_PACK_END As Date
+Public NOTE As String
+Public CAPACITY_AMOUNT As Double
+Public BILLING_DOC_ID As Long
+Public BALANCE_FLAG As String
+Public DOCUMENT_NO_SO As String
+Public CANCEL_FLAG As String
+Public LOAD_TRUE As Double
+Public LOAD_AMOUNT_FLAG As String
+Public VERIFY_FLAG As String
+Public FEATURE_CODE As String
+Public FEATURE_DESC As String
+
+Public InputRebagToBagType As Long 'ตัดแตกหรือ ถ่ายถุง
+Public SubLotItems As Collection
+Public IncludeFlag As Boolean
+Public C_LotDoc As Collection
+Private Sub Class_Initialize()
+   Set m_Conn = glbDatabaseMngr.DBConnection
+   FROM_DATE = -1
+   TO_DATE = -1
+   DOCUMENT_DATE = -1
+   MIX_DATE = -1
+   START_DATE = -1
+   FROM_PACK_DATE = -1
+   TO_PACK_DATE = -1
+
+   Set SubLotItems = New Collection
+   Set C_LotDoc = New Collection
+End Sub
+
+'In this class we will not handle any error or any transaction
+Public Function QueryData(Ind As Long, Rs As ADODB.Recordset, ItemCount As Long, Optional MustCount As Boolean = True)
+Dim SQL1 As String
+Dim SQL2 As String
+Dim SelectStr1 As String
+Dim SelectStr2 As String
+Dim FromStr As String
+Dim WhereStr As String
+Dim OrderByStr As String
+Dim OrderTypeStr As String
+Dim TempDate As String
+Dim SubLen As Long
+Dim NewStr As String
+Dim GroupByStr As String
+
+   If Ind = 1 Then 'ใช้แล้ว
+         SelectStr1 = "SELECT LIW.*, PT.*, LC.*,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC, UN.*, IVD.ADJUST_FLAG, IVD.SUPPLIER_ID, IVD.DOCUMENT_DATE, IVD.START_DATE, IVD.DOCUMENT_NO, IVD.COMMIT_FLAG, IVD.DOCUMENT_TYPE, IVD.QUE_NO, IVD.RECEIVE_NAME, IVD.TRUCK_NO, IVD.DO_NO, IVD.SENDER_NAME, SP.SUPPLIER_CODE, NM1.LONG_NAME SUPPLIER_NAME, DP.PRIORITY1, PT.PART_GROUP_ID PART_GROUP_ID1,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,LC4.LOCATION_NAME HEAD_PACK_NAME,MR2.KEY_NAME PRODUCT_TYPE_NAME "
+      SelectStr1 = SelectStr1 & ",IVD.PR_NO "
+      SelectStr1 = SelectStr1 & ",IVD.ENTRY_DATE,IVD.EXIT_DATE,LTD.LOT_DOC_ID,LT.LOT_NO,BD.DOCUMENT_NO  DOCUMENT_NO_SO "
+      
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN UNIT UN ON (PI.UNIT_COUNT = UN.UNIT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER_NAME SN ON (SN.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN NAME NM1 ON (SN.NAME_ID = NM1.NAME_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN DOCUMENT_PRIORITY DP ON ((IVD.DOCUMENT_TYPE = DP.DOCUMENT_TYPE) AND (LIW.TX_TYPE = DP.TX_TYPE) AND (DP.AREA = 1)) "
+      FromStr = FromStr & "LEFT OUTER JOIN MASTER_REF MR2 ON (MR2.KEY_ID = LIW.PRODUCT_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN BILLING_DOC BD ON (LIW.BILLING_DOC_ID = BD.BILLING_DOC_ID) "
+      WhereStr = ""
+   ElseIf Ind = 2 Then 'ดึงเฉพาะสินค้าที่มีเหลือ ตามเบอร์อาหาร และ น้ำหนักถุง
+'''      SelectStr1 = "SELECT LIW.PART_ITEM_ID,IVD.START_DATE,IVD.DOCUMENT_TYPE,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.BIN_NO,LIW.LOCK_NO,LIW.HEAD_PACK_NO,LIW.BL_START_DATE,LIW.TX_TYPE,"
+'''      SelectStr1 = SelectStr1 & "LIW.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,LIW.PACK_DATE,LIW.TIME_PACK_BEGIN,LIW.TIME_PACK_END  "
+'''      SelectStr2 = "SELECT COUNT(*)  "
+'''
+'''      FromStr = "FROM LOT_ITEM_WH LIW "
+'''      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+'''
+'''      WhereStr = ""
+      
+      SelectStr1 = "SELECT LIW.PART_ITEM_ID,IVD.START_DATE,IVD.DOCUMENT_TYPE,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.BIN_NO,LIW.LOCK_NO,LIW.HEAD_PACK_NO,LIW.BL_START_DATE,LIW.TX_TYPE,"
+      SelectStr1 = SelectStr1 & "LIW.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,LIW.PACK_DATE,LIW.TIME_PACK_BEGIN,LIW.TIME_PACK_END  "
+      SelectStr2 = "SELECT COUNT(*)  "
+  
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN (SELECT DISTINCT IVD2.INVENTORY_WH_DOC_ID,IVD2.START_DATE,IVD2.DOCUMENT_TYPE,IVD2.DOCUMENT_DATE,J.VERIFY_FLAG FROM INVENTORY_WH_DOC IVD2 "
+     FromStr = FromStr & "INNER JOIN JOB J ON (IVD2.INVENTORY_WH_DOC_ID =J.INVENTORY_WH_DOC_ID)) AS IVD ON (LIW.INVENTORY_WH_DOC_ID =IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+'
+      WhereStr = ""
+      
+ElseIf Ind = 3 Then 'ดึงเฉพาะสินค้าที่มีเหลือ ตามเบอร์อาหาร และ น้ำหนักถุง และ sum รวมยอดทั้งหมดใน pallet ของแต่ล่ะสินค้า ที่รับเข้า
+      SelectStr1 = "SELECT LIW.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.BIN_NO,LIW.LOCK_NO,LIW.HEAD_PACK_NO,LIW.TX_TYPE,LIW.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,SUM(PD.CAPACITY_AMOUNT) CAPACITY_AMOUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PALLET_DOC PD ON (LTD.LOT_DOC_ID = PD.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+
+      WhereStr = ""
+   ElseIf Ind = 4 Then 'ใช้แล้ว
+      SelectStr1 = "SELECT LIW.BIN_NO,LC2.LOCATION_NAME BIN_NAME "
+      SelectStr2 = "SELECT COUNT(*)  "
+            
+      WhereStr = ""
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+   ElseIf Ind = 5 Then 'ใช้แล้ว
+      SelectStr1 = "SELECT LIW.LOCK_NO,LC3.LOCATION_NAME LOCK_NAME "
+      SelectStr2 = "SELECT COUNT(*)  "
+            
+      WhereStr = ""
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+   ElseIf Ind = 6 Then 'ดึงเฉพาะสินค้าที่มีเหลือ ตามเบอร์อาหาร และ น้ำหนักถุง และ sum รวมยอดทั้งหมดใน pallet ของแต่ล่ะสินค้า ที่จ่ายออก
+      SelectStr1 = "SELECT LIW.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID_REF,LT.LOT_ID,LT.LOT_NO,LIW2.BIN_NO,LIW2.LOCK_NO,LIW2.HEAD_PACK_NO,LIW2.TX_TYPE,LIW2.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,SUM(PD.CAPACITY_AMOUNT) CAPACITY_AMOUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD2 ON (LTD.LOT_DOC_ID_REF = LTD2.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LTD2.LOT_ITEM_WH_ID =LIW2.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PALLET_DOC PD ON (LTD.LOT_DOC_ID = PD.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW2.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW2.LOCATION_ID = LC.LOCATION_ID) " ' FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW2.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW2.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW2.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW2.HEAD_PACK_NO = LC4.LOCATION_ID) "
+
+      WhereStr = ""
+    ElseIf Ind = 7 Then 'ดึงเฉพาะสินค้าสำเร็จรูปทั้งหมดที่ไม่ซ้ำกัน
+      SelectStr1 = "SELECT DISTINCT LIW.PART_ITEM_ID,PI.WEIGHT_PER_PACK,LIW.BL_START_DATE,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,IVD.DOCUMENT_TYPE  "
+      SelectStr2 = "SELECT COUNT(*)  "
+
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+
+      WhereStr = ""
+    ElseIf Ind = 8 Then 'ใช้แล้ว
+      SelectStr1 = "SELECT  LIW.LOT_ITEM_WH_ID "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      
+      WhereStr = ""
+    ElseIf Ind = 9 Then  'ใช้แล้ว
+      SelectStr1 = "SELECT DISTINCT LIW.PART_ITEM_ID,PI.WEIGHT_PER_PACK,PI.PART_NO,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,LIW.BIN_NO,LC2.LOCATION_NAME BIN_NAME,LT.LOT_ID,LT.LOT_NO  "
+      SelectStr2 = "SELECT COUNT(*)  "
+
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+       FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+
+      WhereStr = ""
+   ElseIf Ind = 10 Then 'ใช้แล้ว
+      SelectStr1 = "SELECT DISTINCT LIW.LOT_ITEM_WH_ID,LIW.INVENTORY_WH_DOC_ID,LIW.PART_ITEM_ID,LIW.FEATURE_ID,LIW.LOCATION_ID,LIW.TX_TYPE,PI.WEIGHT_PER_PACK,LIW.PACK_AMOUNT,LIW.CALCULATE_FLAG,LIW.TX_AMOUNT,LIW.BL_START_DATE,LIW.LOAD_AMOUNT_FLAG,LIW.LOAD_TRUE "
+      SelectStr1 = SelectStr1 & ",PT.*, LC.*,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC, UN.*, IVD.ADJUST_FLAG, IVD.SUPPLIER_ID, IVD.DOCUMENT_DATE, IVD.START_DATE, IVD.DOCUMENT_NO, IVD.COMMIT_FLAG, IVD.DOCUMENT_TYPE, IVD.QUE_NO, IVD.RECEIVE_NAME, IVD.TRUCK_NO, IVD.DO_NO, IVD.SENDER_NAME, SP.SUPPLIER_CODE, NM1.LONG_NAME SUPPLIER_NAME,  PT.PART_GROUP_ID PART_GROUP_ID1,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,LC4.LOCATION_NAME HEAD_PACK_NAME,MR2.KEY_NAME PRODUCT_TYPE_NAME "
+      SelectStr1 = SelectStr1 & ",IVD.PR_NO "
+      SelectStr1 = SelectStr1 & ",IVD.ENTRY_DATE,IVD.EXIT_DATE,BD.BILLING_DOC_ID,BD.DOCUMENT_NO  DOCUMENT_NO_SO,FT.FEATURE_CODE,FT.FEATURE_DESC "
+      
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN UNIT UN ON (PI.UNIT_COUNT = UN.UNIT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER_NAME SN ON (SN.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN NAME NM1 ON (SN.NAME_ID = NM1.NAME_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN MASTER_REF MR2 ON (MR2.KEY_ID = LIW.PRODUCT_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN BILLING_DOC BD ON (LIW.BILLING_DOC_ID = BD.BILLING_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN FEATURE FT ON (LIW.FEATURE_ID = FT.FEATURE_ID) "
+      WhereStr = ""
+   ElseIf Ind = 11 Then  'ใช้แล้ว
+      SelectStr1 = "SELECT  DISTINCT LIW.PART_ITEM_ID,LIW.FEATURE_ID,LIW.BILLING_DOC_ID,PI.WEIGHT_PER_PACK,LIW.PACK_AMOUNT,LIW.TX_AMOUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      
+      WhereStr = ""
+   ElseIf Ind = 12 Then  'ใช้แล้ว
+      SelectStr1 = "SELECT  LIW.LOT_ITEM_WH_ID,LIW.PACK_AMOUNT,PI.WEIGHT_PER_PACK,LC3.LOCATION_NAME,PI.PART_TYPE,PI.PART_NO "
+      SelectStr2 = "SELECT COUNT(*)  "
+
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IWD ON (LIW.INVENTORY_WH_DOC_ID =IWD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      
+      WhereStr = ""
+   ElseIf Ind = 13 Then 'CReportAgePartWh
+      SelectStr1 = "SELECT LIW.PART_ITEM_ID,IVD.START_DATE,IVD.DOCUMENT_TYPE,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.TX_TYPE "
+      SelectStr2 = "SELECT COUNT(*)  "
+  
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+
+      WhereStr = ""
+  ElseIf Ind = 14 Then
+      SelectStr1 = "SELECT DISTINCT LIW.PART_ITEM_ID,PI.WEIGHT_PER_PACK,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      
+      WhereStr = ""
+    ElseIf Ind = 15 Then
+      SelectStr1 = "SELECT LIW.LOT_ITEM_WH_ID,LIW.PART_ITEM_ID,SUM(LIW.PACK_AMOUNT)  AS PACK_AMOUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+  
+      FromStr = "FROM  LOT_ITEM_WH LIW "
+
+      WhereStr = ""
+   ElseIf Ind = 16 Then  'ใช้แล้ว
+         SelectStr1 = "SELECT LIW.*, PT.*, LC.*,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC, UN.*, IVD.ADJUST_FLAG, IVD.SUPPLIER_ID, IVD.DOCUMENT_DATE, IVD.START_DATE, IVD.DOCUMENT_NO, IVD.COMMIT_FLAG, IVD.DOCUMENT_TYPE, IVD.QUE_NO, IVD.RECEIVE_NAME, IVD.TRUCK_NO, IVD.DO_NO, IVD.SENDER_NAME, SP.SUPPLIER_CODE, NM1.LONG_NAME SUPPLIER_NAME, DP.PRIORITY1, PT.PART_GROUP_ID PART_GROUP_ID1,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,LC4.LOCATION_NAME HEAD_PACK_NAME,MR2.KEY_NAME PRODUCT_TYPE_NAME "
+      SelectStr1 = SelectStr1 & ",IVD.PR_NO "
+      SelectStr1 = SelectStr1 & ",IVD.ENTRY_DATE,IVD.EXIT_DATE,BD.DOCUMENT_NO  DOCUMENT_NO_SO "
+      
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN UNIT UN ON (PI.UNIT_COUNT = UN.UNIT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER_NAME SN ON (SN.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN NAME NM1 ON (SN.NAME_ID = NM1.NAME_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN DOCUMENT_PRIORITY DP ON ((IVD.DOCUMENT_TYPE = DP.DOCUMENT_TYPE) AND (LIW.TX_TYPE = DP.TX_TYPE) AND (DP.AREA = 1)) "
+      FromStr = FromStr & "LEFT OUTER JOIN MASTER_REF MR2 ON (MR2.KEY_ID = LIW.PRODUCT_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN BILLING_DOC BD ON (LIW.BILLING_DOC_ID = BD.BILLING_DOC_ID) "
+      WhereStr = ""
+   ElseIf Ind = 17 Then
+      SelectStr1 = "SELECT PT.*, IVD.DOCUMENT_DATE,IVD.DOCUMENT_NO,LC.LOCATION_ID,LC.LOCATION_NAME,LIW.TX_TYPE,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.WEIGHT_PER_PACK,PT.PART_TYPE_NO,"
+      SelectStr1 = SelectStr1 & "LT.LOT_NO,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,PD.PALLET_DOC_NO PALLET_NAME,PD.CAPACITY_AMOUNT, "
+       SelectStr1 = SelectStr1 & "LIW2.TX_TYPE TX_TYPE_I,LC4.LOCATION_NAME BIN_NAME_I,LC5.LOCATION_NAME LOCK_NAME_I "
+      SelectStr2 = "SELECT COUNT(*)  "
+
+      FromStr = "FROM LOT_ITEM_WH  LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PALLET_DOC PD ON (LTD.LOT_DOC_ID = PD.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LTD.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID)"
+
+      FromStr = FromStr & "LEFT OUTER JOIN UNIT UN ON (PI.UNIT_COUNT = UN.UNIT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER_NAME SN ON (SN.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN NAME NM1 ON (SN.NAME_ID = NM1.NAME_ID) "
+
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD2 ON (LTD.LOT_DOC_ID_REF = LTD2.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LTD2.LOT_ITEM_WH_ID =LIW2.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LTD2.BIN_NO = LC4.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC5 ON (LIW2.LOCK_NO = LC5.LOCATION_ID) "
+
+      WhereStr = ""
+'''
+'''      SelectStr1 = "SELECT PT.*, IVD.DOCUMENT_DATE,IVD.DOCUMENT_NO,LC.LOCATION_ID,LC.LOCATION_NAME,LIW.TX_TYPE,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.WEIGHT_PER_PACK,PT.PART_TYPE_NO,"
+'''      SelectStr1 = SelectStr1 & "LT.LOT_NO,LC2.LOCATION_NAME BIN_NAME,LC3.LOCATION_NAME LOCK_NAME,PD.PALLET_DOC_NO PALLET_NAME,PD.CAPACITY_AMOUNT, "
+'''       SelectStr1 = SelectStr1 & "LIW2.TX_TYPE TX_TYPE_I,LC4.LOCATION_NAME BIN_NAME_I,LC5.LOCATION_NAME LOCK_NAME_I "
+'''      SelectStr2 = "SELECT COUNT(*)  "
+'''
+'''      FromStr = "FROM LOT_ITEM_WH  LIW "
+'''      FromStr = FromStr & "LEFT OUTER JOIN (SELECT DISTINCT IVD2.INVENTORY_WH_DOC_ID,IVD2.START_DATE,IVD2.DOCUMENT_TYPE,IVD2.DOCUMENT_DATE,IVD2.DOCUMENT_NO,IVD2.SUPPLIER_ID,J.VERIFY_FLAG FROM INVENTORY_WH_DOC IVD2 "
+'''      FromStr = FromStr & "INNER JOIN JOB J ON (IVD2.INVENTORY_WH_DOC_ID =J.INVENTORY_WH_DOC_ID)) AS IWD ON (LIW.INVENTORY_WH_DOC_ID =IWD.INVENTORY_WH_DOC_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN PALLET_DOC PD ON (LTD.LOT_DOC_ID = PD.LOT_DOC_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LTD.BIN_NO = LC2.LOCATION_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID)"
+'''
+'''      FromStr = FromStr & "LEFT OUTER JOIN UNIT UN ON (PI.UNIT_COUNT = UN.UNIT_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER_NAME SN ON (SN.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN NAME NM1 ON (SN.NAME_ID = NM1.NAME_ID) "
+'''
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD2 ON (LTD.LOT_DOC_ID_REF = LTD2.LOT_DOC_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LTD2.LOT_ITEM_WH_ID =LIW2.LOT_ITEM_WH_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LTD2.BIN_NO = LC4.LOCATION_ID) "
+'''      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC5 ON (LIW2.LOCK_NO = LC5.LOCATION_ID) "
+'''
+'''      WhereStr = ""
+   ElseIf Ind = 18 Then 'ดึงเฉพาะสินค้าที่มีเหลือ ตามเบอร์อาหาร และ น้ำหนักถุง และ sum รวมยอดทั้งหมดใน pallet ของแต่ล่ะสินค้า ที่รับเข้า
+      SelectStr1 = "SELECT LIW.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.WEIGHT_PER_PACK,LIW.TX_TYPE,SUM(PD.CAPACITY_AMOUNT) CAPACITY_AMOUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PALLET_DOC PD ON (LTD.LOT_DOC_ID = PD.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LIW.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LIW.HEAD_PACK_NO = LC4.LOCATION_ID) "
+
+      WhereStr = ""
+   ElseIf Ind = 19 Then
+      SelectStr1 = "SELECT PT.PART_TYPE_ID,PT.PART_TYPE_NO,PT.PART_TYPE_NAME, IVD.DOCUMENT_DATE,IVD.DOCUMENT_NO,LC.LOCATION_ID,LC.LOCATION_NAME,LIW.TX_TYPE,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.WEIGHT_PER_PACK,PT.PART_TYPE_NO,"
+      SelectStr1 = SelectStr1 & "LT.LOT_NO,"
+       SelectStr1 = SelectStr1 & "LIW2.TX_TYPE TX_TYPE_I,SUM(PD.CAPACITY_AMOUNT)  CAPACITY_AMOUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM_WH  LIW "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD ON (LIW.LOT_ITEM_WH_ID = LTD.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT LT ON (LTD.LOT_ID = LT.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PALLET_DOC PD ON (LTD.LOT_DOC_ID = PD.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LIW.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC2 ON (LTD.BIN_NO = LC2.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC3 ON (LIW.LOCK_NO = LC3.LOCATION_ID)"
+      
+      FromStr = FromStr & "LEFT OUTER JOIN UNIT UN ON (PI.UNIT_COUNT = UN.UNIT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_WH_DOC IVD ON (LIW.INVENTORY_WH_DOC_ID = IVD.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER_NAME SN ON (SN.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN NAME NM1 ON (SN.NAME_ID = NM1.NAME_ID) "
+      
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LTD2 ON (LTD.LOT_DOC_ID_REF = LTD2.LOT_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LTD2.LOT_ITEM_WH_ID =LIW2.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC4 ON (LTD2.BIN_NO = LC4.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC5 ON (LIW2.LOCK_NO = LC5.LOCATION_ID) "
+
+      
+      WhereStr = ""
+   End If
+   
+   If LOT_ITEM_WH_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID & ") "
+      End If
+   End If
+   
+   If INVENTORY_WH_DOC_ID > 0 Then 'แก้แล้ว
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.INVENTORY_WH_DOC_ID = " & INVENTORY_WH_DOC_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.INVENTORY_WH_DOC_ID = " & INVENTORY_WH_DOC_ID & ") "
+      End If
+   End If
+   
+   If LOCATION_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.LOCATION_ID = " & LOCATION_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.LOCATION_ID = " & LOCATION_ID & ") "
+      End If
+   End If
+   
+   If FROM_LOCATION_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.LOCATION_ID = " & FROM_LOCATION_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.LOCATION_ID = " & FROM_LOCATION_ID & ") "
+      End If
+   End If
+   
+   If TO_LOCATION_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LI2.LOCATION_ID = " & TO_LOCATION_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LI2.LOCATION_ID = " & TO_LOCATION_ID & ") "
+      End If
+   End If
+   
+   If PART_ITEM_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.PART_ITEM_ID = " & PART_ITEM_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.PART_ITEM_ID = " & PART_ITEM_ID & ") "
+      End If
+   End If
+   
+   If FEATURE_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.FEATURE_ID = " & FEATURE_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.FEATURE_ID = " & FEATURE_ID & ") "
+      End If
+   End If
+
+   If BILLING_DOC_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.BILLING_DOC_ID = " & BILLING_DOC_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LIW.BILLING_DOC_ID = " & BILLING_DOC_ID & ") "
+      End If
+   End If
+
+   If LOT_DOC_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LTD.LOT_DOC_ID = " & LOT_DOC_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (LTD.LOT_DOC_ID = " & LOT_DOC_ID & ") "
+      End If
+   End If
+   
+   If Len(COMMIT_FLAG) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (COMMIT_FLAG = '" & COMMIT_FLAG & "') "
+      Else
+         WhereStr = WhereStr & "AND (COMMIT_FLAG = '" & COMMIT_FLAG & "') "
+      End If
+   End If
+   
+   If Len(TX_TYPE) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.TX_TYPE = '" & TX_TYPE & "') "
+      Else
+         WhereStr = WhereStr & "AND (LIW.TX_TYPE = '" & TX_TYPE & "') "
+      End If
+   End If
+
+
+   If Len(BALANCE_FLAG) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LTD.BALANCE_FLAG = '" & BALANCE_FLAG & "') "
+      Else
+         WhereStr = WhereStr & "AND (LTD.BALANCE_FLAG = '" & BALANCE_FLAG & "') "
+      End If
+   End If
+   
+   If Len(VERIFY_FLAG) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (IVD.VERIFY_FLAG = '" & VERIFY_FLAG & "') "
+      Else
+         WhereStr = WhereStr & "AND (IVD.VERIFY_FLAG = '" & VERIFY_FLAG & "') "
+      End If
+   End If
+
+   If Len(FROM_TX_TYPE) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LIW.TX_TYPE = '" & FROM_TX_TYPE & "') "
+      Else
+         WhereStr = WhereStr & "AND (LIW.TX_TYPE = '" & FROM_TX_TYPE & "') "
+      End If
+   End If
+   
+   If DOCUMENT_TYPE > 0 Then
+      If Ind = 4 Then
+         If Len(WhereStr) <= 0 Then
+            WhereStr = "WHERE (IVD2.DOCUMENT_TYPE = " & DOCUMENT_TYPE & ") "
+         Else
+            WhereStr = WhereStr & "AND (IVD2.DOCUMENT_TYPE = " & DOCUMENT_TYPE & ") "
+         End If
+      Else
+         If Len(WhereStr) <= 0 Then
+            WhereStr = "WHERE (IVD.DOCUMENT_TYPE = " & DOCUMENT_TYPE & ") "
+         Else
+            WhereStr = WhereStr & "AND (IVD.DOCUMENT_TYPE = " & DOCUMENT_TYPE & ") "
+         End If
+      End If
+   End If
+   
+   If Len(DOCUMENT_TYPE_SET) > 0 Then
+      If Ind = 4 Then
+         If Len(WhereStr) <= 0 Then
+            WhereStr = "WHERE (IVD2.DOCUMENT_TYPE IN " & DOCUMENT_TYPE_SET & ") "
+         Else
+            WhereStr = WhereStr & "AND (IVD2.DOCUMENT_TYPE IN " & DOCUMENT_TYPE_SET & ") "
+         End If
+      Else
+         If Len(WhereStr) <= 0 Then
+            WhereStr = "WHERE (IVD.DOCUMENT_TYPE IN " & DOCUMENT_TYPE_SET & ") "
+         Else
+            WhereStr = WhereStr & "AND (IVD.DOCUMENT_TYPE IN " & DOCUMENT_TYPE_SET & ") "
+         End If
+      End If
+   End If
+   
+   
+   If PART_GROUP_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (PT.PART_GROUP_ID = " & PART_GROUP_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (PT.PART_GROUP_ID = " & PART_GROUP_ID & ") "
+      End If
+   End If
+      
+   If PART_TYPE > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (PART_TYPE = " & PART_TYPE & ") "
+      Else
+         WhereStr = WhereStr & "AND (PART_TYPE = " & PART_TYPE & ") "
+      End If
+   End If
+   
+   If PROCESS_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (JB.PROCESS_ID = " & PROCESS_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (JB.PROCESS_ID = " & PROCESS_ID & ") "
+      End If
+   End If
+   
+    If DOCUMENT_DATE > -1 Then
+      TempDate = Trim(DateToStringInt(DOCUMENT_DATE))
+      If WhereStr = "" Then
+         WhereStr = "WHERE (IVD.DOCUMENT_DATE = '" & ChangeQuote(TempDate) & "')"
+      Else
+         WhereStr = WhereStr & "AND (IVD.DOCUMENT_DATE = '" & ChangeQuote(TempDate) & "')"
+      End If
+   End If
+   
+    If FROM_DATE > -1 Then
+      TempDate = DateToStringIntLow(Trim(FROM_DATE))
+      If WhereStr = "" Then
+         WhereStr = "WHERE (IVD.DOCUMENT_DATE >= '" & ChangeQuote(TempDate) & "')"
+      Else
+         WhereStr = WhereStr & "AND (IVD.DOCUMENT_DATE >= '" & ChangeQuote(TempDate) & "')"
+      End If
+   End If
+
+   If TO_DATE > -1 Then
+      TempDate = DateToStringIntHi(Trim(TO_DATE))
+      If WhereStr = "" Then
+         WhereStr = "WHERE (IVD.DOCUMENT_DATE <= '" & ChangeQuote(TempDate) & "')"
+      Else
+         WhereStr = WhereStr & "AND (IVD.DOCUMENT_DATE <= '" & ChangeQuote(TempDate) & "')"
+      End If
+   End If
+   
+   If FROM_PACK_DATE > -1 Then
+      TempDate = DateToStringIntLow(Trim(FROM_PACK_DATE))
+      If WhereStr = "" Then
+         WhereStr = "WHERE (LIW.PACK_DATE >= '" & ChangeQuote(TempDate) & "')"
+      Else
+         WhereStr = WhereStr & "AND (LIW.PACK_DATE >= '" & ChangeQuote(TempDate) & "')"
+      End If
+   End If
+
+   If TO_PACK_DATE > -1 Then
+      TempDate = DateToStringIntHi(Trim(TO_PACK_DATE))
+      If WhereStr = "" Then
+         WhereStr = "WHERE (LIW.PACK_DATE <= '" & ChangeQuote(TempDate) & "')"
+      Else
+         WhereStr = WhereStr & "AND (LIW.PACK_DATE <= '" & ChangeQuote(TempDate) & "')"
+      End If
+   End If
+   
+   If Trim(PART_NO) <> "" Then
+      If WildCard(PART_NO, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(PI.PART_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(PI.PART_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (PI.PART_NO = '" & ChangeQuote(Trim(PART_NO)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (PI.PART_NO = '" & ChangeQuote(Trim(PART_NO)) & "')"
+         End If
+      End If
+   End If
+   
+   If Trim(PART_DESC) <> "" Then
+      If WildCard(PART_DESC, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(PI.PART_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(PI.PART_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (PI.PART_DESC = '" & Trim(PART_DESC) & "')"
+         Else
+            WhereStr = WhereStr & "AND (PI.PART_DESC = '" & Trim(PART_DESC) & "')"
+         End If
+      End If
+   End If
+   
+   If Trim(SUPPLIER_CODE) <> "" Then
+      If WildCard(SUPPLIER_CODE, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(SUPPLIER_CODE,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(SUPPLIER_CODE,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUPPLIER_CODE = '" & ChangeQuote(Trim(SUPPLIER_CODE)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUPPLIER_CODE = '" & ChangeQuote(Trim(SUPPLIER_CODE)) & "')"
+         End If
+      End If
+   End If
+   
+   If Trim(LOT_NO) <> "" Then
+      If WildCard(PART_NO, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(LT.LOT_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(LT.LOT_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (LT.LOT_NO = '" & ChangeQuote(Trim(LOT_NO)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (LT.LOT_NO= '" & ChangeQuote(Trim(LOT_NO)) & "')"
+         End If
+      End If
+   End If
+   
+   If SUPPLIER_ID > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (SUPPLIER_ID = " & SUPPLIER_ID & ") "
+      Else
+         WhereStr = WhereStr & "AND (SUPPLIER_ID = " & SUPPLIER_ID & ") "
+      End If
+   End If
+   
+   
+   If BIN_NO > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (BIN_NO  = " & BIN_NO & ") "
+      Else
+         WhereStr = WhereStr & "AND (BIN_NO  = " & BIN_NO & ") "
+      End If
+   End If
+   
+   If PALLET_NO > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (PALLET_NO   = " & PALLET_NO & ") "
+      Else
+         WhereStr = WhereStr & "AND (PALLET_NO   = " & PALLET_NO & ") "
+      End If
+   End If
+   
+   If LOCK_NO > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (LOCK_NO    = " & LOCK_NO & ") "
+      Else
+         WhereStr = WhereStr & "AND (LOCK_NO    = " & LOCK_NO & ") "
+      End If
+   End If
+   
+   If HEAD_PACK_NO > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (HEAD_PACK_NO    = " & HEAD_PACK_NO & ") "
+      Else
+         WhereStr = WhereStr & "AND (HEAD_PACK_NO    = " & HEAD_PACK_NO & ") "
+      End If
+   End If
+   
+
+   If Len(CANCEL_FLAG) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (PI.CANCEL_FLAG    = '" & CANCEL_FLAG & "') "
+      Else
+         WhereStr = WhereStr & "AND (PI.CANCEL_FLAG    = '" & CANCEL_FLAG & "') "
+      End If
+   End If
+   
+   GroupByStr = ""
+   If Ind = 2 Then
+       GroupByStr = "GROUP BY LIW.PART_ITEM_ID,IVD.START_DATE,IVD.DOCUMENT_TYPE,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.BIN_NO,LIW.LOCK_NO,LIW.HEAD_PACK_NO,LIW.BL_START_DATE,LIW.TX_TYPE,LIW.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME,LC3.LOCATION_NAME,LIW.PACK_DATE,LIW.TIME_PACK_BEGIN,LIW.TIME_PACK_END "
+    ElseIf Ind = 3 Then
+       GroupByStr = "GROUP BY LIW.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.BIN_NO,LIW.LOCK_NO,LIW.HEAD_PACK_NO,LIW.TX_TYPE,LIW.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME,LC3.LOCATION_NAME "
+   ElseIf Ind = 6 Then
+       GroupByStr = "GROUP BY LIW.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID_REF,LT.LOT_ID,LT.LOT_NO,LIW2.BIN_NO,LIW2.LOCK_NO,LIW2.HEAD_PACK_NO,LIW2.TX_TYPE,LIW2.LOCATION_ID,LC.LOCATION_NAME,LC2.LOCATION_NAME,LC3.LOCATION_NAME "
+    ElseIf Ind = 13 Then
+       GroupByStr = "GROUP BY LIW.PART_ITEM_ID,IVD.START_DATE,IVD.DOCUMENT_TYPE,PI.PART_NO,PI.PART_TYPE,PI.PART_DESC,PI.BARCODE_NO,PI.BILL_DESC,PI.WEIGHT_PER_PACK,LTD.LOT_DOC_ID,LT.LOT_ID,LT.LOT_NO,LIW.TX_TYPE "
+   ElseIf Ind = 15 Then
+      GroupByStr = "GROUP BY LIW.LOT_ITEM_WH_ID,LIW.PART_ITEM_ID "
+   ElseIf Ind = 18 Then
+       GroupByStr = "GROUP BY LIW.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.WEIGHT_PER_PACK,LIW.TX_TYPE "
+    ElseIf Ind = 19 Then
+       GroupByStr = "GROUP BY PT.PART_TYPE_ID,PT.PART_TYPE_NO,PT.PART_TYPE_NAME, IVD.DOCUMENT_DATE,IVD.DOCUMENT_NO,LC.LOCATION_ID,LC.LOCATION_NAME,LIW.TX_TYPE,PI.PART_ITEM_ID,PI.PART_NO,PI.PART_DESC,PI.WEIGHT_PER_PACK,PT.PART_TYPE_NO,LT.LOT_NO,LIW2.TX_TYPE "
+   End If
+
+   OrderByStr = ""
+   OrderTypeStr = ""
+
+   If Ind = 1 Then
+      If OrderBy = 1 Then
+         OrderByStr = "ORDER BY LOT_ITEM_WH_ID "
+      ElseIf OrderBy = 2 Then
+         OrderByStr = "ORDER BY LOT_ITEM_WH_ID "
+     End If
+   ElseIf Ind = 2 Then
+      If OrderBy = 1 Then
+         OrderByStr = "ORDER BY PI.BILL_DESC "
+      ElseIf OrderBy = 2 Then
+         OrderByStr = "ORDER BY PI.PART_DESC "
+      ElseIf OrderBy = 3 Then
+         OrderByStr = "ORDER BY PI.BARCODE_NO "
+      ElseIf OrderBy = 4 Then
+         OrderByStr = "ORDER BY IVD.START_DATE "
+      ElseIf OrderBy = 5 Or OrderBy = 0 Then
+         OrderByStr = "ORDER BY PI.PART_NO "
+      ElseIf OrderBy = 6 Then
+         OrderByStr = "ORDER BY LT.LOT_NO "
+     End If
+   ElseIf Ind = 7 Then
+      If OrderBy = 2 Then
+         OrderByStr = "ORDER BY LIW.PART_ITEM_ID "
+      ElseIf OrderBy = 5 Then
+         OrderByStr = "ORDER BY PI.PART_NO "
+     End If
+   ElseIf Ind = 14 Then
+     If OrderBy = 2 Then
+         OrderByStr = "ORDER BY PI.PART_DESC "
+      ElseIf OrderBy = 3 Then
+         OrderByStr = "ORDER BY PI.BARCODE_NO "
+      ElseIf OrderBy = 5 Then
+         OrderByStr = "ORDER BY PI.PART_NO "
+      Else
+       OrderByStr = "ORDER BY PI.PART_DESC "
+     End If
+   ElseIf Ind = 17 Then
+     If OrderBy = 1 Then
+'         OrderByStr = "ORDER BY PI.PART_NO,IVD.DOCUMENT_DATE,LIW.TX_TYPE DESC,IVD.DOCUMENT_NO "
+         OrderByStr = "ORDER BY PI.PART_NO,IVD.DOCUMENT_DATE,LIW.TX_TYPE DESC,IVD.DOCUMENT_NO,LT.LOT_NO,BIN_NAME,LOCK_NAME,PD.PALLET_DOC_NO "
+      ElseIf OrderBy = 2 Then
+         OrderByStr = "ORDER BY PI.PART_ITEM_ID "
+      Else
+       OrderByStr = "ORDER BY PI.PART_NO "
+     End If
+ ElseIf Ind = 18 Then
+     If OrderBy = 1 Then
+         OrderByStr = "ORDER BY PI.PART_NO "
+      Else
+       OrderByStr = "ORDER BY PI.PART_ITEM_ID "
+     End If
+     
+   End If
+   
+      If OrderType = 1 Then
+         OrderTypeStr = "ASC "
+      ElseIf OrderType = 2 Then
+         OrderTypeStr = "DESC "
+      Else
+         OrderTypeStr = "ASC "
+      End If
+   
+   If Len(OrderByStr) <= 0 Then
+      OrderTypeStr = ""
+   End If
+   
+   SQL1 = SelectStr1 & FromStr & WhereStr & GroupByStr & OrderByStr & OrderTypeStr
+   SQL2 = SelectStr2 & FromStr & WhereStr
+   
+   Call glbDatabaseMngr.GetRs(SQL1, SQL2, MustCount, ItemCount, Rs, glbErrorLog)
+End Function
+Public Function CopyObjectFromDoItem(Ind As Long, TempObj As CDoItem)
+   PART_TYPE = TempObj.PART_TYPE
+   PART_TYPE_NAME = TempObj.PART_TYPE_NAME
+   PART_ITEM_ID = TempObj.PART_ITEM_ID
+   LOCATION_ID = TempObj.LOCATION_ID
+   LOCATION_NAME = TempObj.LOCATION_NAME
+   FEATURE_ID = TempObj.FEATURE_ID
+   PART_NO = TempObj.PART_NO
+   PART_TYPE_NO = TempObj.PART_TYPE_NO
+   PART_DESC = TempObj.PART_DESC
+   PACK_AMOUNT = TempObj.PACK_AMOUNT
+   GUI_ID = TempObj.GUI_ID
+   WEIGHT_PER_PACK = TempObj.WEIGHT_PER_PACK
+   BILLING_DOC_ID = TempObj.BILLING_DOC_ID
+   TX_AMOUNT = TempObj.TX_AMOUNT
+   DOCUMENT_NO_SO = TempObj.PO_NO
+   PO_ID = TempObj.PO_ID
+   Flag = TempObj.Flag
+End Function
+Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
+   If Ind = 1 Then
+      LOT_ITEM_WH_ID = NVLI(Rs("LOT_ITEM_WH_ID"), -1)
+      INVENTORY_WH_DOC_ID = NVLI(Rs("INVENTORY_WH_DOC_ID"), -1)
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      FEATURE_ID = NVLI(Rs("FEATURE_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLI(Rs("PART_TYPE"), -1)
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      LOCATION_REST_ID = NVLI(Rs("LOCATION_REST_ID"), -1)
+      LOCATION_LOSE_ID = NVLI(Rs("LOCATION_LOSE_ID"), -1)
+      TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
+      CALCULATE_FLAG = NVLS(Rs("CALCULATE_FLAG"), "")
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+
+      
+      PART_GROUP_ID = NVLI(Rs("PART_GROUP_ID1"), -1)
+      PART_TYPE_NAME = NVLS(Rs("PART_TYPE_NAME"), "")
+      PART_TYPE_NO = NVLS(Rs("PART_TYPE_NO"), "")
+      PART_TYPE_ID = NVLI(Rs("PART_TYPE_ID"), -1)
+      LOCATION_NO = NVLS(Rs("LOCATION_NO"), "")
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+
+      UNIT_NAME = NVLS(Rs("UNIT_NAME"), "")
+      DOCUMENT_DATE = InternalDateToDate(NVLS(Rs("DOCUMENT_DATE"), ""))
+
+      DOCUMENT_NO = NVLS(Rs("DOCUMENT_NO"), "")
+      DO_NO = NVLS(Rs("DO_NO"), "")
+      TRUCK_NO = NVLS(Rs("TRUCK_NO"), "")
+      
+      PR_NO = NVLS(Rs("PR_NO"), "")
+      ENTRY_DATE = InternalDateToDate(NVLS(Rs("ENTRY_DATE"), ""))
+      EXIT_DATE = InternalDateToDate(NVLS(Rs("EXIT_DATE"), ""))
+      
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOCK_NO = NVLI(Rs("LOCK_NO"), -1)
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      HEAD_PACK_NO = NVLI(Rs("HEAD_PACK_NO"), -1)
+      HEAD_PACK_NAME = NVLS(Rs("HEAD_PACK_NAME"), "")
+      GOOD_AMOUNT = NVLD(Rs("GOOD_AMOUNT"), 0)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      FULL_PALLET_FROM = NVLI(Rs("FULL_PALLET_FROM"), -1)
+      FULL_PALLET_TO = NVLI(Rs("FULL_PALLET_TO"), -1)
+      FULL_UNIT_PER_PALLET = NVLI(Rs("FULL_UNIT_PER_PALLET"), -1)
+      SCRAP_PALLET = NVLI(Rs("SCRAP_PALLET"), -1)
+      SCRAP_UNIT_PER_PALLET = NVLI(Rs("SCRAP_UNIT_PER_PALLET"), -1)
+      
+      PRODUCT_TYPE_ID = NVLI(Rs("PRODUCT_TYPE_ID"), -1)
+      PRODUCT_TYPE_NAME = NVLS(Rs("PRODUCT_TYPE_NAME"), "")
+      LOSE_AMOUNT = NVLD(Rs("LOSE_AMOUNT"), 0)
+      REST_AMOUNT = NVLD(Rs("REST_AMOUNT"), 0)
+      PACK_DATE = InternalDateToDate(NVLS(Rs("PACK_DATE"), ""))
+      PACK_AMOUNT = NVLD(Rs("PACK_AMOUNT"), 0)
+      TIME_PACK_BEGIN = NVLS(Rs("TIME_PACK_BEGIN"), "")
+      TIME_PACK_END = NVLS(Rs("TIME_PACK_END"), "") ' InternalDateToDate(NVLS(Rs("TIME_PACK_END"), ""))
+      NOTE = NVLS(Rs("NOTE"), "")
+      START_DATE = InternalDateToDate(NVLS(Rs("START_DATE"), ""))
+      BL_START_DATE = InternalDateToDate(NVLS(Rs("BL_START_DATE"), ""))
+      LOT_DOC_ID = NVLI(Rs("LOT_DOC_ID"), -1)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
+   ElseIf Ind = 2 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLI(Rs("PART_TYPE"), -1)
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      LOT_DOC_ID = NVLI(Rs("LOT_DOC_ID"), -1)
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      LOCK_NO = NVLI(Rs("LOCK_NO"), -1)
+      HEAD_PACK_NO = NVLI(Rs("HEAD_PACK_NO"), -1)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      START_DATE = InternalDateToDate(NVLS(Rs("START_DATE"), ""))
+      BL_START_DATE = InternalDateToDate(NVLS(Rs("BL_START_DATE"), ""))
+      DOCUMENT_TYPE = NVLI(Rs("DOCUMENT_TYPE"), -1)
+      
+      PACK_DATE = InternalDateToDate(NVLS(Rs("PACK_DATE"), ""))
+      TIME_PACK_BEGIN = NVLS(Rs("TIME_PACK_BEGIN"), "")
+      TIME_PACK_END = NVLS(Rs("TIME_PACK_END"), "")
+   ElseIf Ind = 3 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      LOT_DOC_ID = NVLI(Rs("LOT_DOC_ID"), -1)
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      LOCK_NO = NVLI(Rs("LOCK_NO"), -1)
+      HEAD_PACK_NO = NVLI(Rs("HEAD_PACK_NO"), -1)
+      CAPACITY_AMOUNT = NVLD(Rs("CAPACITY_AMOUNT"), 0)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+   ElseIf Ind = 4 Then
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+   ElseIf Ind = 5 Then
+      LOCK_NO = NVLI(Rs("LOCK_NO"), -1)
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+    ElseIf Ind = 6 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+      LOT_DOC_ID_REF = NVLI(Rs("LOT_DOC_ID_REF"), -1)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      LOCK_NO = NVLI(Rs("LOCK_NO"), -1)
+      HEAD_PACK_NO = NVLI(Rs("HEAD_PACK_NO"), -1)
+      CAPACITY_AMOUNT = NVLD(Rs("CAPACITY_AMOUNT"), 0)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+   ElseIf Ind = 7 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLI(Rs("PART_TYPE"), -1)
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      DOCUMENT_TYPE = NVLI(Rs("DOCUMENT_TYPE"), -1)
+      BL_START_DATE = InternalDateToDate(NVLS(Rs("BL_START_DATE"), ""))
+   ElseIf Ind = 8 Then
+      LOT_ITEM_WH_ID = NVLI(Rs("LOT_ITEM_WH_ID"), -1)
+   ElseIf Ind = 9 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+     ElseIf Ind = 10 Then
+      LOT_ITEM_WH_ID = NVLI(Rs("LOT_ITEM_WH_ID"), -1)
+      INVENTORY_WH_DOC_ID = NVLI(Rs("INVENTORY_WH_DOC_ID"), -1)
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      FEATURE_ID = NVLI(Rs("FEATURE_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      PART_TYPE_NO = NVLS(Rs("PART_TYPE_NO"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      CALCULATE_FLAG = NVLS(Rs("CALCULATE_FLAG"), "")
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      TRUCK_NO = NVLS(Rs("TRUCK_NO"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      PACK_AMOUNT = NVLD(Rs("PACK_AMOUNT"), 0)
+      TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
+      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
+      DOCUMENT_NO_SO = NVLS(Rs("DOCUMENT_NO_SO"), "")
+      BL_START_DATE = InternalDateToDate(NVLS(Rs("BL_START_DATE"), ""))
+      LOAD_TRUE = NVLD(Rs("LOAD_TRUE"), 0)
+      LOAD_AMOUNT_FLAG = NVLS(Rs("LOAD_AMOUNT_FLAG"), "")
+      FEATURE_CODE = NVLS(Rs("FEATURE_CODE"), "")
+      FEATURE_DESC = NVLS(Rs("FEATURE_DESC"), "")
+      
+  ElseIf Ind = 11 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      FEATURE_ID = NVLI(Rs("FEATURE_ID"), -1)
+      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      PACK_AMOUNT = NVLD(Rs("PACK_AMOUNT"), 0)
+      TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
+   ElseIf Ind = 12 Then
+      LOT_ITEM_WH_ID = NVLI(Rs("LOT_ITEM_WH_ID"), -1)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      PACK_AMOUNT = NVLD(Rs("PACK_AMOUNT"), 0)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLS(Rs("PART_TYPE"), "")
+   ElseIf Ind = 13 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLI(Rs("PART_TYPE"), -1)
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      LOT_DOC_ID = NVLI(Rs("LOT_DOC_ID"), -1)
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      START_DATE = InternalDateToDate(NVLS(Rs("START_DATE"), ""))
+      DOCUMENT_TYPE = NVLI(Rs("DOCUMENT_TYPE"), -1)
+   ElseIf Ind = 14 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLI(Rs("PART_TYPE"), -1)
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      BARCODE_NO = NVLS(Rs("BARCODE_NO"), "")
+      BILL_DESC = NVLS(Rs("BILL_DESC"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+     ElseIf Ind = 15 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PACK_AMOUNT = NVLD(Rs("PACK_AMOUNT"), 0)
+   ElseIf Ind = 16 Then
+      LOT_ITEM_WH_ID = NVLI(Rs("LOT_ITEM_WH_ID"), -1)
+      INVENTORY_WH_DOC_ID = NVLI(Rs("INVENTORY_WH_DOC_ID"), -1)
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_TYPE = NVLI(Rs("PART_TYPE"), -1)
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
+      CALCULATE_FLAG = NVLS(Rs("CALCULATE_FLAG"), "")
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+
+      
+      PART_GROUP_ID = NVLI(Rs("PART_GROUP_ID1"), -1)
+      PART_TYPE_NAME = NVLS(Rs("PART_TYPE_NAME"), "")
+      PART_TYPE_NO = NVLS(Rs("PART_TYPE_NO"), "")
+      PART_TYPE_ID = NVLI(Rs("PART_TYPE_ID"), -1)
+      LOCATION_NO = NVLS(Rs("LOCATION_NO"), "")
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+
+      UNIT_NAME = NVLS(Rs("UNIT_NAME"), "")
+      DOCUMENT_DATE = InternalDateToDate(NVLS(Rs("DOCUMENT_DATE"), ""))
+      START_DATE = InternalDateToDate(NVLS(Rs("START_DATE"), ""))
+      DOCUMENT_NO = NVLS(Rs("DOCUMENT_NO"), "")
+      DO_NO = NVLS(Rs("DO_NO"), "")
+      TRUCK_NO = NVLS(Rs("TRUCK_NO"), "")
+      
+      PR_NO = NVLS(Rs("PR_NO"), "")
+      ENTRY_DATE = InternalDateToDate(NVLS(Rs("ENTRY_DATE"), ""))
+      EXIT_DATE = InternalDateToDate(NVLS(Rs("EXIT_DATE"), ""))
+      
+      BIN_NO = NVLI(Rs("BIN_NO"), -1)
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOCK_NO = NVLI(Rs("LOCK_NO"), -1)
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      HEAD_PACK_NO = NVLI(Rs("HEAD_PACK_NO"), -1)
+      HEAD_PACK_NAME = NVLS(Rs("HEAD_PACK_NAME"), "")
+      GOOD_AMOUNT = NVLD(Rs("GOOD_AMOUNT"), 0)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      FULL_PALLET_FROM = NVLI(Rs("FULL_PALLET_FROM"), -1)
+      FULL_PALLET_TO = NVLI(Rs("FULL_PALLET_TO"), -1)
+      FULL_UNIT_PER_PALLET = NVLI(Rs("FULL_UNIT_PER_PALLET"), -1)
+      SCRAP_PALLET = NVLI(Rs("SCRAP_PALLET"), -1)
+      SCRAP_UNIT_PER_PALLET = NVLI(Rs("SCRAP_UNIT_PER_PALLET"), -1)
+      
+      PRODUCT_TYPE_ID = NVLI(Rs("PRODUCT_TYPE_ID"), -1)
+      PRODUCT_TYPE_NAME = NVLS(Rs("PRODUCT_TYPE_NAME"), "")
+      LOSE_AMOUNT = NVLD(Rs("LOSE_AMOUNT"), 0)
+      REST_AMOUNT = NVLD(Rs("REST_AMOUNT"), 0)
+      PACK_DATE = InternalDateToDate(NVLS(Rs("PACK_DATE"), ""))
+      PACK_AMOUNT = NVLD(Rs("PACK_AMOUNT"), 0)
+      TIME_PACK_BEGIN = NVLS(Rs("TIME_PACK_BEGIN"), "")
+      TIME_PACK_END = NVLS(Rs("TIME_PACK_END"), "") ' InternalDateToDate(NVLS(Rs("TIME_PACK_END"), ""))
+      NOTE = NVLS(Rs("NOTE"), "")
+      START_DATE = InternalDateToDate(NVLS(Rs("START_DATE"), ""))
+      BL_START_DATE = InternalDateToDate(NVLS(Rs("BL_START_DATE"), ""))
+      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
+   ElseIf Ind = 17 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      PART_TYPE_NAME = NVLS(Rs("PART_TYPE_NAME"), "")
+      PART_TYPE_NO = NVLS(Rs("PART_TYPE_NO"), "")
+      PART_TYPE_ID = NVLI(Rs("PART_TYPE_ID"), -1)
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+      DOCUMENT_DATE = InternalDateToDate(NVLS(Rs("DOCUMENT_DATE"), ""))
+      DOCUMENT_NO = NVLS(Rs("DOCUMENT_NO"), "")
+      CAPACITY_AMOUNT = NVLD(Rs("CAPACITY_AMOUNT"), 0)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+      LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      PALLET_NAME = NVLS(Rs("PALLET_NAME"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      
+      If TX_TYPE = "I" Then
+         BIN_NAME = NVLS(Rs("BIN_NAME"), "")
+         LOCK_NAME = NVLS(Rs("LOCK_NAME"), "")
+      Else
+         BIN_NAME = NVLS(Rs("BIN_NAME_I"), "")
+         LOCK_NAME = NVLS(Rs("LOCK_NAME_I"), "")
+      End If
+      
+   ElseIf Ind = 18 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      CAPACITY_AMOUNT = NVLD(Rs("CAPACITY_AMOUNT"), 0)
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+   ElseIf Ind = 19 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      PART_TYPE_NAME = NVLS(Rs("PART_TYPE_NAME"), "")
+      PART_TYPE_NO = NVLS(Rs("PART_TYPE_NO"), "")
+      PART_TYPE_ID = NVLI(Rs("PART_TYPE_ID"), -1)
+      LOCATION_NAME = NVLS(Rs("LOCATION_NAME"), "")
+      DOCUMENT_DATE = InternalDateToDate(NVLS(Rs("DOCUMENT_DATE"), ""))
+      DOCUMENT_NO = NVLS(Rs("DOCUMENT_NO"), "")
+      CAPACITY_AMOUNT = NVLD(Rs("CAPACITY_AMOUNT"), 0)
+      LOT_NO = NVLS(Rs("LOT_NO"), "")
+      WEIGHT_PER_PACK = NVLD(Rs("WEIGHT_PER_PACK"), 0)
+   End If
+End Function
+
+Public Function AddEditData()
+Dim ServerDateTime As String
+Dim SQL1 As String
+Dim ID As Long
+Dim ID2 As Long
+Dim TempID1  As String
+Dim TempID2  As String
+Dim TempID3 As String
+Dim TempID4 As String
+Dim TempID5 As String
+Dim TempID6 As String
+Dim TempID7 As String
+
+   TempID1 = PART_ITEM_ID
+   If PART_ITEM_ID <= 0 Then
+      TempID1 = "NULL"
+   End If
+
+   
+   TempID2 = LOAD_AMOUNT_FLAG
+   If LOAD_AMOUNT_FLAG = "" Then
+      TempID2 = "N"
+   End If
+   
+   TempID3 = BILLING_DOC_ID
+   If BILLING_DOC_ID <= 0 Then
+      TempID3 = "NULL"
+   End If
+   
+  TempID4 = FEATURE_ID
+   If FEATURE_ID <= 0 Then
+      TempID4 = "NULL"
+   End If
+   
+   TempID5 = LOCATION_ID
+   If LOCATION_ID <= 0 Then
+      TempID5 = "NULL"
+   End If
+   
+   TempID6 = LOCATION_REST_ID
+   If LOCATION_REST_ID <= 0 Then
+      TempID6 = "NULL"
+   End If
+   
+   TempID7 = LOCATION_LOSE_ID
+   If LOCATION_LOSE_ID <= 0 Then
+      TempID7 = "NULL"
+   End If
+
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+   
+   If TX_TYPE = "E" Then
+      MULTIPLIER = -1
+   ElseIf TX_TYPE = "I" Then
+      MULTIPLIER = 1
+   End If
+   
+   If MANUAL_PRICE = "" Then
+      MANUAL_PRICE = "N"
+   End If
+   
+   If AddEditMode = SHOW_ADD Then
+      Call glbDatabaseMngr.GetSeqID("LOT_ITEM_WH_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
+      
+      SQL1 = "INSERT INTO LOT_ITEM_WH " & _
+                     "( " & _
+                     "   LOT_ITEM_WH_ID, " & _
+                     "   INVENTORY_WH_DOC_ID, " & _
+                     "   PART_ITEM_ID, " & _
+                     "   LOCATION_ID,LOCATION_REST_ID,LOCATION_LOSE_ID, " & _
+                     "   FEATURE_ID, "
+         SQL1 = SQL1 & "TX_AMOUNT," & _
+                      "   TRANSACTION_SEQ, " & _
+                     "   CALCULATE_FLAG, " & _
+                    "   TX_TYPE, "
+         SQL1 = SQL1 & "BIN_NO,LOCK_NO,HEAD_PACK_NO,BL_START_DATE,GOOD_AMOUNT,WEIGHT_PER_PACK,FULL_PALLET_FROM,FULL_PALLET_TO,FULL_UNIT_PER_PALLET,SCRAP_PALLET,SCRAP_UNIT_PER_PALLET, " & _
+                     "   PRODUCT_TYPE_ID,LOSE_AMOUNT,REST_AMOUNT,PACK_AMOUNT,PACK_DATE,TIME_PACK_BEGIN,TIME_PACK_END,NOTE,BILLING_DOC_ID,LOAD_AMOUNT_FLAG,LOAD_TRUE," & _
+                     "   CREATE_DATE, " & _
+                    "    CREATE_BY, " & _
+                    "    MODIFY_DATE, " & _
+                    "    MODIFY_BY " & _
+                     ") " & _
+                     "VALUES " & _
+                     "( " & _
+                         ID & "," & _
+                         "" & INVENTORY_WH_DOC_ID & "," & _
+                         TempID1 & "," & _
+                         "" & TempID5 & "," & TempID6 & "," & TempID7 & "," & _
+                         TempID4 & ","
+               SQL1 = SQL1 & _
+                         "" & TX_AMOUNT & "," & _
+                         "" & ID2 & "," & _
+                         "'" & CALCULATE_FLAG & "'," & _
+                         "'" & TX_TYPE & "'," & _
+                        "" & BIN_NO & "," & LOCK_NO & "," & HEAD_PACK_NO & ",'" & DateToStringInt(BL_START_DATE) & "'," & GOOD_AMOUNT & "," & WEIGHT_PER_PACK & "," & FULL_PALLET_FROM & "," & FULL_PALLET_TO & "," & FULL_UNIT_PER_PALLET & "," & SCRAP_PALLET & "," & SCRAP_UNIT_PER_PALLET & "," & _
+                        "" & PRODUCT_TYPE_ID & "," & LOSE_AMOUNT & "," & REST_AMOUNT & "," & PACK_AMOUNT & ",'" & DateToStringInt(PACK_DATE) & "','" & TimeToStringHHMM(TIME_PACK_BEGIN) & "','" & TimeToStringHHMM(TIME_PACK_END) & "','" & NOTE & "'," & TempID3 & ",'" & TempID2 & "'," & LOAD_TRUE & "," & _
+                         "'" & ServerDateTime & "'," & _
+                         glbUser.USER_ID & "," & _
+                         "'" & ServerDateTime & "'," & _
+                         glbUser.USER_ID & _
+                     ") "
+         LOT_ITEM_WH_ID = ID
+   Else 'Show edit
+      Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
+
+      SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "   INVENTORY_WH_DOC_ID = " & INVENTORY_WH_DOC_ID & ", " & _
+                     "   PART_ITEM_ID = " & TempID1 & ", " & _
+                     "   LOCATION_ID = " & TempID5 & ", " & _
+                     "   LOCATION_REST_ID = " & TempID6 & ", " & _
+                     "   LOCATION_LOSE_ID = " & TempID7 & ", " & _
+                     "   FEATURE_ID = " & TempID4 & ", " & _
+                     "   TX_AMOUNT = " & TX_AMOUNT & ", " & _
+                     "   TRANSACTION_SEQ = " & ID2 & ", " & _
+                     "   CALCULATE_FLAG = '" & CALCULATE_FLAG & "', " & _
+                     "   TX_TYPE = '" & TX_TYPE & "', " & _
+                     "   BIN_NO = " & BIN_NO & ",LOCK_NO = " & LOCK_NO & ",HEAD_PACK_NO = " & HEAD_PACK_NO & ",BL_START_DATE  = '" & DateToStringInt(BL_START_DATE) & "', " & _
+                     "   GOOD_AMOUNT = '" & GOOD_AMOUNT & "',WEIGHT_PER_PACK = " & WEIGHT_PER_PACK & "," & _
+                     "   FULL_PALLET_FROM = " & FULL_PALLET_FROM & ",FULL_PALLET_TO = " & FULL_PALLET_TO & ",FULL_UNIT_PER_PALLET = " & FULL_UNIT_PER_PALLET & ",SCRAP_PALLET = " & SCRAP_PALLET & ",SCRAP_UNIT_PER_PALLET  = " & SCRAP_UNIT_PER_PALLET & "," & _
+                      "  PRODUCT_TYPE_ID = " & PRODUCT_TYPE_ID & ",LOSE_AMOUNT= " & LOSE_AMOUNT & ",REST_AMOUNT= " & REST_AMOUNT & ",PACK_AMOUNT= " & PACK_AMOUNT & ",PACK_DATE  = '" & DateToStringInt(PACK_DATE) & "',TIME_PACK_BEGIN= '" & TimeToStringHHMM(TIME_PACK_BEGIN) & "',TIME_PACK_END = '" & TimeToStringHHMM(TIME_PACK_END) & "',NOTE= '" & NOTE & "',BILLING_DOC_ID= " & TempID3 & "," & _
+                     "    LOAD_AMOUNT_FLAG = '" & TempID2 & "', " & _
+                     "    LOAD_TRUE = " & LOAD_TRUE & ", " & _
+                    "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                    "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                     "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+   End If
+   
+   If (AddEditMode = SHOW_ADD) Or (AddEditMode = SHOW_EDIT) Then
+      m_Conn.Execute (SQL1)
+   End If
+End Function
+Public Function DeleteData()
+Dim SQL1 As String
+
+      SQL1 = "DELETE FROM PALLET_DOC WHERE LOT_DOC_ID IN  (SELECT LOT_DOC_ID FROM LOT_DOC WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID & ")"
+      m_Conn.Execute (SQL1)
+   
+      SQL1 = "DELETE FROM LOT_DOC WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+      m_Conn.Execute (SQL1)
+
+      SQL1 = "DELETE FROM LOT_ITEM_WH WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+      m_Conn.Execute (SQL1)
+End Function
+
+Public Function DecreaseLeftAmount(DecAmount As Double)
+Dim SQL1 As String
+      SQL1 = "UPDATE LOT_ITEM_WH SET LEFT_AMOUNT = LEFT_AMOUNT - " & DecAmount & " WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+      m_Conn.Execute (SQL1)
+End Function
+
+Public Function PatchDocDate() As Boolean
+Dim ServerDateTime As String
+Dim SQL1 As String
+
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+   
+   SQL1 = "UPDATE INVENTORY_DOC_WH SET " & _
+                  "   DOCUMENT_DATE = '" & ChangeQuote(Trim(DateToStringInt(DOCUMENT_DATE))) & "', " & _
+                 "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                 "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                  "WHERE INVENTORY_WH_DOC_ID = " & INVENTORY_WH_DOC_ID
+                  
+   m_Conn.Execute (SQL1)
+End Function
+
+Public Function PatchAvgPriceExp(AvgPrice As Double, PrevAmount As Double, CurrentAmount As Double, ExportTotalPrice As Double, NewTotalPrice As Double) As Boolean
+On Error GoTo ErrorHandler
+Dim ServerDateTime As String
+Dim SQL1 As String
+
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+   SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                  "   INCLUDE_UNIT_PRICE = " & AvgPrice & ", " & _
+                  "   PREVIOUS_AMOUNT = " & PrevAmount & ", " & _
+                  "   PREVIOUS_PRICE = " & AvgPrice & ", " & _
+                  "   NEW_AMOUNT = " & CurrentAmount & ", " & _
+                  "   NEW_PRICE = " & AvgPrice & ", " & _
+                  "   TOTAL_INCLUDE_PRICE = " & ExportTotalPrice & ", " & _
+                  "   TOTAL_NEW_PRICE = " & NewTotalPrice & ", " & _
+                  "   TX_AMOUNT = " & PrevAmount - CurrentAmount & ", " & _
+                  "   TX_TYPE = '" & TX_TYPE & "', " & _
+                 "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                 "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                  "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+
+   m_Conn.Execute (SQL1)
+   Exit Function
+   
+ErrorHandler:
+   SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                  "   INCLUDE_UNIT_PRICE = " & 0 & ", " & _
+                  "   PREVIOUS_AMOUNT = " & PrevAmount & ", " & _
+                  "   PREVIOUS_PRICE = " & 0 & ", " & _
+                  "   NEW_AMOUNT = " & CurrentAmount & ", " & _
+                  "   NEW_PRICE = " & 0 & ", " & _
+                  "   TOTAL_INCLUDE_PRICE = " & 0 & ", " & _
+                  "   TOTAL_NEW_PRICE = " & 0 & ", " & _
+                  "   TX_AMOUNT = " & PrevAmount - CurrentAmount & ", " & _
+                  "   TX_TYPE = '" & TX_TYPE & "', " & _
+                 "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                 "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                  "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+
+   m_Conn.Execute (SQL1)
+End Function
+
+Public Function PatchAvgPrice(AvgPrice As Double, PrevAmount As Double, CurrentAmount As Double, NewPrice As Double, ImportAmount As Double, DocumentType As Long, TotalIncludePrice As Double, NewTotalPrice As Double) As Boolean
+On Error GoTo ErrorHandler
+Dim ServerDateTime As String
+Dim SQL1 As String
+
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+   If (DocumentType = 12) Or (DocumentType = 13) Or (DocumentType = 14) Or (DocumentType = 3) Or (DocumentType = 22) Or (DocumentType = 4) Or (DocumentType = 5) Then
+      SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "   ACTUAL_UNIT_PRICE = " & AvgPrice & ", " & _
+                     "   INCLUDE_UNIT_PRICE = " & AvgPrice & ", " & _
+                     "   TOTAL_INCLUDE_PRICE = " & TotalIncludePrice & ", " & _
+                     "   TOTAL_ACTUAL_PRICE = " & TotalIncludePrice & ", " & _
+                     "   PREVIOUS_AMOUNT = " & PrevAmount & ", " & _
+                     "   NEW_AMOUNT = " & CurrentAmount & ", " & _
+                     "   NEW_PRICE = " & NewPrice & ", " & _
+                     "   RAW_COST = " & RAW_COST & ", " & _
+                     "   TX_AMOUNT = " & ImportAmount & ", " & _
+                     "   EXPENSE_COST = " & EXPENSE_COST & ", " & _
+                     "   TOTAL_NEW_PRICE = " & NewTotalPrice & ", " & _
+                     "   TX_TYPE = '" & TX_TYPE & "', " & _
+                    "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                    "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                     "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+   Else
+      SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "   PREVIOUS_AMOUNT = " & PrevAmount & ", " & _
+                     "   NEW_AMOUNT = " & CurrentAmount & ", " & _
+                     "   NEW_PRICE = " & NewPrice & ", " & _
+                     "   RAW_COST = " & RAW_COST & ", " & _
+                     "   EXPENSE_COST = " & EXPENSE_COST & ", " & _
+                     "   TOTAL_NEW_PRICE = " & NewTotalPrice & ", " & _
+                     "   TX_TYPE = '" & TX_TYPE & "', " & _
+                    "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                    "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                     "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+   End If
+   m_Conn.Execute (SQL1)
+   Exit Function
+   
+ErrorHandler:
+
+   If (DocumentType = 3) Or (DocumentType = 22) Or (DocumentType = 12) Or (DocumentType = 13) Or (DocumentType = 14) Then
+      SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "   ACTUAL_UNIT_PRICE = " & 0 & ", " & _
+                     "   INCLUDE_UNIT_PRICE = " & 0 & ", " & _
+                     "   TOTAL_INCLUDE_PRICE = " & 0 & ", " & _
+                     "   TOTAL_ACTUAL_PRICE = " & 0 & ", " & _
+                     "   PREVIOUS_AMOUNT = " & PrevAmount & ", " & _
+                     "   NEW_AMOUNT = " & CurrentAmount & ", " & _
+                     "   NEW_PRICE = " & 0 & ", " & _
+                     "   RAW_COST = " & 0 & ", " & _
+                     "   EXPENSE_COST = " & 0 & ", " & _
+                     "   TOTAL_NEW_PRICE = " & 0 & ", " & _
+                     "   TX_TYPE = '" & TX_TYPE & "', " & _
+                    "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                    "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                     "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+   Else
+      SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "   PREVIOUS_AMOUNT = " & PrevAmount & ", " & _
+                     "   NEW_AMOUNT = " & CurrentAmount & ", " & _
+                     "   NEW_PRICE = " & 0 & ", " & _
+                     "   RAW_COST = " & 0 & ", " & _
+                     "   EXPENSE_COST = " & 0 & ", " & _
+                     "   TOTAL_NEW_PRICE = " & 0 & ", " & _
+                     "   TX_TYPE = '" & TX_TYPE & "', " & _
+                    "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                    "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                     "WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID
+   End If
+   m_Conn.Execute (SQL1)
+End Function
+
+Private Sub Class_Terminate()
+   Set SubLotItems = Nothing
+'   Set Pallet = New Collection
+'   Set Lots = New Collection
+   Set C_LotDoc = Nothing
+End Sub
+''Public Function CopyObjectFromSup(Ind As Long, TempObj As CSupItem)
+''
+''      PART_ITEM_ID = TempObj.PART_ITEM_ID                                                             '2
+''      LOCATION_ID = TempObj.LOCATION_ID                                                             '2
+''      FEATURE_ID = TempObj.FEATURE_ID
+''      ACTUAL_UNIT_PRICE = TempObj.ACTUAL_UNIT_PRICE                                                             '2
+''      INCLUDE_UNIT_PRICE = TempObj.INCLUDE_UNIT_PRICE                                                             '2
+''      PREVIOUS_PRICE = TempObj.PREVIOUS_PRICE                                                             '2
+''      PREVIOUS_AMOUNT = TempObj.PREVIOUS_AMOUNT                                                             '2
+''      NEW_PRICE = TempObj.NEW_PRICE                                                             '2
+''      TX_AMOUNT = TempObj.TX_AMOUNT                                                             '2
+''      TRANSACTION_SEQ = TempObj.TRANSACTION_SEQ                                                             '2
+''      GUI_ID = TempObj.GUI_ID                                                             '2
+''
+''      CALCULATE_FLAG = TempObj.CALCULATE_FLAG                                                             '2
+''      TOTAL_ACTUAL_PRICE = TempObj.TOTAL_ACTUAL_PRICE                                                             '2
+''      TOTAL_INCLUDE_PRICE = TempObj.TOTAL_INCLUDE_PRICE                                                               '2
+''      TX_TYPE = TempObj.TX_TYPE                                                             '2
+''      LEFT_AMOUNT = TempObj.LEFT_AMOUNT                                                             '2
+''      LAYOUT_ID = TempObj.LAYOUT_ID                                                             '2
+''      LINK_ID = TempObj.LINK_ID                                                             '2
+''      PACKAGING_AMT = TempObj.PACKAGING_AMT                                                             '2
+''      ENTRY_WEIGHT = TempObj.ENTRY_WEIGHT                                                             '2
+''      EXIT_WEIGHT = TempObj.EXIT_WEIGHT                                                             '2
+''
+''      WEIGHT_AMOUNT = TempObj.WEIGHT_AMOUNT                                                             '2
+''      PACKAGE_WEIGHT = TempObj.PACKAGE_WEIGHT                                                             '2
+''      OTHER_WEIGHT = TempObj.OTHER_WEIGHT                                                             '2
+''      PERCENT_HUMID = TempObj.PERCENT_HUMID                                                             '2
+''      HUMID_WEIGHT = TempObj.HUMID_WEIGHT                                                             '2
+''      PACKAGING_ID = TempObj.PACKAGING_ID                                                             '2
+''
+''      SUPPLIER_WEIGHT = TempObj.SUPPLIER_WEIGHT                                                             '2
+''      CALCULATE_TYPE = TempObj.CALCULATE_TYPE                                                             '2
+''      PACKAGE_AMOUNT = TempObj.PACKAGE_AMOUNT                                                             '2
+''      ACTUAL_PKG_AMOUNT = TempObj.ACTUAL_PKG_AMOUNT                                                             '2
+''      PUREXP_ID1 = TempObj.PUREXP_ID1                                                             '2
+''      PUREXP_ID2 = TempObj.PUREXP_ID2                                                             '2
+''      EXPENSE1 = TempObj.EXPENSE1                                                             '2
+''      EXPENSE2 = TempObj.EXPENSE2                                                             '2
+''      TOTAL_WEIGHT = TempObj.TOTAL_WEIGHT                                                             '2
+''      RAW_PRICE = TempObj.RAW_PRICE                                                             '2
+''
+''      DISCOUNT_AMT = TempObj.DISCOUNT_AMT                                                             '2
+''      RAW_TOT_PRICE = TempObj.RAW_TOT_PRICE                                                             '2
+''      TO_DEPARTMENT = TempObj.TO_DEPARTMENT                                                             '2
+''      ITEM_DESC = TempObj.ITEM_DESC                                                             '2
+''      EXTRA_NAME = TempObj.EXTRA_NAME                                                             '2
+''      SALE_TOT_PRICE = TempObj.SALE_TOT_PRICE                                                             '2
+''      CALCULATE_WEIGHT = TempObj.CALCULATE_WEIGHT                                                             '2
+''      RAW_COST = TempObj.RAW_COST                                                             '2
+''      EXPENSE_COST = TempObj.EXPENSE_COST                                                             '2
+''      TOTAL_NEW_PRICE = TempObj.TOTAL_NEW_PRICE                                                             '2
+''      BAG_RETURN = TempObj.BAG_RETURN                                                             '2
+''
+''      ACTUAL_AMOUNT = TempObj.ACTUAL_AMOUNT                                                             '2
+''      ACTUAL_PRICE = TempObj.ACTUAL_PRICE                                                             '2
+''      CURRENT_AMOUNT = TempObj.CURRENT_AMOUNT                                                             '2
+''      CURRENT_PRICE = TempObj.CURRENT_PRICE                                                             '2
+''      NEED_TOTAL_PRICE = TempObj.NEED_TOTAL_PRICE                                                             '2
+''      NEED_TOTAL_AMOUNT = TempObj.NEED_TOTAL_AMOUNT                                                             '2
+''      NEED_AVG_PRICE = TempObj.NEED_AVG_PRICE                                                             '2
+''      MANUAL_PRICE = TempObj.MANUAL_PRICE                                                             '2
+''      EXPENSE_TYPE = TempObj.EXPENSE_TYPE                                                             '2
+''      AUTO_PRICE = TempObj.AUTO_PRICE                                                             '2
+''      ITEM_DESC_ID = TempObj.ITEM_DESC_ID                                                             '2
+''      ITEM_DESC_NO = TempObj.ITEM_DESC_NO                                                             '2
+''
+''      ITEM_DESC_NAME = TempObj.ITEM_DESC_NAME                                                             '2
+''      PUREXP_NO1 = TempObj.PUREXP_NO1                                                             '2
+''      PUREXP_NO2 = TempObj.PUREXP_NO2                                                             '2
+''      PUREXP_NAME1 = TempObj.PUREXP_NAME1                                                             '2
+''      PUREXP_NAME2 = TempObj.PUREXP_NAME2                                                             '2
+''      EXPENSE_RATE1 = TempObj.EXPENSE_RATE1                                                             '2
+''      EXPENSE_RATE2 = TempObj.EXPENSE_RATE2                                                             '2
+''      PACKAGING_CODE = TempObj.PACKAGING_CODE                                                             '2
+''
+''      PRIORITY1 = TempObj.PRIORITY1                                                             '2
+''      EXPORT_AVG_PRICE = TempObj.EXPORT_AVG_PRICE                                                             '2
+''      EXPORT_TOTAL_PRICE = TempObj.EXPORT_TOTAL_PRICE                                                             '2
+''      IMPORT_AMOUNT = TempObj.IMPORT_AMOUNT                                                             '2
+''      OLD_LOCATION_ID = TempObj.OLD_LOCATION_ID                                                             '2
+''      OLD_TX_AMOUNT = TempObj.OLD_TX_AMOUNT                                                             '2
+''      OLD_LOCATION_ID = TempObj.OLD_LOCATION_ID                                                             '2
+''      PACKAGING_CODE = TempObj.PACKAGING_CODE                                                             '2
+''      PACKAGING_CODE = TempObj.PACKAGING_CODE                                                             '2
+''      PACKAGING_CODE = TempObj.PACKAGING_CODE                                                             '2
+''
+''      PART_GROUP_ID = TempObj.PART_GROUP_ID                                                             '2
+''      PART_TYPE = TempObj.PART_TYPE                                                             '2
+''      PART_TYPE_NAME = TempObj.PART_TYPE_NAME                                                             '2
+''      PART_TYPE_NO = TempObj.PART_TYPE_NO                                                             '2
+''      LOCATION_NO = TempObj.LOCATION_NO                                                             '2
+''      LOCATION_NAME = TempObj.LOCATION_NAME                                                             '2
+''      PART_NO = TempObj.PART_NO                                                             '2
+''      PART_DESC = TempObj.PART_DESC                                                             '2
+''      PIG_FLAG = TempObj.PIG_FLAG                                                             '2
+''      PIG_TYPE = TempObj.PIG_TYPE                                                             '2
+''      UNIT_NAME = TempObj.UNIT_NAME                                                             '2
+''
+''      DOCUMENT_DATE = TempObj.DOCUMENT_DATE                                                             '2
+''      DOCUMENT_NO = TempObj.DOCUMENT_NO                                                             '2
+''      DO_NO = TempObj.DO_NO                                                             '2
+''      SENDER_NAME = TempObj.SENDER_NAME                                                             '2
+''      DOCUMENT_TYPE = TempObj.DOCUMENT_TYPE                                                             '2
+''      RECEIVE_NAME = TempObj.RECEIVE_NAME                                                             '2
+''      QUE_NO = TempObj.QUE_NO                                                             '2
+''      TRUCK_NO = TempObj.TRUCK_NO                                                             '2
+''      SUPPLIER_ID = TempObj.SUPPLIER_ID                                                             '2
+''      SUPPLIER_CODE = TempObj.SUPPLIER_CODE                                                             '2
+''      SUPPLIER_NAME = TempObj.SUPPLIER_NAME                                                             '2
+''      PR_NO = TempObj.PR_NO                                                             '2
+''      DEPARTMENT_NAME = TempObj.DEPARTMENT_NAME                                                             '2
+''
+''End Function
+Public Function UpdateOutStockFlag(Flag As String)
+Dim SQL1 As String
+                     SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "  OUT_STOCK_FLAG = '" & ChangeQuote(Trim(Flag)) & "'" & _
+                     "  WHERE LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID & " AND TX_TYPE='" & TX_TYPE & "'"
+                     
+                     m_Conn.Execute (SQL1)
+End Function
+Public Function UpdatePartItemIdInLotItemWh()
+Dim SQL1 As String
+                     SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+                     "  LOT_ITEM_WH.PART_ITEM_ID = " & PART_ITEM_ID & "" & _
+                     "  WHERE LOT_ITEM_WH.LOT_ITEM_WH_ID = " & LOT_ITEM_WH_ID & "  AND LOT_ITEM_WH.TX_TYPE='" & TX_TYPE & "'"
+
+
+                     m_Conn.Execute (SQL1)
+End Function
+

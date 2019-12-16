@@ -1,0 +1,13 @@
+CREATE TABLE FORMULA_PRICE
+(
+   FORMULA_PRICE_ID      ID_TYPE NOT NULL,
+   FORMULA_ID            ID_TYPE,
+   PRICE_DATE            DATE_TYPE,
+   RMC                   MONEY_TYPE,
+   PMC                   MONEY_TYPE,
+
+   CREATE_DATE           DATE_TYPE NOT NULL,
+   CREATE_BY             ID_TYPE NOT NULL,
+   MODIFY_DATE           DATE_TYPE NOT NULL,
+   MODIFY_BY             ID_TYPE NOT NULL
+);

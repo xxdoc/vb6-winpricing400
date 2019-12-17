@@ -9,7 +9,7 @@ Public Sub InitPaymentType3(C As ComboBox)
    
    C.AddItem (PaymentType2Text(1))
    C.ItemData(1) = 1
-   
+   '
 '   C.AddItem (PaymentType2Text(2))
 '   C.ItemData(2) = 2
 

@@ -617,7 +617,7 @@ Public TempLotItemsWH As Collection
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public ID2 As Long
 Public ID_LOT As Long
 Public PART_ITEM_ID As Long
@@ -893,8 +893,8 @@ Dim I As Long
  For Each TempData In Cl
    If Not (C Is Nothing) Then
          I = I + 1
-         C.AddItem (TempData.LOT_NO & "-" & Format(TempData.TIME_PACK_BEGIN, "HH:mm") & " " & TempData.BIN_NAME & " " & TempData.LOCK_NAME)
-         C.ItemData(I) = TempData.LOT_ID & TempData.LOT_DOC_ID
+         C.AddItem (TempData.LOT_NO & "-" & Format(TempData.TIME_PACK_BEGIN, "HH:mm") & " " & TempData.BIN_NAME & " " & TempData.LOCK_NAME & "     k:" & TempData.LOT_ID & TempData.LOT_DOC_ID)
+         C.ItemData(I) = I 'TempData.LOT_ID & TempData.LOT_DOC_ID
       End If
    Next TempData
 End Sub
@@ -904,7 +904,8 @@ Dim TempLTD As CLotDoc
 Dim Key As String
 Dim Key2 As String
 
-   Key = Trim(str(cboLotNo.ItemData(Minus2Zero(cboLotNo.ListIndex))))
+'   Key = Trim(str(cboLotNo.ItemData(Minus2Zero(cboLotNo.ListIndex))))
+   Key = getKeyCbo(cboLotNo.Text)
    Set LTD = GetObject("CLotDoc", m_CollLotItemWh, Key, False)
    If Not (LTD Is Nothing) Then
       Key2 = Trim(str(LTD.LOT_ID) & "-" & str(LTD.LOT_DOC_ID))
@@ -1183,7 +1184,7 @@ Private Sub cmdEdit2_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
 Dim LTD As CLotDoc
 
@@ -1192,12 +1193,12 @@ Dim LTD As CLotDoc
    End If
    
    FlagEvens = "D"
-   ID = Val(GridEX2.Value(2))
+   id = Val(GridEX2.Value(2))
 '   Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
 
    Set LTD = TempCollection.Item(ID_LOT)
 
-   frmAddEditLocation.ID = ID
+   frmAddEditLocation.id = id
    If DOCUMENT_TYPE_INPUT = 14 Then
       frmAddEditLocation.HeaderText = MapText("·°È‰¢®”π«π∂ÿß")
    ElseIf DOCUMENT_TYPE_INPUT = 13 Then

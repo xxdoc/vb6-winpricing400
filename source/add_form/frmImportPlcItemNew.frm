@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmImportPlcItemNew 
    BackColor       =   &H80000000&
    BorderStyle     =   1  'Fixed Single
@@ -316,7 +316,7 @@ Private m_HasActivate As Boolean
 Private m_HasModify As Boolean
 Private m_Rs As ADODB.Recordset
 
-Public id As Long
+Public ID As Long
 Public OKClick As Boolean
 Public ShowMode As SHOW_MODE_TYPE
 Public HeaderText As String
@@ -379,7 +379,7 @@ Private Sub cmdDelete_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim id As Long
+Dim ID As Long
 'Dim TempBatch As CBacthing
 
    If Not cmdDelete.Enabled Then
@@ -393,14 +393,14 @@ Dim id As Long
    If Not VerifyGrid(GridEX2.Value(1)) Then
       Exit Sub
    End If
-   id = GridEX2.Value(2)
+   ID = GridEX2.Value(2)
    
    Call EnableForm(Me, False)
    
-   If id <= 0 Then
-      m_CollList2.Remove (id)
+   If ID <= 0 Then
+      m_CollList2.Remove (ID)
    Else
-         m_CollList2.Item(id).Flag = "D"
+         m_CollList2.Item(ID).Flag = "D"
    End If
    
    GridEX2.ItemCount = CountItem(m_CollList2)
@@ -513,19 +513,19 @@ Private Sub cmdSelectAll_Click()
    GridEX2.ItemCount = CountItem(m_CollList2) 'm_CollList2.Count
    GridEX2.Rebind
 End Sub
-Public Sub CopyItem(TempCol1 As Collection, TempCol2 As Collection, id As Long)
+Public Sub CopyItem(TempCol1 As Collection, TempCol2 As Collection, ID As Long)
 Dim L As CUserAccount
 Dim strDate As Date
-   If id > 0 Then
-      strDate = DateSerial(Val(Mid(TempCol1(id).BatchStartDate, 7, 4)), Val(Mid(TempCol1(id).BatchStartDate, 4, 2)), Val(Mid(TempCol1(id).BatchStartDate, 1, 2)))
+   If ID > 0 Then
+      strDate = DateSerial(Val(Mid(TempCol1(ID).BatchStartDate, 7, 4)), Val(Mid(TempCol1(ID).BatchStartDate, 4, 2)), Val(Mid(TempCol1(ID).BatchStartDate, 1, 2)))
       If Not VerifyLockInventoryDate(strDate, strDate) Then
          glbErrorLog.LocalErrorMsg = MapText("ไม่สามารถเปลี่ยนแปลงเอกสารตามวันที่เอกสารที่เลือกได้ กรุณาติดต่อผู้ดูแลระบบ หรือผู้มีสิทธิ์กำหนดวันที่เอกสารได้")
          glbErrorLog.ShowUserError
          Exit Sub
       End If
        
-      Call TempCol2.add(TempCol1(id), Trim(TempCol1(id).TempProductionNumber))
-      TempCol1.Remove (id)
+      Call TempCol2.add(TempCol1(ID), Trim(TempCol1(ID).TempProductionNumber))
+      TempCol1.Remove (ID)
    End If
 End Sub
 Public Sub CopyAllItem(TempCol1 As Collection, TempCol2 As Collection)
@@ -557,7 +557,7 @@ End Sub
 Private Sub cmdStart_Click()
 Dim TempID As Long
 Dim tempBatch As CBacthing
-Dim id As Long
+Dim ID As Long
 Dim SearchBacthing As CBacthing
 
    If Not VerifyTextControl(lblFileName, txtFileName) Then
@@ -569,14 +569,14 @@ Dim SearchBacthing As CBacthing
    End If
    
    If m_CollList2.Count > 0 Then
-   id = 0
+   ID = 0
        For Each tempBatch In m_CollList2
-         id = id + 1
+         ID = ID + 1
          If tempBatch.SKIP_PART_ITEM_NO = False Then  'ถ้าไม่ใช่รำล้างไลน์ หรือ ข้าวโพดล้างไลน์'If TempBatch.FormulaCode <> "10541" And TempBatch.FormulaCode <> "10101" Then  'ถ้าไม่ใช่รำล้างไลน์ หรือ ข้าวโพดล้างไลน์
             If Len(tempBatch.LotNo) = 0 And tempBatch.Flag <> "D" Then
                glbErrorLog.LocalErrorMsg = "การผลิตอาหารเบอร์ " & tempBatch.FormulaCode & " ยังไม่มีเลข Lot การผลิต กรุณาป้อนเลข Lot การผลิต"
                glbErrorLog.ShowUserError
-               Call ShowLot(id)
+               Call ShowLot(ID)
                Exit Sub
             End If
          End If
@@ -2675,8 +2675,8 @@ Private Sub GridEX2_DblClick()
   End If
   Call ShowLot(Val(GridEX2.Value(2)))
 End Sub
-Private Function ShowLot(id As Long)
-   frmAddEditLotNo.id = id
+Private Function ShowLot(ID As Long)
+   frmAddEditLotNo.ID = ID
    frmAddEditLotNo.HeaderText = MapText("แก้ไขข้อมูล LOT การผลิต")
    frmAddEditLotNo.ShowMode = SHOW_EDIT
    frmAddEditLotNo.SplitFlag = SplitFlag

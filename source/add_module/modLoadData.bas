@@ -2506,6 +2506,9 @@ Set m_CollJob = New Collection
  Call LoadJobByInventoryWhDoc(Nothing, m_CollJob, , , , , DOCUMENT_TYPE)
    While Not Rs.EOF
       I = I + 1
+'      If I = 28 Then
+'      Debug.Print I
+'      End If
       Set TempData = New CLotDoc
       Call TempData.PopulateFromRS(Ind, Rs)
       
@@ -2547,8 +2550,9 @@ Set m_CollJob = New Collection
                End If
             ElseIf SumLotAmount > PackAmount Then
                If Not (C Is Nothing) Then
-                  C.AddItem (TempData.LOT_NO & "-" & Format(TempData.TIME_PACK_BEGIN, "HH:mm") & " " & TempData.BIN_NAME & " " & TempData.LOCK_NAME)
-                   C.ItemData(I) = TempData.LOT_ID & TempData.LOT_DOC_ID 'ตัวนี้จำเป็นต้องให้ key ติดกัน
+                  C.AddItem (TempData.LOT_NO & "-" & Format(TempData.TIME_PACK_BEGIN, "HH:mm") & " " & TempData.BIN_NAME & " " & TempData.LOCK_NAME & "     k:" & TempData.LOT_ID & TempData.LOT_DOC_ID) 'แนบ key  ("k" & TempData.LOT_ID & TempData.LOT_DOC_ID) เข้าไปด้วย ตัวนี้จำเป็นต้องให้ key ติดกัน
+'                   C.ItemData(I) = TempData.LOT_ID & TempData.LOT_DOC_ID 'ตัวนี้จำเป็นต้องให้ key ติดกัน
+                  C.ItemData(I) = I
                End If
 
                If Not (Cl Is Nothing) Then
@@ -2756,8 +2760,8 @@ Set m_CollJob = New Collection
                      SumLotAmount = SumLotAmount + TempData.LOT_AMOUNT
                      
                        If Not (C Is Nothing) Then
-                         C.AddItem (TempData.LOT_NO & "-" & Format(TempData.TIME_PACK_BEGIN, "HH:mm"))
-                         C.ItemData(I) = TempData.LOT_ID & TempData.LOT_DOC_ID 'ตัวนี้จำเป็นต้องให้ key ติดกัน
+                         C.AddItem (TempData.LOT_NO & "-" & Format(TempData.TIME_PACK_BEGIN, "HH:mm") & "     k:" & TempData.LOT_ID & TempData.LOT_DOC_ID)
+                         C.ItemData(I) = I ' TempData.LOT_ID & TempData.LOT_DOC_ID 'ตัวนี้จำเป็นต้องให้ key ติดกัน
                      End If
                      
                      If Not (Cl Is Nothing) Then
@@ -4112,7 +4116,7 @@ ErrorHandler:
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 
-Public Sub LoadStockPartItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional PartGroupID As Long, Optional ID As Long)
+Public Sub LoadStockPartItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional PartGroupID As Long, Optional id As Long)
 On Error GoTo ErrorHandler
 Dim D As CPartItem
 Dim ItemCount As Long
@@ -4165,7 +4169,7 @@ ErrorHandler:
 End Sub
 
 '==
-Public Sub LoadPartType(C As ComboBox, Optional Cl As Collection = Nothing, Optional PartGroupID As Long, Optional ID As Long)
+Public Sub LoadPartType(C As ComboBox, Optional Cl As Collection = Nothing, Optional PartGroupID As Long, Optional id As Long)
 On Error GoTo ErrorHandler
 Dim D As CPartType
 Dim ItemCount As Long
@@ -6668,7 +6672,7 @@ ErrorHandler:
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 
-Public Sub LoadSupplier(C As ComboBox, Optional Cl As Collection = Nothing, Optional KeyType As Byte = 1, Optional SupID As Long = -1)
+Public Sub LoadSupplier(C As ComboBox, Optional Cl As Collection = Nothing, Optional KeyType As Byte = 1, Optional SupID As Long = -1, Optional SupType As Long = -1)
 On Error GoTo ErrorHandler
 Dim D As CSupplier
 Dim ItemCount As Long
@@ -6680,6 +6684,7 @@ Dim I As Long
    D.SUPPLIER_ID = -1
    D.OrderBy = 1
    D.OrderType = 1
+   D.SUPPLIER_TYPE = SupType
    If Rs Is Nothing Then
       Set Rs = New ADODB.Recordset
       Call D.QueryData2(Rs, ItemCount)
@@ -7190,7 +7195,7 @@ ErrorHandler:
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 
-Public Sub LoadEmployee(C As ComboBox, Optional Cl As Collection = Nothing, Optional ID As Long = -1)
+Public Sub LoadEmployee(C As ComboBox, Optional Cl As Collection = Nothing, Optional id As Long = -1)
 On Error GoTo ErrorHandler
 Dim D As CEmployee
 Dim ItemCount As Long
@@ -7201,7 +7206,7 @@ Dim I As Long
    Set Rs = New ADODB.Recordset
    
    D.EMP_ID = -1
-   D.CURRENT_POSITION = ID
+   D.CURRENT_POSITION = id
    Call D.QueryData(Rs, ItemCount)
    
    If Not (C Is Nothing) Then
@@ -7541,34 +7546,34 @@ Public Sub InitPaperSize(C As ComboBox)
    C.ItemData(4) = 177
 End Sub
 
-Public Function PeriodTypeToText(ID As PERIOD_TYPE) As String
-   If ID = DAILY_PERIOD Then
+Public Function PeriodTypeToText(id As PERIOD_TYPE) As String
+   If id = DAILY_PERIOD Then
       PeriodTypeToText = MapText("รายวัน")
-   ElseIf ID = MONTHLY_PERIOD Then
+   ElseIf id = MONTHLY_PERIOD Then
       PeriodTypeToText = MapText("รายเดือน")
    End If
 End Function
 
-Public Function RateTypeToText(ID As RATE_TYPE) As String
-   If ID = RATE_FLAT Then
+Public Function RateTypeToText(id As RATE_TYPE) As String
+   If id = RATE_FLAT Then
       RateTypeToText = MapText("แฟลต")
-   ElseIf ID = RATE_STEP Then
+   ElseIf id = RATE_STEP Then
       RateTypeToText = MapText("เสตป")
-   ElseIf ID = RATE_TIER Then
+   ElseIf id = RATE_TIER Then
       RateTypeToText = MapText("เทียร์")
    End If
 End Function
 
-Public Function VariableToText(ID As JOB_VARIABLE_TYPE) As String
-   If ID = CAN_VAR Then
+Public Function VariableToText(id As JOB_VARIABLE_TYPE) As String
+   If id = CAN_VAR Then
       VariableToText = MapText("ค่าภาชนะบรรจุ/หน่วย")
-   ElseIf ID = LOSS_VAR Then
+   ElseIf id = LOSS_VAR Then
       VariableToText = MapText("%การสูญเสีย")
-   ElseIf ID = OVERHEAD_VAR Then
+   ElseIf id = OVERHEAD_VAR Then
       VariableToText = MapText("โอเวอร์เฮด/หน่วย")
-   ElseIf ID = PMC_VAR Then
+   ElseIf id = PMC_VAR Then
       VariableToText = MapText("PMC")
-   ElseIf ID = RCM_VAR Then
+   ElseIf id = RCM_VAR Then
       VariableToText = MapText("RMC")
    End If
 End Function
@@ -10329,12 +10334,12 @@ Public Sub InitPaymentType(C As ComboBox)
    C.ItemData(3) = 3
 End Sub
 
-Public Function PaymentType2Text(ID As Long) As String
-   If ID = 1 Then
+Public Function PaymentType2Text(id As Long) As String
+   If id = 1 Then
       PaymentType2Text = "เงินสด"
-   ElseIf ID = 2 Then
+   ElseIf id = 2 Then
       PaymentType2Text = "เงินโอน"
-   ElseIf ID = 3 Then
+   ElseIf id = 3 Then
       PaymentType2Text = "เช็ค"
    Else
       PaymentType2Text = ""
@@ -13961,12 +13966,12 @@ ErrorHandler:
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 
-Public Function ID2ExportDocTypeSet(ID As Long) As String
-   If ID = 0 Then
+Public Function ID2ExportDocTypeSet(id As Long) As String
+   If id = 0 Then
       ID2ExportDocTypeSet = "(2, 20)"
-   ElseIf ID = 1 Then
+   ElseIf id = 1 Then
       ID2ExportDocTypeSet = "(2)"
-   ElseIf ID = 2 Then
+   ElseIf id = 2 Then
       ID2ExportDocTypeSet = "(20)"
    End If
 End Function
@@ -13984,14 +13989,14 @@ Public Sub InitExportDocTypeSet(C As ComboBox)
    C.ItemData(2) = 2
 End Sub
 
-Public Function ID2ImportDocTypeSet(ID As Long) As String
-   If ID = 0 Then
+Public Function ID2ImportDocTypeSet(id As Long) As String
+   If id = 0 Then
       ID2ImportDocTypeSet = "(19, 23,20)"
-   ElseIf ID = 1 Then
+   ElseIf id = 1 Then
       ID2ImportDocTypeSet = "(23)"
-   ElseIf ID = 2 Then
+   ElseIf id = 2 Then
       ID2ImportDocTypeSet = "(19)"
-   ElseIf ID = 3 Then
+   ElseIf id = 3 Then
       ID2ImportDocTypeSet = "(20)"
    End If
 End Function
@@ -14038,6 +14043,39 @@ Public Sub InitMemoNoteOrderBy(C As ComboBox)
    
    C.AddItem (MapText("สถานะ"))
    C.ItemData(7) = 7
+End Sub
+Public Sub InitWeightOrderBy(C As ComboBox)
+   C.Clear
+   
+   C.AddItem ("")
+   C.ItemData(0) = 0
+   
+   C.AddItem (MapText("วันที่รถเข้า"))
+   C.ItemData(1) = 1
+
+   C.AddItem (MapText("วันที่รถออก"))
+   C.ItemData(2) = 2
+   
+   C.AddItem (MapText("เวลารถเข้า"))
+   C.ItemData(3) = 3
+
+   C.AddItem (MapText("เวลารถออก"))
+   C.ItemData(4) = 4
+   
+   C.AddItem (MapText("ทะเบียนรถ"))
+   C.ItemData(5) = 5
+   
+   C.AddItem (MapText("รหัสซัพฯ"))
+   C.ItemData(6) = 6
+   
+   C.AddItem (MapText("ชื่อซัพฯ"))
+   C.ItemData(7) = 7
+   
+   C.AddItem (MapText("รหัสสินค้า"))
+   C.ItemData(8) = 8
+   
+   C.AddItem (MapText("ชื่อสินค้า"))
+   C.ItemData(9) = 9
 End Sub
 '===
 Public Sub LoadUserAccount(C As ComboBox, Optional Cl As Collection = Nothing)

@@ -330,7 +330,7 @@ Private m_Employees As Collection
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public DocumentType As Long
 Public ProcessID As Long
 
@@ -363,7 +363,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
       
-      m_InventoryWHDoc.INVENTORY_WH_DOC_ID = ID
+      m_InventoryWHDoc.INVENTORY_WH_DOC_ID = id
       m_InventoryWHDoc.COMMIT_FLAG = ""
       m_InventoryWHDoc.QueryFlag = 1
       If Not glbDaily.QueryInventoryWhDoc(m_InventoryWHDoc, m_Rs, ItemCount, IsOK, glbErrorLog) Then
@@ -520,7 +520,7 @@ Dim ID2 As Long
    End If
    
    m_InventoryWHDoc.AddEditMode = ShowMode
-   m_InventoryWHDoc.INVENTORY_WH_DOC_ID = ID
+   m_InventoryWHDoc.INVENTORY_WH_DOC_ID = id
     m_InventoryWHDoc.DOCUMENT_DATE = uctlDocumentDate.ShowDate
    m_InventoryWHDoc.DOCUMENT_NO = txtDocumentNo.Text
    m_InventoryWHDoc.DELIVERY_FEE = 0
@@ -588,6 +588,7 @@ Dim ID2 As Long
    m_Job.INVENTORY_WH_DOC_ID = -1
    m_Job.INVENTORY_WH_DOC_ID_INPUT = -1
    m_Job.INVENTORY_WH_DOC_ID = m_InventoryWHDoc.INVENTORY_WH_DOC_ID
+   m_Job.VERIFY_FLAG = "Y"
    
    If Not glbProduction.AddEditJob(m_Job, IsOK, False, glbErrorLog) Then
       glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -694,7 +695,7 @@ Dim PartType As Long
    If TabStrip1.SelectedItem.Index = 1 Then
      Set frmAddEditJobOutputEx3.Temp_IWD = m_InventoryWHDoc 'ส่งไปทั้ง Class
      frmAddEditJobOutputEx3.COMMIT_FLAG = m_InventoryWHDoc.OLD_COMMIT_FLAG
-     frmAddEditJobOutputEx3.ID = ID
+     frmAddEditJobOutputEx3.id = id
 '    PartType = cboPartType.ItemData(Minus2Zero(cboPartType.ListIndex))
      If DocumentType = 15 Then
       frmAddEditJobOutputEx3.PartType = 10
@@ -824,18 +825,18 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
       
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 1 Then
-      frmAddEditJobOutputEx3.ID = ID
+      frmAddEditJobOutputEx3.id = id
       frmAddEditJobOutputEx3.DocumentType = DocumentType
       frmAddEditJobOutputEx3.COMMIT_FLAG = m_InventoryWHDoc.COMMIT_FLAG
       Set frmAddEditJobOutputEx3.Temp_IWD = m_InventoryWHDoc 'ส่งไปทั้ง Class
@@ -856,7 +857,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 2 Then
-      frmAddEditJobOutputEx3.ID = ID
+      frmAddEditJobOutputEx3.id = id
       frmAddEditJobOutputEx3.COMMIT_FLAG = m_InventoryWHDoc.COMMIT_FLAG
       Set frmAddEditJobOutputEx3.TempCollection = m_InventoryWHDoc.ExportItems
       frmAddEditJobOutputEx3.HeaderText = MapText("แก้ไขรายการปรับยอด (ลด)")
@@ -900,7 +901,7 @@ Dim lMenuChosen  As Long
          Exit Sub
       End If
       
-      ID = m_InventoryWHDoc.INVENTORY_WH_DOC_ID
+      id = m_InventoryWHDoc.INVENTORY_WH_DOC_ID
       Set m_InventoryWHDoc = Nothing
       Set m_InventoryWHDoc = New CInventoryWHDoc
       ShowMode = SHOW_EDIT

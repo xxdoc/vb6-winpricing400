@@ -17135,11 +17135,11 @@ Dim I As Long
    D.TO_DATE = ToDate
    D.VERIFY_FLAG = "Y"
    D.INVENTORY_WH_DOC_ID = InventoryWhDoc
-   If DocumentType = 13 Or DocumentType = 2001 Then
-      D.PROCESS_ID_IN = "(4,7)"
-   ElseIf DocumentType = 14 Or DocumentType = 2000 Then
-      D.PROCESS_ID_IN = "(2,6)"
-   End If
+''''   If DocumentType = 13 Or DocumentType = 2001 Then
+''''      D.PROCESS_ID_IN = "(4,7)"
+''''   ElseIf DocumentType = 14 Or DocumentType = 2000 Then
+''''      D.PROCESS_ID_IN = "(2,6)"
+''''   End If
    Call D.QueryData(7, Rs, ItemCount)
    
    If Not (C Is Nothing) Then

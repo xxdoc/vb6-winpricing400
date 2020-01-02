@@ -2465,7 +2465,7 @@ Private Sub Timer1_Timer()
    lblUsername.Caption = MapText("ผู้ใช้ : ") & " " & glbUser.USER_NAME
    lblUserGroup.Caption = MapText("กลุ่มผู้ใช้ : ") & " " & glbUser.GROUP_NAME
    
-   Timer1.Enabled = True
+Timer1.Enabled = True
 End Sub
 Private Sub trvMain_NodeClick(ByVal Node As MSComctlLib.Node)
    If Node Is Nothing Then

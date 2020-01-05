@@ -27,7 +27,9 @@ Public WEIGHT_ACTUAL_ID As Long
 Public WEIGHT_ID As String
 Public TRUCK_ID As String
 Public CUST_ID As String
+Public CUST_NAME As String
 Public PRODUCT_ID As String
+Public PRODUCT_NAME As String
 Public Date1 As Date
 Public Date2 As Date
 Public DateShow1 As String
@@ -65,64 +67,177 @@ Dim WhereStr As String
 Dim OrderByStr As String
 Dim OrderTypeStr As String
 If Ind = 1 Then
-   SelectStr1 = "SELECT sale.*  "
+   SelectStr1 = "SELECT sl.*,cm.cust_name,pd.product_name  "
    SelectStr2 = "SELECT COUNT(*) as RC  "
-   FromStr = "FROM sale "
+   FromStr = "FROM ((sale  AS sl "
+   FromStr = FromStr & "LEFT  JOIN customer AS cm  ON (sl.cust_id = cm.cust_id)) "
+   FromStr = FromStr & "LEFT  JOIN product AS pd ON (sl.product_id  = pd.product_id)) "
    WhereStr = ""
 ElseIf Ind = 2 Then
-    SelectStr1 = "SELECT tmpsale.*  "
+    SelectStr1 = "SELECT sl.*,cm.cust_name,pd.product_name  "
    SelectStr2 = "SELECT COUNT(*) as RC  "
-   FromStr = "FROM tmpsale "
+   FromStr = "FROM ((tmpsale  AS sl  "
+   FromStr = FromStr & "LEFT  JOIN customer AS cm  ON (sl.cust_id = cm.cust_id)) "
+   FromStr = FromStr & "LEFT  JOIN product AS pd ON (sl.product_id  = pd.product_id)) "
    WhereStr = ""
 End If
    If Len(CUST_ID) > 0 Then
       If Len(WhereStr) <= 0 Then
-         WhereStr = "WHERE (cust_id LIKE '%" & CUST_ID & "%') "
+         WhereStr = "WHERE (sl.cust_id LIKE '%" & CUST_ID & "%') "
       Else
-         WhereStr = WhereStr & "AND (cust_id LIKE '%" & CUST_ID & "%') "
+         WhereStr = WhereStr & "AND (sl.cust_id LIKE '%" & CUST_ID & "%') "
       End If
    End If
    
    If Len(TRUCK_ID) > 0 Then
       If Len(WhereStr) <= 0 Then
-         WhereStr = "WHERE (TRUCK_ID LIKE '%" & TRUCK_ID & "%') "
+         WhereStr = "WHERE (sl.TRUCK_ID LIKE '%" & TRUCK_ID & "%') "
       Else
-         WhereStr = WhereStr & "AND (TRUCK_ID LIKE '%" & TRUCK_ID & "%') "
+         WhereStr = WhereStr & "AND (sl.TRUCK_ID LIKE '%" & TRUCK_ID & "%') "
       End If
    End If
    
     If Date1 > -1 Then
       If Ind = 1 Then
          If Len(WhereStr) <= 0 Then
-'            WhereStr = "WHERE (Format(date1,'dd/MM/YYYY') LIKE '" & Date1 & "') "
-          WhereStr = "WHERE (date1  LIKE '" & Date1 & "') "
+          WhereStr = "WHERE (sl.date1  LIKE '" & Date1 & "') "
          Else
-            'WhereStr = WhereStr & "AND (Format(date1,'dd/MM/YYYY') LIKE '" & Date1 & "') "
-          WhereStr = WhereStr & "AND (date1  LIKE '" & Date1 & "') "
+          WhereStr = WhereStr & "AND (sl.date1  LIKE '" & Date1 & "') "
          End If
       ElseIf Ind = 2 Then
          If Len(WhereStr) <= 0 Then
-'            WhereStr = "WHERE (Format(date,'dd/MM/YYYY') LIKE '" & Date1 & "') "
-              WhereStr = "WHERE (date  LIKE '" & Date1 & "') "
+              WhereStr = "WHERE (sl.date  LIKE '" & Date1 & "') "
          Else
-'            WhereStr = WhereStr & "AND (Format(date,'dd/MM/YYYY') LIKE '" & Date1 & "') "
-              WhereStr = WhereStr & "AND (date  LIKE '" & Date1 & "') "
+              WhereStr = WhereStr & "AND (sl.date  LIKE '" & Date1 & "') "
          End If
       End If
    End If
    
    If Ind = 1 Then
-      OrderByStr = "ORDER BY date1,time1 "
+      If OrderBy = 1 Then
+         OrderByStr = "ORDER BY sl.date1 "
+      ElseIf OrderBy = 2 Then
+         OrderByStr = "ORDER BY sl.date2  "
+      ElseIf OrderBy = 3 Then
+         OrderByStr = "ORDER BY sl.time1 "
+      ElseIf OrderBy = 4 Then
+         OrderByStr = "ORDER BY sl.time2 "
+      ElseIf OrderBy = 5 Then
+         OrderByStr = "ORDER BY sl.TRUCK_ID "
+      ElseIf OrderBy = 6 Then
+         OrderByStr = "ORDER BY sl.CUST_ID "
+      ElseIf OrderBy = 7 Then
+         OrderByStr = "ORDER BY cm.cust_name "
+      ElseIf OrderBy = 8 Then
+         OrderByStr = "ORDER BY sl.PRODUCT_ID  "
+      ElseIf OrderBy = 9 Then
+         OrderByStr = "ORDER BY pd.product_name  "
+      Else
+         OrderByStr = "ORDER BY sl.date1 DESC,sl.time1 "
+      End If
    ElseIf Ind = 2 Then
-      OrderByStr = "ORDER BY date,time "
+      If OrderBy = 1 Then
+         OrderByStr = "ORDER BY sl.date "
+      ElseIf OrderBy = 2 Then
+         OrderByStr = "ORDER BY sl.date  "
+      ElseIf OrderBy = 3 Then
+         OrderByStr = "ORDER BY sl.time "
+      ElseIf OrderBy = 4 Then
+         OrderByStr = "ORDER BY sl.time "
+      ElseIf OrderBy = 5 Then
+         OrderByStr = "ORDER BY sl.TRUCK_ID "
+      ElseIf OrderBy = 6 Then
+         OrderByStr = "ORDER BY sl.CUST_ID "
+      ElseIf OrderBy = 7 Then
+         OrderByStr = "ORDER BY cm.cust_name "
+      ElseIf OrderBy = 8 Then
+         OrderByStr = "ORDER BY sl.PRODUCT_ID  "
+      ElseIf OrderBy = 9 Then
+         OrderByStr = "ORDER BY pd.product_name  "
+      Else
+         OrderByStr = "ORDER BY sl.date DESC,sl.time "
+      End If
    End If
    
-   OrderTypeStr = "DESC "
+   If OrderType = 1 Then
+      OrderTypeStr = "ASC "
+   ElseIf OrderType = 2 Then
+      OrderTypeStr = "DESC "
+   Else
+      OrderTypeStr = "DESC "
+   End If
    
    SQL1 = SelectStr1 & FromStr & WhereStr & OrderByStr & OrderTypeStr
    SQL2 = SelectStr2 & FromStr & WhereStr
    
    Call glbDatabaseMngr2.GetLegacyRs(SQL1, SQL2, True, ItemCount, Rs, glbErrorLog)
+'Dim SQL1 As String
+'Dim SQL2 As String
+'Dim SelectStr1 As String
+'Dim SelectStr2 As String
+'Dim FromStr As String
+'Dim WhereStr As String
+'Dim OrderByStr As String
+'Dim OrderTypeStr As String
+'If Ind = 1 Then
+'   SelectStr1 = "SELECT sale.*,customer.cust_name,product.product_name  "
+'   SelectStr2 = "SELECT COUNT(*) as RC  "
+'   FromStr = "FROM ((sale  "
+'   FromStr = FromStr & "LEFT  JOIN customer  ON (sale.cust_id = customer.cust_id)) "
+'   FromStr = FromStr & "LEFT  JOIN product ON (sale.product_id  = product.product_id)) "
+'   WhereStr = ""
+'ElseIf Ind = 2 Then
+'    SelectStr1 = "SELECT tmpsale.*,customer.cust_name,product.product_name  "
+'   SelectStr2 = "SELECT COUNT(*) as RC  "
+'   FromStr = "FROM ((tmpsale  "
+'   FromStr = FromStr & "LEFT  JOIN customer  ON (tmpsale.cust_id = customer.cust_id)) "
+'   FromStr = FromStr & "LEFT  JOIN product ON (tmpsale.product_id  = product.product_id)) "
+'   WhereStr = ""
+'End If
+'   If Len(CUST_ID) > 0 Then
+'      If Len(WhereStr) <= 0 Then
+'         WhereStr = "WHERE (cust_id LIKE '%" & CUST_ID & "%') "
+'      Else
+'         WhereStr = WhereStr & "AND (cust_id LIKE '%" & CUST_ID & "%') "
+'      End If
+'   End If
+'
+'   If Len(TRUCK_ID) > 0 Then
+'      If Len(WhereStr) <= 0 Then
+'         WhereStr = "WHERE (TRUCK_ID LIKE '%" & TRUCK_ID & "%') "
+'      Else
+'         WhereStr = WhereStr & "AND (TRUCK_ID LIKE '%" & TRUCK_ID & "%') "
+'      End If
+'   End If
+'
+'    If Date1 > -1 Then
+'      If Ind = 1 Then
+'         If Len(WhereStr) <= 0 Then
+'          WhereStr = "WHERE (date1  LIKE '" & Date1 & "') "
+'         Else
+'          WhereStr = WhereStr & "AND (date1  LIKE '" & Date1 & "') "
+'         End If
+'      ElseIf Ind = 2 Then
+'         If Len(WhereStr) <= 0 Then
+'              WhereStr = "WHERE (date  LIKE '" & Date1 & "') "
+'         Else
+'              WhereStr = WhereStr & "AND (date  LIKE '" & Date1 & "') "
+'         End If
+'      End If
+'   End If
+'
+'   If Ind = 1 Then
+'      OrderByStr = "ORDER BY date1,time1 "
+'   ElseIf Ind = 2 Then
+'      OrderByStr = "ORDER BY date,time "
+'   End If
+'
+'   OrderTypeStr = "DESC "
+'
+'   SQL1 = SelectStr1 & FromStr & WhereStr & OrderByStr & OrderTypeStr
+'   SQL2 = SelectStr2 & FromStr & WhereStr
+'
+'   Call glbDatabaseMngr2.GetLegacyRs(SQL1, SQL2, True, ItemCount, Rs, glbErrorLog)
 End Function
 
 Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
@@ -130,7 +245,9 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       WEIGHT_ID = NVLS(Rs("WEIGHT_ID"), "")
       TRUCK_ID = NVLS(Rs("TRUCK_ID"), "")
       CUST_ID = NVLS(Rs("CUST_ID"), "")
+      CUST_NAME = NVLS(Rs("CUST_NAME"), "")
       PRODUCT_ID = NVLS(Rs("PRODUCT_ID"), "")
+      PRODUCT_NAME = NVLS(Rs("PRODUCT_NAME"), "")
       DateShow1 = InternalDateToStringEx5(CDate(Rs("DATE1"))) 'InternalDateToStringEx4(NVLS(Rs("DATE1"), ""))
       DateShow2 = InternalDateToStringEx5(CDate(Rs("DATE2"))) ' InternalDateToStringEx4(NVLS(Rs("DATE1"), ""))
       Time1 = NVLS(Rs("Time1"), "")
@@ -143,7 +260,9 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       WEIGHT_ID = NVLS(Rs("WEIGHT_ID"), "")
       TRUCK_ID = NVLS(Rs("TRUCK_ID"), "")
       CUST_ID = NVLS(Rs("CUST_ID"), "")
+      CUST_NAME = NVLS(Rs("CUST_NAME"), "")
       PRODUCT_ID = NVLS(Rs("PRODUCT_ID"), "")
+      PRODUCT_NAME = NVLS(Rs("PRODUCT_NAME"), "")
       DateShow1 = InternalDateToStringEx5(CDate(Rs("DATE")))
       DateShow2 = ""
       Time1 = NVLS(Rs("Time"), "")
@@ -155,13 +274,13 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
 
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("WEIGHT_ACTUAL_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("WEIGHT_ACTUAL_SEQ", id, glbErrorLog)
 
       SQL1 = "INSERT INTO WEIGHT_ACTUAL " & _
                      "( " & _
@@ -177,7 +296,7 @@ Dim TempID1 As String
                      ") " & _
                      "VALUES " & _
                      "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & DOCUMENT_NO & "'," & _
                          "" & WEIGHT1 & "," & _
                          "" & WEIGHT2 & "," & _
@@ -187,7 +306,7 @@ Dim TempID1 As String
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         WEIGHT_ACTUAL_ID = ID
+         WEIGHT_ACTUAL_ID = id
    Else 'Show edit
       SQL1 = "UPDATE WEIGHT_ACTUAL SET " & _
                      "   DOCUMENT_NO = '" & DOCUMENT_NO & "', " & _

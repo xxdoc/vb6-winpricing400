@@ -2322,7 +2322,7 @@ Public Function ReverseFormatNumber(N As String) As Double
    ReverseFormatNumber = Val(Replace(N, ",", ""))
 End Function
 
-Public Function IDToListIndex(Cbo As ComboBox, ID As Long) As Long
+Public Function IDToListIndex(Cbo As ComboBox, id As Long) As Long
 Dim I As Long
 Dim Temp As String
 
@@ -2333,7 +2333,7 @@ Dim Temp As String
       Else
          Temp = Mid(Cbo.ItemData(I), 1, InStr(Cbo.ItemData(I), ":") - 1)
       End If
-      If Temp = ID Then
+      If Temp = id Then
          IDToListIndex = I
       End If
    Next I
@@ -2642,7 +2642,7 @@ Public Function TypeUnitFlag(A As Long) As String
       TypeUnitFlag = ""
    End If
 End Function
-Public Function CheckUniqueNs(UnqType As UNIQUE_TYPE, Key As String, ID As Long, Optional FieldNameExTendValue As String, Optional FlagSpacial As Long = 0, Optional FieldNameExTendValue2 As String, Optional ID_TYPE As Long = 0, Optional ID_TEMP As Long = 0) As Boolean
+Public Function CheckUniqueNs(UnqType As UNIQUE_TYPE, Key As String, id As Long, Optional FieldNameExTendValue As String, Optional FlagSpacial As Long = 0, Optional FieldNameExTendValue2 As String, Optional ID_TYPE As Long = 0, Optional ID_TEMP As Long = 0) As Boolean
 On Error GoTo ErrorHandler
 Dim TableName As String
 Dim FieldName1 As String
@@ -3136,7 +3136,7 @@ ElseIf UnqType = MONTHLY_ADD_NAME Then
    End If
 
    If Flag Then
-      Count = glbDatabaseMngr.CountRecord(TableName, FieldName1, FieldName2, Key, ID, glbErrorLog, FieldNameExTend, FieldNameExTendValue, FlagSpacial, FieldNameExTend2, FieldNameExTendValue2, ID_TYPE, ID_TEMP)
+      Count = glbDatabaseMngr.CountRecord(TableName, FieldName1, FieldName2, Key, id, glbErrorLog, FieldNameExTend, FieldNameExTendValue, FlagSpacial, FieldNameExTend2, FieldNameExTendValue2, ID_TYPE, ID_TEMP)
       If Count <> 0 Then
          CheckUniqueNs = False
       Else
@@ -3243,12 +3243,12 @@ Public Function ConvertSuccessFlagBillingSo(F As String) As String
        ConvertSuccessFlagBillingSo = ""
    End If
 End Function
-Public Function ConvertTypeProduct(ID As Long) As String
-   If ID = 221 Then
+Public Function ConvertTypeProduct(id As Long) As String
+   If id = 221 Then
        ConvertTypeProduct = "ผง"
-   ElseIf ID = 222 Then
+   ElseIf id = 222 Then
        ConvertTypeProduct = "เม็ด"
-   ElseIf ID = 227 Then
+   ElseIf id = 227 Then
        ConvertTypeProduct = "ครัม"
    Else
        ConvertTypeProduct = ""
@@ -5517,55 +5517,55 @@ Dim YYYY As Long
    LD = DateSerial(YYYY, MM, DD2)
 End Sub
 
-Public Function PaymentTypeToText(ID As PAYMENT_TYPE) As String
-   If ID = CASH_PMT Then
+Public Function PaymentTypeToText(id As PAYMENT_TYPE) As String
+   If id = CASH_PMT Then
       PaymentTypeToText = MapText("เงินสด")
-   ElseIf ID = CHECK_PMT Then
+   ElseIf id = CHECK_PMT Then
       PaymentTypeToText = MapText("เช็ค")
-   ElseIf ID = CREDITCRD_PMT Then
+   ElseIf id = CREDITCRD_PMT Then
       PaymentTypeToText = MapText("บัตรเครดิต")
-   ElseIf ID = BANKTRF_PMT Then
+   ElseIf id = BANKTRF_PMT Then
       PaymentTypeToText = MapText("โอนผ่านธนาคาร")
-   ElseIf ID = CASHRET_PMT Then
+   ElseIf id = CASHRET_PMT Then
       PaymentTypeToText = MapText("เงินสดขายคืน")
    End If
 End Function
 
-Public Function RatioTypeToText(ID As RATIO_TYPE) As String
-   If ID = RATIO_COST Then
+Public Function RatioTypeToText(id As RATIO_TYPE) As String
+   If id = RATIO_COST Then
       RatioTypeToText = MapText("ตามต้นทุนผลิต")
-   ElseIf ID = RATIO_QUANTITY Then
+   ElseIf id = RATIO_QUANTITY Then
       RatioTypeToText = MapText("ตามปริมาณผลิต")
-   ElseIf ID = RATIO_RAW Then
+   ElseIf id = RATIO_RAW Then
       RatioTypeToText = MapText("จำนวนวัตถุดิบที่ใช้")
-   ElseIf ID = RATIO_VARY Then
+   ElseIf id = RATIO_VARY Then
       RatioTypeToText = MapText("แปรผันตามจำนวนผลิต")
-   ElseIf ID = RATIO_PERCENT Then
+   ElseIf id = RATIO_PERCENT Then
       RatioTypeToText = MapText("แปรผันตาม % ของมูลค่าวัตถุดิบที่ใช้")
    End If
 End Function
-Public Function PictureTypeToText(ID As PICTURE_TYPE) As String
-   If ID = HEAD_ACCOUNT Then
+Public Function PictureTypeToText(id As PICTURE_TYPE) As String
+   If id = HEAD_ACCOUNT Then
       PictureTypeToText = MapText("ใบเปิดหน้าบัญชี")
-   ElseIf ID = HEAD_PART Then
+   ElseIf id = HEAD_PART Then
      PictureTypeToText = MapText("รูปภาพประกอบ")
    End If
 End Function
 
-Public Function ParcelTypeToText(ID As PARCEL_TYPE) As String
-   If ID = PARCEL_BAG Then
+Public Function ParcelTypeToText(id As PARCEL_TYPE) As String
+   If id = PARCEL_BAG Then
       ParcelTypeToText = MapText("BAG")
-   ElseIf ID = PARCEL_BULK Then
+   ElseIf id = PARCEL_BULK Then
       ParcelTypeToText = MapText("BULK")
-   ElseIf ID = PARCEL_ALL Then
+   ElseIf id = PARCEL_ALL Then
       ParcelTypeToText = MapText("ทั้งหมด")
    End If
 End Function
 
-Public Function ConvertPerPack(ID As Integer) As String
-   If ID = 10 Then
+Public Function ConvertPerPack(id As Integer) As String
+   If id = 10 Then
       ConvertPerPack = MapText("BAG")
-   ElseIf ID = 21 Then
+   ElseIf id = 21 Then
       ConvertPerPack = MapText("BULK")
    End If
 End Function
@@ -5842,31 +5842,31 @@ Dim InternalDate As String
    Next Tf
 End Sub
 
-Public Function CashDocType2Text(ID As CASH_DOC_TYPE) As String
-   If ID = CASH_DEPOSIT Then
+Public Function CashDocType2Text(id As CASH_DOC_TYPE) As String
+   If id = CASH_DEPOSIT Then
       CashDocType2Text = "ใบนำฝากเงิน"
-   ElseIf ID = CASH_PITTYCASH Then
+   ElseIf id = CASH_PITTYCASH Then
       CashDocType2Text = "ใบเบิก/เคลียร์เงินสดย่อย"
-   ElseIf ID = CASH_TRANSFER Then
+   ElseIf id = CASH_TRANSFER Then
       CashDocType2Text = "ใบโอนเงินระหว่างบัญชี"
-   ElseIf ID = CASH_WITHDRAW Then
+   ElseIf id = CASH_WITHDRAW Then
       CashDocType2Text = "ใบถอนเงิน (ใช้เพื่อเป็นเงินสดย่อย)"
-   ElseIf ID = CASH_WHTHDRAW2 Then
+   ElseIf id = CASH_WHTHDRAW2 Then
       CashDocType2Text = "ใบถอนเงิน/โอนเงิน (ทั่วไป)"
-   ElseIf ID = CASH_DEPOSIT2 Then
+   ElseIf id = CASH_DEPOSIT2 Then
       CashDocType2Text = "ใบนำฝากเงิน/โอนเงิน (ทั่วไป)"
-   ElseIf ID = POST_CHEQUE Then
+   ElseIf id = POST_CHEQUE Then
       CashDocType2Text = "ใบยืนยันการ clearing เช็ค"
-   ElseIf ID = WAITING_CHEQUE Then
+   ElseIf id = WAITING_CHEQUE Then
       CashDocType2Text = "ใบยืนยันการรับเช็คของซัพพลายเออร์"
-   ElseIf ID = PASSED_CHEQUE Then
+   ElseIf id = PASSED_CHEQUE Then
       CashDocType2Text = "ใบยืนยันการ Clearing เช็คจ่าย"
    End If
    
 End Function
 
-Public Function ChequeDocType2Text(ID As CHEQUE_DOC_TYPE) As String
-   If ID = CHECK_CHEQUE Then
+Public Function ChequeDocType2Text(id As CHEQUE_DOC_TYPE) As String
+   If id = CHECK_CHEQUE Then
       ChequeDocType2Text = "ใบตรวจสอบการรับ/คืนเช็ค"
 End If
 End Function
@@ -6027,8 +6027,8 @@ Public Function GetNewClass(ClassName As String) As Object
 
 End Function
 Public Function SavePictureToServer(PathSource As String) As String
-Dim ID As Long
-   Call glbDatabaseMngr.GetSeqID("PICTURE_FILE_SEQ", ID, glbErrorLog)
+Dim id As Long
+   Call glbDatabaseMngr.GetSeqID("PICTURE_FILE_SEQ", id, glbErrorLog)
 
    If Right(glbParameterObj.MapDrivePicture, 1) <> "\" Then
       glbParameterObj.MapDrivePicture = glbParameterObj.MapDrivePicture & "\"
@@ -6044,9 +6044,9 @@ Dim ID As Long
       MkDir (glbParameterObj.MapDrivePicture & Year(Now) & Format(Month(Now), "00"))
    End If
 
-   Call FileCopy(PathSource, glbParameterObj.MapDrivePicture & Year(Now) & Format(Month(Now), "00") & "\" & Format(ID, "000000") & ".JPG")
+   Call FileCopy(PathSource, glbParameterObj.MapDrivePicture & Year(Now) & Format(Month(Now), "00") & "\" & Format(id, "000000") & ".JPG")
    
-   SavePictureToServer = Year(Now) & Format(Month(Now), "00") & "\" & Format(ID, "000000") & ".JPG"
+   SavePictureToServer = Year(Now) & Format(Month(Now), "00") & "\" & Format(id, "000000") & ".JPG"
    
    Exit Function
 NoPath:
@@ -7722,4 +7722,13 @@ Public Function isDiff(Value As Double) As Double
    If Value > 0 Then
       isDiff = MyDiff(Value * 100, 102)
    End If
+End Function
+Public Function getKeyCbo(data As String) As String
+Dim strKey() As String
+strKey = Split(data, "k:")
+If UBound(strKey) > 0 Then
+   getKeyCbo = strKey(1)
+Else
+   getKeyCbo = ""
+End If
 End Function

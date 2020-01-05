@@ -4435,7 +4435,7 @@ End Function
 
 Private Sub AddSubLotItem(Li As CLotItem)
 Dim D As CSubLotItem
-Dim ID As Long
+Dim id As Long
 
    Set D = New CSubLotItem
    D.LOT_ITEM_ID = Li.LOT_ITEM_ID
@@ -4708,7 +4708,7 @@ ErrorHandler:
    IsOK = False
    AddEditInventoryWhDoc = False
 End Function
-Public Function AddBalancePart(Ug As CInventoryWHDoc, IsOK As Boolean, AutoCommit As Boolean, ErrorObj As clsErrorLog, Optional ID As Long = 0)
+Public Function AddBalancePart(Ug As CInventoryWHDoc, IsOK As Boolean, AutoCommit As Boolean, ErrorObj As clsErrorLog, Optional id As Long = 0)
 On Error GoTo ErrorHandler
 Dim Rs As ADODB.Recordset
 Dim RName As String
@@ -4779,7 +4779,7 @@ ErrorHandler:
    IsOK = False
    AddBalancePart = False
 End Function
-Public Function EditBalancePart(Ug As CInventoryWHDoc, IsOK As Boolean, AutoCommit As Boolean, ErrorObj As clsErrorLog, Optional ID As Long = 0)
+Public Function EditBalancePart(Ug As CInventoryWHDoc, IsOK As Boolean, AutoCommit As Boolean, ErrorObj As clsErrorLog, Optional id As Long = 0)
 On Error GoTo ErrorHandler
 Dim Rs As ADODB.Recordset
 Dim RName As String
@@ -14650,7 +14650,7 @@ ErrorHandler:
    DeleteEvaluatePay = True
 End Function
 
-Public Function VerifyReferPo(ID As Long, DocumentTypeSet As String, ErrorObj As clsErrorLog) As Boolean
+Public Function VerifyReferPo(id As Long, DocumentTypeSet As String, ErrorObj As clsErrorLog) As Boolean
 Dim Sp  As CSupItem
 Dim m_Rs  As ADODB.Recordset
 Dim ItemCount  As Long
@@ -14661,7 +14661,7 @@ Dim ItemCount  As Long
    Set m_Rs = New ADODB.Recordset
    Sp.SUP_ITEM_ID = -1
    Sp.DOCUMENT_TYPE_SET = DocumentTypeSet
-   Sp.PO_ID = ID
+   Sp.PO_ID = id
    Call Sp.QueryData(26, m_Rs, ItemCount)
    
    If ItemCount > 0 Then
@@ -15077,6 +15077,8 @@ Dim tmpCount As Long
    CW.Date1 = Ua.Date1
    CW.CUST_ID = Ua.CUST_ID
    CW.TRUCK_ID = Ua.TRUCK_ID
+   CW.OrderBy = Ua.OrderBy
+   CW.OrderType = Ua.OrderType
    
    Call CW.QueryData(1, Rs, tmpCount)
    ItemCount = tmpCount

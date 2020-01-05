@@ -2072,7 +2072,7 @@ Dim oMenu As cPopupMenu
 
    Set oMenu = New cPopupMenu
    #If LIMIT_AREA <> 1 Then
-       lMenuChosen = oMenu.Popup("เปลี่ยนรหัสผ่าน", "-", "ปรับราคาเฉลี่ย", "-", "อิมพอร์ตข้อมูล", "-", "คอนฟิคเลขที่เอกสาร", "-", "โน๊ต MEMO", "-", "EXPORT ข้อมูล AP", "-", "IMPORT ข้อมูล AP", "-", "IMPORT ผังบัญชี mapping", "-", "แพตข้อมูล", "-", "EXPORT ข้อมูลเช็ค", "-", "IMPORT ข้อมูลเช็ค", "-", "ประมวลผลประจำปี", "-", "ระบบปรับราคาย้อนหลัง", "-", "ระบบแจ้งเตือน", "-", "ตั้งค่าสิทธิ์อนุมัติการสั่งซื้อ", "-", "กำหนดวันที่เอกสาร", "-", "IMPORT ข้อมูลวัตถุดิบที่ต้องการ")
+       lMenuChosen = oMenu.Popup("เปลี่ยนรหัสผ่าน", "-", "ปรับราคาเฉลี่ย", "-", "อิมพอร์ตข้อมูล", "-", "คอนฟิคเลขที่เอกสาร", "-", "โน๊ต MEMO", "-", "EXPORT ข้อมูล AP", "-", "IMPORT ข้อมูล AP", "-", "IMPORT ผังบัญชี mapping", "-", "แพตข้อมูล", "-", "EXPORT ข้อมูลเช็ค", "-", "IMPORT ข้อมูลเช็ค", "-", "ประมวลผลประจำปี", "-", "ระบบปรับราคาย้อนหลัง", "-", "ระบบแจ้งเตือน", "-", "ตั้งค่าสิทธิ์อนุมัติการสั่งซื้อ", "-", "กำหนดวันที่เอกสาร", "-", "IMPORT ข้อมูลวัตถุดิบที่ต้องการ", "-", "ข้อมูลการชั่งน้ำหนัก")
       'lMenuChosen = oMenu.Popup("เปลี่ยนรหัสผ่าน", "-", "ปรับราคาเฉลี่ย", "-", "อิมพอร์ตข้อมูล", "-", "คอนฟิคเลขที่เอกสาร", "-", "โน๊ต MEMO", "-", "EXPORT ข้อมูล AP", "-", "IMPORT ข้อมูล AP", "-", "IMPORT ผังบัญชี mapping", "-", "แพตข้อมูล", "-", "EXPORT ข้อมูลเช็ค", "-", "IMPORT ข้อมูลเช็ค", "-", "ประมวลผลประจำปี", "-", "ระบบปรับราคาย้อนหลัง", "-", "ระบบแจ้งเตือน")
    #End If
    
@@ -2261,6 +2261,17 @@ Dim oMenu As cPopupMenu
       
       Unload frmImportDoc4
       Set frmImportDoc4 = Nothing
+   ElseIf lMenuChosen = 35 Then
+        If Not VerifyAccessRight("PROGRAM_WEIGHT-PREVIEW", "ข้อมูลการชั่งน้ำหนัก") Then
+            Call EnableForm(Me, True)
+            Exit Sub
+         End If
+      frmWeightPreview.HeaderText = "รายงานข้อมูลการชั่งน้ำหนัก"
+      Load frmWeightPreview
+      frmWeightPreview.Show 1
+      
+      Unload frmWeightPreview
+      Set frmWeightPreview = Nothing
    End If
 End Sub
 
@@ -2454,7 +2465,7 @@ Private Sub Timer1_Timer()
    lblUsername.Caption = MapText("ผู้ใช้ : ") & " " & glbUser.USER_NAME
    lblUserGroup.Caption = MapText("กลุ่มผู้ใช้ : ") & " " & glbUser.GROUP_NAME
    
-   Timer1.Enabled = True
+Timer1.Enabled = True
 End Sub
 Private Sub trvMain_NodeClick(ByVal Node As MSComctlLib.Node)
    If Node Is Nothing Then

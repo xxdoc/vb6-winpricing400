@@ -339,6 +339,7 @@ Dim PrevKey1 As String
    cData.TX_TYPE = "E"
    cData.COMMIT_FLAG = ""
    cData.LAYOUT_ID = mcolParam("DEPARTMENT_ID")
+   cData.EXPENSE_TYPE = mcolParam("EXPENSE_TYPE")
    cData.OrderBy = 4
    cData.OrderType = mcolParam("ORDER_TYPE")
    Call cData.QueryData(21, Rs, iCount)

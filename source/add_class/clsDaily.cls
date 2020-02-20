@@ -4661,6 +4661,8 @@ Dim SumGoodAmount As Long
              If LTD.IS_EDIT_LOT Then
                Call LTD.AddEditLot
              End If
+             
+             LTD.AddEditBinNo 'UPDATE ถังบรรจุที่จ่ายออกไปด้วย
            ElseIf LTD.Flag = "D" Then
             Call LTD.DeleteData
            End If

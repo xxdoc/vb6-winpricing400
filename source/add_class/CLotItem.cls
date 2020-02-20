@@ -173,6 +173,8 @@ Public PACK_AMOUNT As Double
 Public PRICE_PER_PACK As Double
 Public TOTAL_PRICE As Double
 
+Public LOT_ID As Long
+
 Public DEPARTMENT_NAME As String
 Public CSTTYPE_NAME As String
 Public PR_NO As String
@@ -686,7 +688,7 @@ Dim GroupByStr As String
     
       WhereStr = ""
    ElseIf Ind = 36 Then              'LoadLotItemFindCostByBilling
-      SelectStr1 = "SELECT BD.BILLING_DOC_ID,PI.PART_ITEM_ID,LI.TOTAL_INCLUDE_PRICE,LI.TX_AMOUNT,LI.TX_TYPE,PI2.PART_TYPE "
+      SelectStr1 = "SELECT PI.PART_ITEM_ID,LD3.LOT_ID,SUM(LI.TOTAL_INCLUDE_PRICE) TOTAL_INCLUDE_PRICE,SUM(LI.TX_AMOUNT) TX_AMOUNT "
       SelectStr2 = "SELECT COUNT(*)  "
       
       FromStr = "FROM BILLING_DOC BD "
@@ -694,12 +696,28 @@ Dim GroupByStr As String
       FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD ON (LIW.LOT_ITEM_WH_ID = LD.LOT_ITEM_WH_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD2 ON (LD.LOT_DOC_ID_REF = LD2.LOT_DOC_ID) "
-      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LD2.LOT_ITEM_WH_ID = LIW2.LOT_ITEM_WH_ID) "
-      FromStr = FromStr & "LEFT OUTER JOIN JOB J ON (LIW2.INVENTORY_WH_DOC_ID = J.INVENTORY_WH_DOC_ID)"
-      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM LI ON (J.INVENTORY_DOC_ID = LI.INVENTORY_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD3 ON (LD2.LOT_ID = LD3.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LD3.LOT_ITEM_WH_ID =LIW2.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN JOB JB ON (LIW2.INVENTORY_WH_DOC_ID = JB.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM LI ON (JB.INVENTORY_DOC_ID = LI.INVENTORY_DOC_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI2 ON (LI.PART_ITEM_ID = PI2.PART_ITEM_ID) "
       
       WhereStr = " WHERE BD.ACCEPT_BY IS NOT NULL "
+      
+'      SelectStr1 = "SELECT BD.BILLING_DOC_ID,PI.PART_ITEM_ID,LI.TOTAL_INCLUDE_PRICE,LI.TX_AMOUNT,LI.TX_TYPE,PI2.PART_TYPE "
+'      SelectStr2 = "SELECT COUNT(*)  "
+'
+'      FromStr = "FROM BILLING_DOC BD "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW ON (BD.INVENTORY_WH_DOC_ID = LIW.INVENTORY_WH_DOC_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD ON (LIW.LOT_ITEM_WH_ID = LD.LOT_ITEM_WH_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD2 ON (LD.LOT_DOC_ID_REF = LD2.LOT_DOC_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LD2.LOT_ITEM_WH_ID = LIW2.LOT_ITEM_WH_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN JOB J ON (LIW2.INVENTORY_WH_DOC_ID = J.INVENTORY_WH_DOC_ID)"
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM LI ON (J.INVENTORY_DOC_ID = LI.INVENTORY_DOC_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI2 ON (LI.PART_ITEM_ID = PI2.PART_ITEM_ID) "
+'
+'      WhereStr = " WHERE BD.ACCEPT_BY IS NOT NULL "
    ElseIf Ind = 37 Then 'CReportInventory007_3
       SelectStr1 = "SELECT LI.*, PT.*, LC.*, PI.*, UN.*, IVD.ADJUST_FLAG, IVD.SUPPLIER_ID, IVD.SUPPLIER_ID_TRUE, IVD.DOCUMENT_DATE, IVD.DOCUMENT_NO, IVD.COMMIT_FLAG, IVD.DOCUMENT_TYPE, IVD.QUE_NO, IVD.RECEIVE_NAME, IVD.TRUCK_NO, IVD.DO_NO, IVD.SENDER_NAME, SP.SUPPLIER_CODE, NM1.LONG_NAME SUPPLIER_NAME,SP2.SUPPLIER_CODE SUPPLIER_CODE_TRUE, SP2.CREDIT CREDIT_TRUE,NM2.LONG_NAME SUPPLIER_NAME_TRUE, DP.PRIORITY1, PG.PACKAGING_NO, PE1.PUREXP_NO PUREXP_NO1, PE1.PUREXP_NAME PUREXP_NAME1, PE1.EXPENSE_RATE EXPENSE_RATE1, PE2.PUREXP_NO PUREXP_NO2, PE2.PUREXP_NAME PUREXP_NAME2, PE2.EXPENSE_RATE EXPENSE_RATE2, PT.PART_GROUP_ID PART_GROUP_ID1 "
       SelectStr1 = SelectStr1 & ",MR1.KEY_CODE ITEM_DESC_NO,MR1.KEY_NAME ITEM_DESC_NAME,IVD.PR_NO "
@@ -862,6 +880,18 @@ Dim GroupByStr As String
       End If
    End If
    
+   
+   
+   If EXPENSE_TYPE > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (MR1.KEY_ID = " & EXPENSE_TYPE & ") "
+      Else
+         WhereStr = WhereStr & "AND (MR1.KEY_ID = " & EXPENSE_TYPE & ") "
+      End If
+   End If
+   
+   'EXPENSE_TYPE
+   
     If FROM_DATE > -1 Then
       TempDate = DateToStringIntLow(Trim(FROM_DATE))
       If WhereStr = "" Then
@@ -1002,6 +1032,8 @@ Dim GroupByStr As String
       GroupByStr = "GROUP BY LI.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC   "
    ElseIf Ind = 34 Then
       GroupByStr = "GROUP BY LI.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC,IVD.DOCUMENT_DATE"
+     ElseIf Ind = 36 Then
+      GroupByStr = "GROUP BY PI.PART_ITEM_ID,LD3.LOT_ID "
    End If
    
    OrderByStr = ""
@@ -1192,7 +1224,7 @@ Dim GroupByStr As String
     ElseIf Ind = 33 Then
       OrderByStr = "ORDER BY PI.PART_NO "
    ElseIf Ind = 36 Then
-      OrderByStr = "ORDER BY  BD.BILLING_DOC_ID "
+      OrderByStr = "ORDER BY  PI.PART_ITEM_ID "
    ElseIf Ind = 37 Then
       If OrderBy = 7 Then
          OrderByStr = "ORDER BY SP2.SUPPLIER_CODE ASC,IVD.DOCUMENT_DATE  "
@@ -1665,12 +1697,13 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PRICE_PER_PACK = NVLD(Rs("PRICE_PER_PACK"), -1)
       TOTAL_PRICE = NVLD(Rs("TOTAL_PRICE"), -1)
    ElseIf Ind = 36 Then
-      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), 0)
+'      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), 0)
       PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
-      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+'      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
       TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
       TOTAL_INCLUDE_PRICE = NVLD(Rs("TOTAL_INCLUDE_PRICE"), 0)
-      PART_TYPE = NVLI(Rs("PART_TYPE"), 0)
+'      PART_TYPE = NVLI(Rs("PART_TYPE"), 0)
    ElseIf Ind = 37 Then
       LOT_ITEM_ID = NVLI(Rs("LOT_ITEM_ID"), -1)
       INVENTORY_DOC_ID = NVLI(Rs("INVENTORY_DOC_ID"), -1)
@@ -1797,7 +1830,7 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim TempID1 As String
 Dim TempID2 As String
@@ -1876,7 +1909,7 @@ Dim TempID9 As String
    End If
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("LOT_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("LOT_ITEM_SEQ", id, glbErrorLog)
       Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       
       SQL1 = "INSERT INTO LOT_ITEM " & _
@@ -1958,7 +1991,7 @@ Dim TempID9 As String
                      ") " & _
                      "VALUES " & _
                      "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "" & INVENTORY_DOC_ID & "," & _
                          TempID8 & "," & _
                           TempID9 & "," & _
@@ -2030,7 +2063,7 @@ Dim TempID9 As String
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         LOT_ITEM_ID = ID
+         LOT_ITEM_ID = id
    Else 'Show edit
       Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       

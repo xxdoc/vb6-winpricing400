@@ -526,6 +526,16 @@ ElseIf Ind = 9 Then
       OrderByStr = "ORDER BY CM.CUSTOMER_CODE  "
    ElseIf OrderBy = 3 Then
       OrderByStr = "ORDER BY NM6.LONG_NAME  "
+   ElseIf OrderBy = 4 Then
+      OrderByStr = "ORDER BY IWD.TRUCK_NO "
+   ElseIf OrderBy = 5 Then
+      OrderByStr = "ORDER BY IWD.ENTRY_WEIGHT_DATE  "
+   ElseIf OrderBy = 6 Then
+      OrderByStr = "ORDER BY IWD.ENTRY_WEIGHT_TIME  "
+   ElseIf OrderBy = 7 Then
+      OrderByStr = "ORDER BY IWD.EXIT_WEIGHT_DATE  "
+   ElseIf OrderBy = 8 Then
+      OrderByStr = "ORDER BY IWD.EXIT_WEIGHT_TIME  "
    Else
       OrderByStr = "ORDER BY IWD.DOCUMENT_NO "
    End If
@@ -715,7 +725,7 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 Dim TempID2 As String
 Dim TempID3 As String
@@ -780,7 +790,7 @@ Dim TempID7 As String
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("INVENTORY_WH_DOC_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("INVENTORY_WH_DOC_SEQ", id, glbErrorLog)
 
       SQL1 = "INSERT INTO INVENTORY_WH_DOC " & _
                      "( " & _
@@ -817,7 +827,7 @@ Dim TempID7 As String
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(DOCUMENT_NO)) & "'," & _
                          TempID2 & "," & _
                          "'" & ChangeQuote(Trim(DOCUMENT_DESC)) & "'," & _
@@ -848,7 +858,7 @@ Dim TempID7 As String
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         INVENTORY_WH_DOC_ID = ID
+         INVENTORY_WH_DOC_ID = id
    Else 'Show edit
       SQL1 = "UPDATE INVENTORY_WH_DOC SET " & _
                      "   DOCUMENT_NO = '" & ChangeQuote(Trim(DOCUMENT_NO)) & "', " & _

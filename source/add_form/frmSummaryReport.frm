@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmSummaryReport 
    ClientHeight    =   8985
    ClientLeft      =   60
@@ -913,7 +913,7 @@ Dim ReportMode As Long
       Call Rc.PopulateFromRS(1, m_Rs)
       
       frmReportConfig.ShowMode = SHOW_EDIT
-      frmReportConfig.ID = Rc.REPORT_CONFIG_ID
+      frmReportConfig.id = Rc.REPORT_CONFIG_ID
    Else
       frmReportConfig.ShowMode = SHOW_ADD
    End If
@@ -2471,23 +2471,8 @@ Dim C As CReportControl
             End If
          End If
                                  
-         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-5" Then
-            If C.ComboLoadID = 1 Then
-               Call LoadPartGroup(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 2 Then
-               Call LoadPartType(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 3 Then
-               Call LoadLocation(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 4 Then
-               Call InitExportDocTypeSet(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 5 Then
-               Call LoadLayout(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 6 Then
-               Call InitReport4_11Orderby(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 7 Then
-               Call InitOrderType(m_Combos(C.ControlIndex))
-            End If
-         End If
+
+         
          If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-8" Then
             If C.ComboLoadID = 1 Then
                Call LoadPartGroup(m_Combos(C.ControlIndex))
@@ -4331,6 +4316,36 @@ Dim C As CReportControl
 '               Call InitOrderType(m_Combos(C.ControlIndex))
             End If
         End If
+        
+         If trvMaster.SelectedItem.Key = ROOT_TREE & " 6-0-1" Then
+            If C.ComboLoadID = 1 Then
+               Call InitThaiMonth(m_Combos(C.ControlIndex))
+               cboGeneric(C.ControlIndex).ListIndex = Month(Now)
+            ElseIf C.ComboLoadID = 2 Then
+               Call InitThaiMonth(m_Combos(C.ControlIndex))
+               cboGeneric(C.ControlIndex).ListIndex = Month(Now)
+            End If
+         End If
+         
+         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-5" Then
+            If C.ComboLoadID = 1 Then
+               Call LoadPartGroup(m_Combos(C.ControlIndex))
+            ElseIf C.ComboLoadID = 2 Then
+               Call LoadPartType(m_Combos(C.ControlIndex))
+            ElseIf C.ComboLoadID = 3 Then
+               Call LoadLocation(m_Combos(C.ControlIndex))
+            ElseIf C.ComboLoadID = 4 Then
+               Call InitExportDocTypeSet(m_Combos(C.ControlIndex))
+            ElseIf C.ComboLoadID = 5 Then
+               Call LoadLayout(m_Combos(C.ControlIndex))
+           ElseIf C.ComboLoadID = 6 Then
+               Call LoadExpense_Type(m_Combos(C.ControlIndex))
+            ElseIf C.ComboLoadID = 7 Then
+               Call InitReport4_11Orderby(m_Combos(C.ControlIndex))
+            ElseIf C.ComboLoadID = 8 Then
+               Call InitOrderType(m_Combos(C.ControlIndex))
+            End If
+         End If
          
      
    Next C
@@ -5808,17 +5823,25 @@ Dim Offset As Long
    '3 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 5, "DEPARTMENT_ID", "DEPARTMENT_NAME")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("แผนก"))
+   
+   '3 =============================
+   Call LoadControl("C", cboGeneric(0).Width, True, "", 6, "EXPENSE_TYPE", "EXPENSE_NAME") '
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ค่าใช้จ่ายการเบิก"))
 
    '3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 6, "ORDER_BY")
+   Call LoadControl("C", cboGeneric(0).Width, True, "", 7, "ORDER_BY")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงตาม"))
 
    '4 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 7, "ORDER_TYPE")
+   Call LoadControl("C", cboGeneric(0).Width, True, "", 8, "ORDER_TYPE")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงจาก"))
    
    Call ShowControl
-   Call LoadComboData
+   If TempKey = ROOT_TREE & " 4-12-5" Then
+      Call LoadComboData2
+   Else
+      Call LoadComboData
+   End If
 End Sub
 'InitReport4_11_1
 Private Sub InitReport4_11_1()
@@ -5938,18 +5961,22 @@ Dim Offset As Long
    '2 =============================
    Call LoadControl("D", uctlGenericDate(0).Width, True, "", , "TO_DATE")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงวันที่"))
-
-   '1 =============================
-   Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "CUSTOMER_CODE", , "CUSTOMER_CODE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสลูกค้า"))
+'
+'   '1 =============================
+'   Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "CUSTOMER_CODE", , "CUSTOMER_CODE")
+'   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสลูกค้า"))
+'
+'   '1 =============================
+'   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "FROM_CUSTOMER_CODE", , "CUSTOMER_CODE")
+'   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากรหัสลูกค้า"))
+'
+'   '1 =============================
+'   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "TO_CUSTOMER_CODE", , "CUSTOMER_CODE")
+'   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงรหัสลูกค้า"))
    
    '1 =============================
-   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "FROM_CUSTOMER_CODE", , "CUSTOMER_CODE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากรหัสลูกค้า"))
-   
-   '1 =============================
-   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "TO_CUSTOMER_CODE", , "CUSTOMER_CODE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงรหัสลูกค้า"))
+   Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "PART_MASTER_NO", , "PART_MASTER_NO")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสสินค้า (MASTER)"))
    
    '1 =============================
    Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "PART_NO", , "PART_NO")
@@ -6001,6 +6028,7 @@ Dim Offset As Long
       Call LoadControl("CH", cboGeneric(0).Width, True, "แสดงรายบิลขาย", , "SHOW_ORDER_BILL")
    ElseIf TempKey = "Root F-1-9" Then
       Call LoadControl("CH", cboGeneric(0).Width, True, "แสดงรายละเอียด", , "SHOW_DETAIL_PART")
+      Call LoadControl("CH", cboGeneric(0).Width, True, "แสดงรายละเอียดเอกสาร", , "SHOW_DOCUMENT_NO")
    End If
 '   If TempKey = "5-2-1" Then
 '      Call LoadControl("CH", cboGeneric(0).Width, True, "แสดงลดหนี้/เพิ่มหนี้", , "CREDIT")
@@ -7967,6 +7995,8 @@ Dim QueryFlag As Boolean
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub
       End If
+      
+      TempKey = Node.Key
       Call InitReport4_11
       
        ElseIf Node.Key = ROOT_TREE & " 4-12-7" Then
@@ -12081,6 +12111,19 @@ Dim Offset As Long
    Left = lblGeneric(0).Left
    LabelWidth = lblGeneric(0).Width
    Offset = 100
+   
+   Call LoadControl("C", cboGeneric(0).Width \ 2, False, "", 1, "FROM_MONTH")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จาก Plan ใช้เดือน"))
+      
+   Call LoadControl("T", txtGeneric(0).Width / 2, False, "", , "FROM_YEAR", , , , Year(Now) + 543)
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากปี"))
+   
+   Call LoadControl("C", cboGeneric(0).Width \ 2, False, "", 2, "TO_MONTH")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึง Plan ใช้เดือน"))
+      
+   Call LoadControl("T", txtGeneric(0).Width / 2, False, "", , "TO_YEAR", , , , Year(Now) + 543)
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงปี"))
+   
    '1 =============================
    Call LoadControl("D", uctlGenericDate(0).Width, False, "", , "FROM_WEEK")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("Planใช้:วันที่เริ่มสัปดาห์"))
@@ -12105,6 +12148,7 @@ Dim Offset As Long
    Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "LIMIT_PART_DESC")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("จำกัดรายละเอียด(15)"))
    
+   Call LoadControl("CH", cboGeneric(0).Width, True, "ใช้ข้อมูลแผนรายเดือน", , "SHOW_PLAN_MONTH")
    Call LoadControl("CH", cboGeneric(0).Width, True, "เลือกช่วงวันที่เกิน 7 วัน", , "SHOW_DATE_OVER")
    Call LoadControl("CH", cboGeneric(0).Width, True, "เลือกจากกลุ่มวัตถุดิบ", , "SHOW_RM_ALL")
    Call LoadControl("CH", cboGeneric(0).Width, True, "InvA", , "SHOW_INV_ACTUAL")

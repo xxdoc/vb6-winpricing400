@@ -2019,11 +2019,14 @@ Dim I As Long
          ElseIf KeyType = 4 Then
            Call Cl.add(PD, Trim(LOT_ID & "-" & PD.TX_TYPE & "-" & PD.HEAD_PACK_NO))
          ElseIf KeyType = 5 Then 'ถ้าเป็นการจ่ายออก ให้เอา LOT_DOC_ID_REF มาเป็น Key
+
            Set TempData = GetObject("CPalletDoc", Cl, Trim(PD.PALLET_DOC_NO & "-" & str(PD.LOT_ID) & "-" & PD.TX_TYPE & str(PD.BIN_NO)), False)
            If Not TempData Is Nothing Then
                TempData.CAPACITY_AMOUNT = TempData.CAPACITY_AMOUNT + PD.CAPACITY_AMOUNT
             Else
+               Debug.Print Trim(PD.PALLET_DOC_NO & "-" & str(PD.LOT_ID) & "-" & PD.TX_TYPE & str(PD.BIN_NO))
                Call Cl.add(PD, Trim(PD.PALLET_DOC_NO & "-" & str(PD.LOT_ID) & "-" & PD.TX_TYPE & str(PD.BIN_NO)))
+                      
            End If
           ElseIf KeyType = 6 Then 'สำหรับ Bulk
             Call Cl.add(PD, Trim(PD.PALLET_DOC_NO & "-" & str(PD.LOT_DOC_ID) & "-" & "-" & str(PD.PART_ITEM_ID) & "-" & PD.TX_TYPE & str(PD.BIN_NO)))
@@ -8045,6 +8048,57 @@ Dim I As Long
       
       If Not (Cl Is Nothing) Then
          Call Cl.add(TempData, Trim(str(TempData.LAY_OUT_ID)))
+      End If
+      
+      Set TempData = Nothing
+      Rs.MoveNext
+   Wend
+   
+   Set Rs = Nothing
+   Set D = Nothing
+   Exit Sub
+ErrorHandler:
+   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
+   glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
+End Sub
+
+Public Sub LoadExpense_Type(C As ComboBox, Optional Cl As Collection = Nothing)
+On Error GoTo ErrorHandler
+Dim D As CMasterRef
+Dim ItemCount As Long
+Dim Rs As ADODB.Recordset
+Dim TempData As CMasterRef
+Dim I As Long
+      
+   Set D = New CMasterRef
+   Set Rs = New ADODB.Recordset
+   
+   D.KEY_ID = -1
+   D.MASTER_AREA = EXPENSE_TYPE
+   Call D.QueryData(Rs, ItemCount)
+   
+   If Not (C Is Nothing) Then
+      C.Clear
+      I = 0
+      C.AddItem ("")
+   End If
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   While Not Rs.EOF
+      I = I + 1
+      Set TempData = New CMasterRef
+      Call TempData.PopulateFromRS(1, Rs)
+   
+      If Not (C Is Nothing) Then
+         C.AddItem (TempData.KEY_NAME)
+         C.ItemData(I) = TempData.KEY_ID
+      End If
+      
+      If Not (Cl Is Nothing) Then
+         Call Cl.add(TempData, Trim(str(TempData.KEY_ID)))
       End If
       
       Set TempData = Nothing
@@ -14681,6 +14735,21 @@ Public Sub InitReport9_2_2Orderby(C As ComboBox)
    
    C.AddItem (MapText("ชื่อลูกค้า"))
    C.ItemData(3) = 3
+   
+   C.AddItem (MapText("ทะเบียนรถ"))
+   C.ItemData(4) = 4
+   
+   C.AddItem (MapText("วันที่รถเข้า"))
+   C.ItemData(5) = 5
+   
+   C.AddItem (MapText("เวลารถเข้า"))
+   C.ItemData(6) = 6
+   
+   C.AddItem (MapText("วันที่รถออก"))
+   C.ItemData(7) = 7
+   
+   C.AddItem (MapText("เวลารถออก"))
+   C.ItemData(8) = 8
 End Sub
 Public Sub InitExpenseOrderBy(C As ComboBox)
    C.Clear
@@ -16580,6 +16649,8 @@ Dim Key As String
    
    D.LOT_ITEM_ID = -1
    D.BILLING_DOC_ID = BillingdocID
+   D.TX_TYPE = "I"
+   D.PROCESS_ID = 4
    Call D.QueryData(36, Rs, ItemCount)
    
    If Not (C Is Nothing) Then
@@ -16596,31 +16667,60 @@ Dim Key As String
       I = I + 1
       Set TempData = New CLotItem
       Call TempData.PopulateFromRS(36, Rs)
-     If TempData.TX_TYPE = "E" Then
+'     If TempData.TX_TYPE = "E" Then
          If Not (C Is Nothing) Then
          End If
          
-         If TempData.PART_TYPE = 21 Then 'ถ้าเป็น Bulk
-            Key = "21"
-         Else 'ถ้าเป็นถุง
-           Key = "B"
-         End If
+'         If TempData.PART_TYPE = 21 Then 'ถ้าเป็น Bulk
+'            Key = "21"
+'         Else 'ถ้าเป็นถุง
+'           Key = "B"
+'         End If
          
          If Not (Cl Is Nothing) Then
-             Set TempData2 = GetObject("CLotItem", Cl, Trim(str(TempData.BILLING_DOC_ID) & "-" & str(TempData.PART_ITEM_ID) & "-" & Key), False)
+             Set TempData2 = GetObject("CLotItem", Cl, str(TempData.PART_ITEM_ID), False)
             If Not TempData2 Is Nothing Then
               TempData2.TOTAL_INCLUDE_PRICE = TempData2.TOTAL_INCLUDE_PRICE + TempData.TOTAL_INCLUDE_PRICE
               TempData2.TX_AMOUNT = TempData2.TX_AMOUNT + TempData.TX_AMOUNT
             Else
-               Call Cl.add(TempData, Trim(str(TempData.BILLING_DOC_ID) & "-" & str(TempData.PART_ITEM_ID) & "-" & Key))
+               Call Cl.add(TempData, str(TempData.PART_ITEM_ID))
             End If
          End If
          
-      End If
+'      End If
       Set TempData = Nothing
       Rs.MoveNext
    Wend
    
+'   While Not Rs.EOF
+'      I = I + 1
+'      Set TempData = New CLotItem
+'      Call TempData.PopulateFromRS(36, Rs)
+'     If TempData.TX_TYPE = "E" Then
+'         If Not (C Is Nothing) Then
+'         End If
+'
+'         If TempData.PART_TYPE = 21 Then 'ถ้าเป็น Bulk
+'            Key = "21"
+'         Else 'ถ้าเป็นถุง
+'           Key = "B"
+'         End If
+'
+'         If Not (Cl Is Nothing) Then
+'             Set TempData2 = GetObject("CLotItem", Cl, Trim(str(TempData.BILLING_DOC_ID) & "-" & str(TempData.PART_ITEM_ID) & "-" & Key), False)
+'            If Not TempData2 Is Nothing Then
+'              TempData2.TOTAL_INCLUDE_PRICE = TempData2.TOTAL_INCLUDE_PRICE + TempData.TOTAL_INCLUDE_PRICE
+'              TempData2.TX_AMOUNT = TempData2.TX_AMOUNT + TempData.TX_AMOUNT
+'            Else
+'               Call Cl.add(TempData, Trim(str(TempData.BILLING_DOC_ID) & "-" & str(TempData.PART_ITEM_ID) & "-" & Key))
+'            End If
+'         End If
+'
+'      End If
+'      Set TempData = Nothing
+'      Rs.MoveNext
+'   Wend
+'
    Set Rs = Nothing
    Set D = Nothing
    Exit Sub
@@ -18064,6 +18164,130 @@ Public Sub InitPlanPartOrderBy(C As ComboBox)
    
    C.AddItem (MapText("รหัสวัตถุดิบ และ วันที่"))
    C.ItemData(2) = 2
+End Sub
+Public Sub LoadPlanMountAmount(C As ComboBox, Optional Cl As Collection = Nothing, Optional FromMonth As Date, Optional ToMonth As Date, Optional PlanningArea As Long = -1)
+On Error GoTo ErrorHandler
+Dim D As CPlanningItem
+Dim ItemCount As Long
+Dim Rs As ADODB.Recordset
+Dim TempData As CPlanningItem
+Dim SearchItemNo As CPlanningItem
+Dim I As Long
+Dim DiffDate As Long
+Dim StrSQLDate As String
+Dim StrSQLDate2 As String
+Dim TempDate As Date
+Dim PlanningSubType As Long
+Dim FuncName As String
+FuncName = "LoadPlanMountAmount"
+
+PlanningSubType = 1
+   Set D = New CPlanningItem
+   Set Rs = New ADODB.Recordset
+      
+      'สร้าง sql ในนี้
+      DiffDate = DateDiff("M", FromMonth, ToMonth)
+      TempDate = FromMonth
+      StrSQLDate2 = "((PNI.PLANNING_SUB_TYPE = " & PlanningSubType & ") AND  (PN.PLANNING_AREA = " & PlanningArea & ") AND "
+      StrSQLDate = StrSQLDate2 & "(PN.PLANNING_DATE ='" & DateToStringIntLow(TempDate) & "') AND (PN.PLAN_VERSION = " & LoadPlanVersion(TempDate, TempDate, Trim(str(PlanningArea))) & ")) "
+      For I = 1 To DiffDate
+         TempDate = DateAdd("M", 1, TempDate)
+         StrSQLDate = StrSQLDate & "OR" & StrSQLDate2 & " (PN.PLANNING_DATE ='" & DateToStringIntLow(TempDate) & "') AND (PN.PLAN_VERSION = " & LoadPlanVersion(TempDate, TempDate, Trim(str(PlanningArea))) & ")) "
+      Next I
+
+   D.STR_SQL_DATE = StrSQLDate
+   Call D.QueryData(2, Rs, ItemCount)
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   While Not Rs.EOF
+      I = I + 1
+      Set TempData = New CPlanningItem
+      Call TempData.PopulateFromRS(2, Rs)
+   
+      If Not (Cl Is Nothing) Then
+        Debug.Print Trim(TempData.PART_ITEM_ID & "-" & TempData.PLANNING_DATE)
+         Set SearchItemNo = GetObject("CPlanningItem", Cl, Trim(TempData.PART_ITEM_ID & "-" & TempData.PLANNING_DATE), False)
+         If SearchItemNo Is Nothing Then
+            Call Cl.add(TempData, TempData.PART_ITEM_ID & "-" & TempData.PLANNING_DATE)
+         ElseIf TempData.PLANNING_ITEM_ID > SearchItemNo.PLANNING_ITEM_ID Then
+            Call Cl.Remove(SearchItemNo.PART_ITEM_ID & "-" & SearchItemNo.PLANNING_DATE)
+            Call Cl.add(TempData, TempData.PART_ITEM_ID & "-" & TempData.PLANNING_DATE)
+         End If
+      End If
+   
+      Set TempData = Nothing
+      Rs.MoveNext
+   Wend
+   
+   Set Rs = Nothing
+   Set D = Nothing
+   Exit Sub
+   
+ErrorHandler:
+   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION & " <Func: " & FuncName & "> " & TempData.PART_ITEM_ID & "-" & TempData.PLANNING_DATE
+   glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
+'On Error GoTo ErrorHandler
+'Dim D As CPlanning
+'Dim ItemCount As Long
+'Dim Rs As ADODB.Recordset
+'Dim TempData As CPlanning
+'Dim I As Long
+'
+'   Set D = New CPlanning
+'   Set Rs = New ADODB.Recordset
+'
+'   D.PLANNING_ID = -1
+'   D.FROM_DATE = FromMonth
+'   D.TO_DATE = ToMonth
+'   D.PLANNING_AREA = Area
+'   Call D.QueryData(3, Rs, ItemCount)
+'
+''         'สร้าง sql ในนี้
+''      DiffDate = DateDiff("D", FromDate, ToDate)
+''      TempDate = FromDate
+''      StrSQLDate2 = "((PNI.PLANNING_SUB_TYPE = " & PlanningSubType & ") AND  (PN.PLANNING_AREA = " & PlanningArea & ") AND "
+''      StrSQLDate = StrSQLDate2 & "(PN.PLANNING_DATE ='" & DateToStringIntLow(TempDate) & "') AND (PN.PLAN_VERSION = " & LoadPlanVersion(TempDate, TempDate, Trim(str(PlanningArea))) & ")) "
+''      For I = 1 To DiffDate
+''         TempDate = DateAdd("D", 1, TempDate)
+''         StrSQLDate = StrSQLDate & "OR" & StrSQLDate2 & " (PN.PLANNING_DATE ='" & DateToStringIntLow(TempDate) & "') AND (PN.PLAN_VERSION = " & LoadPlanVersion(TempDate, TempDate, Trim(str(PlanningArea))) & ")) "
+''      Next I
+'
+'   If Not (C Is Nothing) Then
+'      C.Clear
+'      I = 0
+'      C.AddItem ("")
+'   End If
+'
+'   If Not (Cl Is Nothing) Then
+'      Set Cl = Nothing
+'      Set Cl = New Collection
+'   End If
+'   While Not Rs.EOF
+'      I = I + 1
+'      Set TempData = New CPlanning
+'      Call TempData.PopulateFromRS(3, Rs)
+'
+'      If Not (C Is Nothing) Then
+'      End If
+'
+'      If Not (Cl Is Nothing) Then
+''         Call Cl.add(TempData, Trim(TempData.PART_ITEM_ID & "-" & TempData.PLANNING_DATE))
+'      End If
+'
+'      Set TempData = Nothing
+'      Rs.MoveNext
+'   Wend
+'
+'   Set Rs = Nothing
+'   Set D = Nothing
+'   Exit Sub
+'
+'ErrorHandler:
+'   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
+'   glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 Public Sub LoadPlanDateAmount(C As ComboBox, Optional Cl As Collection = Nothing, Optional FromDate As Date, Optional ToDate As Date, Optional Area As Long = -1)
 On Error GoTo ErrorHandler

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditJob 
    ClientHeight    =   8490
@@ -559,7 +559,7 @@ Private m_Jobs As Collection
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public JobDocType As Long
 Public ProcessID As Long
 Public mainText As String
@@ -603,7 +603,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
       
-      m_Job.JOB_ID = ID
+      m_Job.JOB_ID = id
       m_Job.QueryFlag = 1
       If Not glbProduction.QueryJob(m_Job, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -648,7 +648,7 @@ Dim ItemCount As Long
    IsOK = True
    If Flag Then
       Call EnableForm(Me, False)
-      m_Job.JOB_ID = ID
+      m_Job.JOB_ID = id
       m_Job.QueryFlag = 1
       If Not glbProduction.QueryJob2(m_Job, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -757,7 +757,7 @@ Dim JO As CJobInput
       End If
    End If
       
-   If Not CheckUniqueNs(JOB_NO, txtJobNo.Text, ID) Then
+   If Not CheckUniqueNs(JOB_NO, txtJobNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtJobNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Call EnableForm(Me, True)
@@ -774,7 +774,7 @@ Dim JO As CJobInput
       Exit Function
    End If
    
-   m_Job.JOB_ID = ID
+   m_Job.JOB_ID = id
    m_Job.AddEditMode = ShowMode
    m_Job.JOB_NO = txtJobNo.Text
    m_Job.JOB_DESC = txtJobDesc.Text
@@ -910,7 +910,7 @@ Dim J As Long
       End If
    End If
       
-   If Not CheckUniqueNs(JOB_NO, txtJobNo.Text, ID) Then
+   If Not CheckUniqueNs(JOB_NO, txtJobNo.Text, id) Then
       Call EnableForm(Me, True)
       SaveData2 = True
       Exit Function
@@ -1001,7 +1001,7 @@ Dim J As Long
       Exit Function
    End If
    
-   m_Job.JOB_ID = ID
+   m_Job.JOB_ID = id
    m_Job.AddEditMode = ShowMode
    m_Job.JOB_NO = txtJobNo.Text
    m_Job.JOB_DESC = txtJobDesc.Text
@@ -1271,7 +1271,7 @@ Private Sub cmdAdd_Click()
 Dim OKClick As Boolean
 Dim lMenuChosen As Long
 Dim oMenu As cPopupMenu
-Dim ID As Long
+Dim id As Long
    If Not cmdAdd.Enabled Then
       Exit Sub
    End If
@@ -1330,7 +1330,7 @@ Dim ID As Long
             typeForm = 1 'ให้แสดง Form ธรรมดา
             GridEX1.MoveFirst
             Set frmFormulaSelect.Job = m_Job
-            frmFormulaSelect.ID = ID
+            frmFormulaSelect.id = id
             frmFormulaSelect.FORMULA_ID = m_FormulaID
             frmFormulaSelect.ParentShowMode = ShowMode
             
@@ -1354,7 +1354,7 @@ Dim ID As Long
             typeForm = 2 'ให้แสดง Form แบบใหม่ ที่มี InventoryWh เข้ามาเกี่ยวข้องแล้ว
             GridEX1.MoveFirst
             Set frmFormulaSelectWh.Job = m_Job
-            frmFormulaSelectWh.ID = ID
+            frmFormulaSelectWh.id = id
             frmFormulaSelectWh.FORMULA_ID = m_FormulaID
             frmFormulaSelectWh.ParentShowMode = ShowMode
             
@@ -1500,7 +1500,7 @@ Dim ID As Long
               frmAddEditJobOutputEx2.PartType = 10
                frmAddEditJobOutputEx2.ParentShowMode = ShowMode
                frmAddEditJobOutputEx2.ShowMode = SHOW_ADD
-               frmAddEditJobOutputEx2.ID = 1
+               frmAddEditJobOutputEx2.id = 1
               frmAddEditJobOutputEx2.HeaderText = MapText("เพิ่มผลิตภัณฑ์ที่ได้")
                Load frmAddEditJobOutputEx2
                frmAddEditJobOutputEx2.Show 1
@@ -1541,7 +1541,7 @@ Dim ID As Long
      frmAddEditJobOutputEx4.typeInput = 1
      frmAddEditJobOutputEx4.DocumentType = DOCUMENT_TYPE
      frmAddEditJobOutputEx4.COMMIT_FLAG = m_Job.OLD_COMMIT_FLAG
-     frmAddEditJobOutputEx4.ID = ID
+     frmAddEditJobOutputEx4.id = id
      frmAddEditJobOutputEx4.JobIdRef = JobIdRef
      frmAddEditJobOutputEx4.StartJob = uctlStartJob.ShowDate
      frmAddEditJobOutputEx4.StopJob = uctlFinishJob.ShowDate
@@ -1788,7 +1788,7 @@ Dim J As CJob
          Exit Sub
       End If
       
-      frmAddEditFormulaMain.ID = m_FormulaID
+      frmAddEditFormulaMain.id = m_FormulaID
       frmAddEditFormulaMain.HeaderText = "ดูข้อมูลสูตร"
       frmAddEditFormulaMain.ShowMode = SHOW_VIEW_ONLY
       Load frmAddEditFormulaMain
@@ -1807,7 +1807,7 @@ Dim J As CJob
       If ProcessID = 5 Then
          GridEX1.MoveFirst
          Set frmFormulaSelect.Job = m_Job
-         frmFormulaSelect.ID = ID
+         frmFormulaSelect.id = id
          frmFormulaSelect.FORMULA_ID = m_FormulaID
          frmFormulaSelect.ParentShowMode = ShowMode
          If Val(GridEX1.Value(1)) > 0 Then
@@ -1829,7 +1829,7 @@ Dim J As CJob
       Else
          GridEX1.MoveFirst
          Set frmFormulaSelectWh.Job = m_Job
-         frmFormulaSelectWh.ID = ID
+         frmFormulaSelectWh.id = id
          frmFormulaSelectWh.FORMULA_ID = m_FormulaID
          frmFormulaSelectWh.ParentShowMode = ShowMode
          If Val(GridEX1.Value(1)) > 0 Then
@@ -1869,7 +1869,7 @@ Dim J As CJob
             
                Call glbDaily.StartTransaction
                Set J = New CJob
-               J.JOB_ID = ID
+               J.JOB_ID = id
                Call J.UpdateJobVerifyFlag(TempUserName)
                Call glbDaily.CommitTransaction
                glbErrorLog.LocalErrorMsg = "ตรวจสอบสำเร็จ"
@@ -1899,7 +1899,7 @@ Dim J As CJob
             
                Call glbDaily.StartTransaction
                Set J = New CJob
-               J.JOB_ID = ID
+               J.JOB_ID = id
                Call J.UpdateJobCancelVerifyFlag(TempUserName)
                Call glbDaily.CommitTransaction
                glbErrorLog.LocalErrorMsg = "ยกลิกสำเร็จ"
@@ -2097,7 +2097,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
 
    If Not cmdEdit.Enabled Then
@@ -2108,7 +2108,7 @@ Dim OKClick As Boolean
       Exit Sub
    End If
    
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 1 Then
@@ -2134,7 +2134,7 @@ Dim OKClick As Boolean
         End If
          
         Set frmAddEditJobInput.m_InventoryWhDocInput = m_Job.InventoryWhDocInput.Item(1)
-         frmAddEditJobInput.ID = ID
+         frmAddEditJobInput.id = id
          frmAddEditJobInput.ProcessID = ProcessID
          frmAddEditJobInput.DOCUMENT_DATE = uctlJobDate.ShowDate
          
@@ -2177,7 +2177,7 @@ Dim OKClick As Boolean
         typeForm = 1
          Set frmAddEditJobOutputEx.TempCollection = m_Job.Outputs
          frmAddEditJobOutputEx.COMMIT_FLAG = m_Job.OLD_COMMIT_FLAG
-         frmAddEditJobOutputEx.ID = ID
+         frmAddEditJobOutputEx.id = id
          frmAddEditJobOutputEx.ShowMode = SHOW_EDIT
          frmAddEditJobOutputEx.HeaderText = MapText("แก้ไขผลผลิต")
          Load frmAddEditJobOutputEx
@@ -2195,7 +2195,7 @@ Dim OKClick As Boolean
          
          Set frmAddEditJobOutputEx2.TempPDEdit = TempPDEdit
          frmAddEditJobOutputEx2.COMMIT_FLAG = m_Job.OLD_COMMIT_FLAG
-         frmAddEditJobOutputEx2.ID = ID
+         frmAddEditJobOutputEx2.id = id
          frmAddEditJobOutputEx2.DOCUMENT_TYPE = DOCUMENT_TYPE
 
          frmAddEditJobOutputEx2.StartJob = uctlStartJob.ShowDate
@@ -2216,7 +2216,7 @@ Dim OKClick As Boolean
         typeForm = 1
          Set frmAddEditJobOutputEx.TempCollection = m_Job.Outputs
          frmAddEditJobOutputEx.COMMIT_FLAG = m_Job.OLD_COMMIT_FLAG
-         frmAddEditJobOutputEx.ID = ID
+         frmAddEditJobOutputEx.id = id
          frmAddEditJobOutputEx.ShowMode = SHOW_EDIT
          frmAddEditJobOutputEx.HeaderText = MapText("แก้ไขผลผลิต")
          Load frmAddEditJobOutputEx
@@ -2231,7 +2231,7 @@ Dim OKClick As Boolean
          Set frmAddEditJobOutputEx4.TempCollection2 = m_Job.InventoryWhDoc
          frmAddEditJobOutputEx4.DocumentType = DOCUMENT_TYPE
          frmAddEditJobOutputEx4.COMMIT_FLAG = m_Job.OLD_COMMIT_FLAG
-         frmAddEditJobOutputEx4.ID = ID
+         frmAddEditJobOutputEx4.id = id
          frmAddEditJobOutputEx4.JobIdRef = JobIdRef
          'JobIdRef
          frmAddEditJobOutputEx4.StartJob = uctlStartJob.ShowDate
@@ -2254,7 +2254,7 @@ Dim OKClick As Boolean
       
      Set frmAddEditJobOutputEx.TempCollection = m_Job.Outputs
      frmAddEditJobOutputEx.COMMIT_FLAG = m_Job.OLD_COMMIT_FLAG
-      frmAddEditJobOutputEx.ID = ID
+      frmAddEditJobOutputEx.id = id
       frmAddEditJobOutputEx.ShowMode = SHOW_EDIT
       frmAddEditJobOutputEx.HeaderText = MapText("แก้ไขผลผลิต")
       Load frmAddEditJobOutputEx
@@ -2274,7 +2274,7 @@ Dim OKClick As Boolean
       End If
    ElseIf TabStrip1.SelectedItem.Index = 3 Then
      Set frmAddEditJobPeople.TempCollection = m_Job.Peoples
-      frmAddEditJobPeople.ID = ID
+      frmAddEditJobPeople.id = id
       frmAddEditJobPeople.ShowMode = SHOW_EDIT
       frmAddEditJobPeople.HeaderText = MapText("แก้ไขเครื่องจักรที่ใช้")
       Load frmAddEditJobPeople
@@ -2292,7 +2292,7 @@ Dim OKClick As Boolean
 
 ElseIf TabStrip1.SelectedItem.Index = 4 Then
      Set frmAddEditJobMachineEx.TempCollection = m_Job.Machines
-      frmAddEditJobMachineEx.ID = ID
+      frmAddEditJobMachineEx.id = id
       frmAddEditJobMachineEx.ShowMode = SHOW_EDIT
       frmAddEditJobMachineEx.HeaderText = MapText("แก้ไขเครื่องจักรที่ใช้")
       Load frmAddEditJobMachineEx
@@ -2309,7 +2309,7 @@ ElseIf TabStrip1.SelectedItem.Index = 4 Then
       End If
 ElseIf TabStrip1.SelectedItem.Index = 5 Then
      Set frmAddEditJobParameter.TempCollection = m_Job.Parameters
-      frmAddEditJobParameter.ID = ID
+      frmAddEditJobParameter.id = id
      frmAddEditJobParameter.Process = cboJobProcess.ItemData(Minus2Zero(cboJobProcess.ListIndex))
       frmAddEditJobParameter.ShowMode = SHOW_EDIT
       frmAddEditJobParameter.HeaderText = MapText("แก้ไขพารามิเตอร์ที่ใช้")
@@ -2327,7 +2327,7 @@ ElseIf TabStrip1.SelectedItem.Index = 5 Then
       End If
    ElseIf TabStrip1.SelectedItem.Index = 6 Then
      Set frmVerifyPartItemEx.TempCollection = m_Job.Verifies
-      frmVerifyPartItemEx.ID = ID
+      frmVerifyPartItemEx.id = id
       frmVerifyPartItemEx.ShowMode = SHOW_EDIT
       Set frmVerifyPartItemEx.ParentForm = Me
       frmVerifyPartItemEx.HeaderText = MapText("ตรวจสอบการใช้วัตถุดิบ")
@@ -2396,7 +2396,7 @@ If DOCUMENT_TYPE > 0 Then
                Exit Sub
             End If
             ShowMode = SHOW_EDIT
-            ID = m_Job.JOB_ID
+            id = m_Job.JOB_ID
         Else
              If Not SaveData2 Then
                Exit Sub
@@ -2547,7 +2547,7 @@ Dim ReportType As Long
    Else
       frmReportConfig.ReportMode = 1
       frmReportConfig.ShowMode = EditMode
-      frmReportConfig.ID = Rc.REPORT_CONFIG_ID
+      frmReportConfig.id = Rc.REPORT_CONFIG_ID
       frmReportConfig.ReportKey = ReportKey
       frmReportConfig.HeaderText = HeaderText
       Load frmReportConfig
@@ -2585,7 +2585,7 @@ End If
                Exit Sub
             End If
             ShowMode = SHOW_EDIT
-            ID = m_Job.JOB_ID
+            id = m_Job.JOB_ID
         Else
              If Not SaveData2 Then
                Exit Sub
@@ -3143,7 +3143,7 @@ Private Sub InitFormLayout()
    cmdAuto.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdCalculate.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdLock.Picture = LoadPicture(glbParameterObj.NormalButton1)
-   cmdUnlock.Picture = LoadPicture(glbParameterObj.NormalButton1)
+   cmdUnLock.Picture = LoadPicture(glbParameterObj.NormalButton1)
    
    Call InitMainButton(cmdExit, MapText("ยกเลิก (ESC)"))
    Call InitMainButton(cmdOK, MapText("ตกลง (F2)"))
@@ -3155,14 +3155,14 @@ Private Sub InitFormLayout()
    Call InitMainButton(cmdAuto, MapText("A"))
    Call InitMainButton(cmdCalculate, MapText("อื่น ๆ"))
    Call InitMainButton(cmdLock, MapText("ล็อค"))
-   Call InitMainButton(cmdUnlock, MapText("ปลดล็อค"))
+   Call InitMainButton(cmdUnLock, MapText("ปลดล็อค"))
    
    If ProcessID = 4 Then
       cmdLock.Visible = True
-      cmdUnlock.Visible = True
+      cmdUnLock.Visible = True
    Else
       cmdLock.Visible = False
-      cmdUnlock.Visible = False
+      cmdUnLock.Visible = False
    End If
    
    TabStrip1.Font.Bold = True

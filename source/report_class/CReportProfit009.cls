@@ -187,12 +187,19 @@ Dim PP As CParameterProcess
 
    Call Cf.SetFieldValue(3, "^", "ประเภทสินค้า.", "^")
    Call m_Headers0.AddField(Cf)
-   Call Cf.SetFieldValue(18, "^", "รายได้จากการขาย.", "^")
+   Call Cf.SetFieldValue(16, "^", "รายได้จากการขายอาหาร.", "^")
+   Call m_Headers0.AddField(Cf)
+   Call Cf.SetFieldValue(4, "^", "รายได้ค่าขนส่ง.", "^")
    Call m_Headers0.AddField(Cf)
    Call Cf.SetFieldValue(14, "^", "ต้นทุนขาย.", "^")
    Call m_Headers0.AddField(Cf)
    Call Cf.SetFieldValue(8, "^", "กำไรขั้นต้น.", "^")
    Call m_Headers0.AddField(Cf)
+   
+   If mcolParam("SHOW_DOCUMENT_NO") = 1 Then
+         Call Cf.SetFieldValue(8, "^", "แสดงรายละเอียดเอกสาร", "^")
+         Call m_Headers0.AddField(Cf)
+   End If
 
    Call Cf.SetFieldValue(3, "^", "", "<")
    Call m_Headers1.AddField(Cf)
@@ -204,8 +211,8 @@ Dim PP As CParameterProcess
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ค่าใช้จ่าย/ถุง", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "โปรโมชั่น/ถุง", ">")
-   Call m_Headers1.AddField(Cf)
+'   Call Cf.SetFieldValue(2, "^", "โปรโมชั่น/ถุง", ">")
+'   Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ราคารวม/ถุง", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ขายจริง/ถุง", ">")
@@ -215,6 +222,10 @@ Dim PP As CParameterProcess
    Call Cf.SetFieldValue(2, "^", "ราคาขาย/กก.", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ขาย(บาท)", ">")
+   Call m_Headers1.AddField(Cf)
+   Call Cf.SetFieldValue(2, "^", "ค่าขนส่ง/ถุง", ">")
+   Call m_Headers1.AddField(Cf)
+   Call Cf.SetFieldValue(2, "^", "ขนส่ง(บาท)", ">")
    Call m_Headers1.AddField(Cf)
 
    Call Cf.SetFieldValue(0, "^", "ต่อตัน", ">")
@@ -242,6 +253,16 @@ Dim PP As CParameterProcess
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "%GP", ">")
    Call m_Headers1.AddField(Cf)
+   If mcolParam("SHOW_DOCUMENT_NO") = 1 Then
+      Call Cf.SetFieldValue(3, "^", "เลขที่เอกสาร", ">")
+      Call m_Headers1.AddField(Cf)
+      
+      Call Cf.SetFieldValue(2, "^", "รหัสลูกค้า", "^")
+      Call m_Headers1.AddField(Cf)
+      
+      Call Cf.SetFieldValue(3, "^", "ชื่อลูกค้า", "<")
+      Call m_Headers1.AddField(Cf)
+   End If
 
 
    Set Cf = Nothing
@@ -353,6 +374,7 @@ Dim Total3(100) As Double 'Flag บอกการแสดงผล
 Dim Total4(100) As Double 'Flag บอกสถานะว่าจะให้นำไปหารกับตัวไหน
 Dim Total5(100) As Double 'รวมชนิดอาหาร
 Dim Total6(100) As Double 'รวมสุทธิ
+Dim Total7(100) As Double 'รวมขนาดบรรจุ
 Dim iCount As Long
 Dim TempStr As String
 Dim PrevKey1 As String
@@ -391,6 +413,9 @@ Dim AMOUNT2 As Double
       Total2(J) = 0
       Total3(J) = 0
       Total4(J) = 0
+      Total5(J) = 0
+      Total6(J) = 0
+      Total7(J) = 0
    Next J
 
    mblnHeader = False
@@ -403,9 +428,10 @@ Dim AMOUNT2 As Double
 
       Set Di = New CDoItem
       Di.DO_ITEM_ID = -1
-      Di.CUSTOMER_CODE = mcolParam("CUSTOMER_CODE")
-      Di.FROM_CUSTOMER_CODE = mcolParam("FROM_CUSTOMER_CODE")
-      Di.TO_CUSTOMER_CODE = mcolParam("TO_CUSTOMER_CODE")
+'      Di.CUSTOMER_CODE = mcolParam("CUSTOMER_CODE")
+'      Di.FROM_CUSTOMER_CODE = mcolParam("FROM_CUSTOMER_CODE")
+'      Di.TO_CUSTOMER_CODE = mcolParam("TO_CUSTOMER_CODE")
+      Di.PART_MASTER_NO = mcolParam("PART_MASTER_NO")
       Di.PART_NO = mcolParam("PART_NO")
       Di.FROM_DATE = mcolParam("FROM_DATE")
       Di.TO_DATE = mcolParam("TO_DATE")
@@ -426,6 +452,14 @@ Dim AMOUNT2 As Double
          I = I + 1
          k = 0
           If PrevKey1 <> Di.CSTTYPE_NAME And I > 1 Then
+          
+''            Call GenerateFooter("รวม " & PrevKey4 & " กก.", "", "", Total7, m_Details1, 0, Total3, Total4)
+''            Call m_Details1.GetString(1, TempStr1, TempStr2)
+''            strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+''            Vsp.FontBold = True
+''            Call Vsp.AddTable(strFormat, "", TempStr2)
+''            Vsp.FontBold = False
+         
             If mcolParam("SHOW_DETAIL_PART") = 1 Then
                PrevKey3 = "รวม : " & PrevKey3
             End If
@@ -461,9 +495,17 @@ Dim AMOUNT2 As Double
 
             Vsp = "ประเภทลูกค้า  :  " & Di.CSTTYPE_NAME
             Vsp = "ชนิดอาหาร  :  " & Di.ANIMAL_NAME
+'''            Vsp = "ขนาดบรรจุ : " & Di.WEIGHT_PER_PACK & " กก."
 
          ElseIf PrevKey2 <> Di.ANIMAL_NAME And I > 1 Then
-            If PrevKey3 <> Di.PART_MASTER_NO Then
+            If PrevKey3 <> Di.PART_MASTER_NO & "-" & Trim(str(Di.WEIGHT_PER_PACK)) Then
+'''               Call GenerateFooter("รวม " & PrevKey4 & " กก.", "", "", Total7, m_Details1, 0, Total3, Total4)
+'''               Call m_Details1.GetString(1, TempStr1, TempStr2)
+'''               strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+'''               Vsp.FontBold = True
+'''               Call Vsp.AddTable(strFormat, "", TempStr2)
+'''               Vsp.FontBold = False
+              
                If mcolParam("SHOW_DETAIL_PART") = 1 Then
                   PrevKey3 = "รวม : " & PrevKey3
                End If
@@ -491,7 +533,44 @@ Dim AMOUNT2 As Double
           Next J
             
             Vsp = "ชนิดอาหาร  :  " & Di.ANIMAL_NAME
-         ElseIf PrevKey3 <> Di.PART_MASTER_NO And I > 1 Then
+''''           Vsp = "ขนาดบรรจุ : " & Di.WEIGHT_PER_PACK & " กก."
+''''         ElseIf PrevKey4 <> Trim(str(Di.WEIGHT_PER_PACK)) And I > 1 Then
+''''            If PrevKey2 <> Di.ANIMAL_NAME Then
+''''               If mcolParam("SHOW_DETAIL_PART") = 1 Then
+''''                  PrevKey2 = "รวม : " & PrevKey2
+''''               End If
+''''               Call GenerateFooter(PrevKey2, "", "", Total1, m_Details1, 0, Total3, Total4)
+''''               Call m_Details1.GetString(1, TempStr1, TempStr2)
+''''               strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+''''               Vsp.FontBold = True
+''''               Call Vsp.AddTable(strFormat, "", TempStr2)
+''''               Vsp.FontBold = False
+''''
+''''               For J = 1 To UBound(Total1)
+''''                  Total1(J) = 0
+''''               Next J
+''''            End If
+''''
+''''         Call GenerateFooter("รวม " & PrevKey4 & " กก.", "", "", Total7, m_Details1, 0, Total3, Total4)
+''''         Call m_Details1.GetString(1, TempStr1, TempStr2)
+''''         strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+''''         Vsp.FontBold = True
+''''         Call Vsp.AddTable(strFormat, "", TempStr2)
+''''         Vsp.FontBold = False
+''''
+''''           For J = 1 To UBound(Total1)
+''''                  Total7(J) = 0
+''''          Next J
+''''
+''''           Vsp = "ขนาดบรรจุ : " & Di.WEIGHT_PER_PACK & " กก."
+         ElseIf PrevKey3 <> Di.PART_MASTER_NO & "-" & Trim(str(Di.WEIGHT_PER_PACK)) And I > 1 Then
+'''            Call GenerateFooter("รวม " & PrevKey4 & " กก.", "", "", Total7, m_Details1, 0, Total3, Total4)
+'''            Call m_Details1.GetString(1, TempStr1, TempStr2)
+'''            strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+'''            Vsp.FontBold = True
+'''            Call Vsp.AddTable(strFormat, "", TempStr2)
+'''            Vsp.FontBold = False
+            
             If mcolParam("SHOW_DETAIL_PART") = 1 Then
                PrevKey3 = "รวม : " & PrevKey3
             End If
@@ -505,19 +584,17 @@ Dim AMOUNT2 As Double
             For J = 1 To UBound(Total1)
                Total1(J) = 0
             Next J
+            
          ElseIf I = 1 Then
             Vsp = "ประเภทลูกค้า  :  " & Di.CSTTYPE_NAME
             Vsp = "ชนิดอาหาร  :  " & Di.ANIMAL_NAME
+'''            Vsp = "ขนาดบรรจุ : " & Di.WEIGHT_PER_PACK & " กก."
          End If
 
          PrevKey1 = Di.CSTTYPE_NAME
          PrevKey2 = Di.ANIMAL_NAME
-'         If Di.PART_TYPE = 10 Then
-'            PrevKey3 = Di.PART_MASTER_NO
-'         Else
-'            PrevKey3 = Di.PART_NO
-'         End If
-         PrevKey3 = Di.PART_MASTER_NO
+         PrevKey3 = Di.PART_MASTER_NO & "-" & Trim(str(Di.WEIGHT_PER_PACK))
+'         PrevKey4 = Trim(str(Di.WEIGHT_PER_PACK))
          
          k = k + 1
          Call m_Details1.ClearField
@@ -536,6 +613,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + Amt
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
+         Total7(k) = Total7(k) + Amt
          Total3(k) = -2
          
          
@@ -549,6 +627,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + Amt
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
+         Total7(k) = Total7(k) + Amt
          Total3(k) = -2
          AMOUNT = Amt 'จำนวนถุง
         
@@ -564,6 +643,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
         
@@ -578,47 +658,55 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
 
-         k = k + 1
-         Amt = Di.DISCOUNT_PER_PACK
-         Cost2 = Cost2 - Amt
-         Set HeadCf = m_Headers1.Fields(k)  'โปรโมชั่น/ถุง
-         TempStr = IIf(Amt > 0, "(" & FormatNumber(Amt, -1) & ")", 0)
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
-         Call m_Details1.AddField(BodyCf)
-         Total1(k) = Total1(k) + (AMOUNT * Amt)
-         Total2(k) = Total2(k) + (AMOUNT * Amt)
-         Total5(k) = Total5(k) + (AMOUNT * Amt)
-         Total6(k) = Total6(k) + (AMOUNT * Amt)
-         Total3(k) = -1
-         Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
+''         k = k + 1
+''         Amt = Di.DISCOUNT_PER_PACK
+'''         Cost2 = Cost2 - Amt 'เดิม
+''         Cost2 = Cost2 + Amt
+''         Set HeadCf = m_Headers1.Fields(k)  'โปรโมชั่น/ถุง
+''         TempStr = "" ' IIf(Amt > 0, "(" & FormatNumber(Amt, -1) & ")", 0)
+''         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+''         Call m_Details1.AddField(BodyCf)
+''         Total1(k) = Total1(k) + (AMOUNT * Amt)
+''         Total2(k) = Total2(k) + (AMOUNT * Amt)
+''         Total5(k) = Total5(k) + (AMOUNT * Amt)
+''         Total6(k) = Total6(k) + (AMOUNT * Amt)
+''         Total3(k) = -1
+''         Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
 
          k = k + 1
          Amt = Cost2
          Set HeadCf = m_Headers1.Fields(k)  'ราคารวม/ถุง
-         TempStr = FormatNumber(Amt, 2)
+         TempStr = FormatNumber(Amt, -1)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
          Total1(k) = Total1(k) + (AMOUNT * Amt)
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
-         
 
          k = k + 1   'ขายจริง/ถุง
-         Amt = Di.PRICE_PER_PACK
+         'Amt = Di.PRICE_PER_PACK
+         If Di.PRICE_THINK_TYPE = 2 Then
+            Amt = Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK - Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC
+         Else
+            Amt = Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK
+         End If
          Set HeadCf = m_Headers1.Fields(k)
-         TempStr = FormatNumber(Amt, 2)
+         TempStr = FormatNumber(Amt, -1)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
          Total1(k) = Total1(k) + (AMOUNT * Amt)
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
         
@@ -632,10 +720,15 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
          
-         Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK, Di.WEIGHT_PER_PACK)        'ราคาขาย/กก.
+         If Di.PRICE_THINK_TYPE = 2 Then
+            Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK - Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC, Di.WEIGHT_PER_PACK)        'ราคาขาย/กก.
+         Else
+            Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK, Di.WEIGHT_PER_PACK)         'ราคาขาย/กก.
+         End If
          k = k + 1
          Set HeadCf = m_Headers1.Fields(k)
          TempStr = FormatNumber(Amt, 2)
@@ -645,6 +738,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
 
@@ -659,6 +753,34 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + Amt
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
+         Total7(k) = Total7(k) + Amt
+         Total3(k) = -2
+         
+         k = k + 1
+         Amt = Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC
+         Set HeadCf = m_Headers1.Fields(k)  'ค่าขนส่ง/ถุง
+         TempStr = IIf(Di.PRICE_THINK_TYPE = 2, "*" & Amt, Amt)
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+         Total1(k) = Total1(k) + (AMOUNT * Amt)
+         Total2(k) = Total2(k) + (AMOUNT * Amt)
+         Total5(k) = Total5(k) + (AMOUNT * Amt)
+         Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
+         Total3(k) = -1
+         Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
+
+         Amt = AMOUNT * Amt    'ราคาค่าขนส่ง(บาท)
+         k = k + 1
+         Set HeadCf = m_Headers1.Fields(k)
+         TempStr = FormatNumber(Amt, 2)
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+         Total1(k) = Total1(k) + Amt
+         Total2(k) = Total2(k) + Amt
+         Total5(k) = Total5(k) + Amt
+         Total6(k) = Total6(k) + Amt
+          Total7(k) = Total7(k) + Amt
          Total3(k) = -2
       
       
@@ -672,12 +794,14 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + Amt
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
+         Total7(k) = Total7(k) + Amt
          Total3(k) = -2
          AMOUNT2 = Amt ' 1 ตัน
          
          Amt = 0
          Call LoadLotItemFindCostByBilling(Nothing, m_CostPerPart, Di.DO_ID)
-         Set Lt = GetObject("CLotItem", m_CostPerPart, Trim(str(Di.DO_ID) & "-" & str(Di.PART_ITEM_ID) & "-" & "21"), False)     ' IVN ต้นทุนต่อตันเฉพาะ raw mat
+'         Set Lt = GetObject("CLotItem", m_CostPerPart, Trim(str(Di.DO_ID) & "-" & str(Di.PART_ITEM_ID) & "-" & "21"), False)     ' IVN ต้นทุนต่อตันเฉพาะ raw mat
+         Set Lt = GetObject("CLotItem", m_CostPerPart, str(Di.PART_ITEM_ID), False)     ' IVN ต้นทุนต่อตันเฉพาะ raw mat
          If Not Lt Is Nothing Then
             Amt = MyDiff(Lt.TOTAL_INCLUDE_PRICE, Lt.TX_AMOUNT) * 1000
          End If
@@ -692,6 +816,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT2 * Amt)
          Total5(k) = Total5(k) + (AMOUNT2 * Amt)
          Total6(k) = Total6(k) + (AMOUNT2 * Amt)
+         Total7(k) = Total7(k) + (AMOUNT2 * Amt)
          Total3(k) = -1
          Total4(k) = 2 'บอกว่าเป็นข้อมูลต้นทุนขาย
    
@@ -706,29 +831,35 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT2 * Amt)
          Total5(k) = Total5(k) + (AMOUNT2 * Amt)
          Total6(k) = Total6(k) + (AMOUNT2 * Amt)
+         Total7(k) = Total7(k) + (AMOUNT2 * Amt)
          Total3(k) = -1
          Total4(k) = 2 'บอกว่าเป็นข้อมูลต้นทุนขาย
          
          Amt = 0
-         Set Lt = GetObject("CLotItem", m_CostPerPart, Trim(str(Di.DO_ID) & "-" & str(Di.PART_ITEM_ID) & "-" & "21"), False)    'ค่าถุง/ตัน
-         If Not Lt Is Nothing Then
-             Amt = Lt.TX_AMOUNT
-         End If
          
-         Set Lt = GetObject("CLotItem", m_CostPerPart, Trim(str(Di.DO_ID) & "-" & str(Di.PART_ITEM_ID) & "-" & "B"), False)    'ค่าถุง/ตัน
-         If Not Lt Is Nothing Then
-             Amt = MyDiff(1000, Amt) * Lt.TOTAL_INCLUDE_PRICE
-         End If
+         'เก็บไว้ก่อน
+''''         Set Lt = GetObject("CLotItem", m_CostPerPart, Trim(str(Di.DO_ID) & "-" & str(Di.PART_ITEM_ID) & "-" & "21"), False)    'ค่าถุง/ตัน
+''''         If Not Lt Is Nothing Then
+''''             Amt = Lt.TX_AMOUNT
+''''         End If
+''''
+''''         Set Lt = GetObject("CLotItem", m_CostPerPart, Trim(str(Di.DO_ID) & "-" & str(Di.PART_ITEM_ID) & "-" & "B"), False)    'ค่าถุง/ตัน
+''''         If Not Lt Is Nothing Then
+''''             Amt = MyDiff(1000, Amt) * Lt.TOTAL_INCLUDE_PRICE
+''''         End If
+
+         Amt = Val(mcolParam("BAG_VALUE"))
          Cost2 = Cost2 + Amt
          k = k + 1
          Set HeadCf = m_Headers1.Fields(k)
-         TempStr = FormatNumber(Amt, 2)
+         TempStr = FormatNumber(Amt, -1)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
          Total1(k) = Total1(k) + (AMOUNT2 * Amt)
          Total2(k) = Total2(k) + (AMOUNT2 * Amt)
          Total5(k) = Total5(k) + (AMOUNT2 * Amt)
          Total6(k) = Total6(k) + (AMOUNT2 * Amt)
+         Total7(k) = Total7(k) + (AMOUNT2 * Amt)
          Total3(k) = -1
          Total4(k) = 2 'บอกว่าเป็นข้อมูลต้นทุนขาย
    
@@ -750,13 +881,14 @@ Dim AMOUNT2 As Double
          Cost2 = Cost2 + Amt
          k = k + 1
          Set HeadCf = m_Headers1.Fields(k)
-         TempStr = FormatNumber(Amt, 2)
+         TempStr = FormatNumber(Amt, -1)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
          Total1(k) = Total1(k) + (AMOUNT2 * Amt)
          Total2(k) = Total2(k) + (AMOUNT2 * Amt)
          Total5(k) = Total5(k) + (AMOUNT2 * Amt)
          Total6(k) = Total6(k) + (AMOUNT2 * Amt)
+         Total7(k) = Total7(k) + (AMOUNT2 * Amt)
          Total3(k) = -1
          Total4(k) = 2 'บอกว่าเป็นข้อมูลต้นทุนขาย
          
@@ -770,6 +902,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT2 * Amt)
          Total5(k) = Total5(k) + (AMOUNT2 * Amt)
          Total6(k) = Total6(k) + (AMOUNT2 * Amt)
+         Total7(k) = Total7(k) + (AMOUNT2 * Amt)
          Total3(k) = -1
          Total4(k) = 2 'บอกว่าเป็นข้อมูลต้นทุนขาย
          
@@ -783,6 +916,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT2 * Amt)
          Total5(k) = Total5(k) + (AMOUNT2 * Amt)
          Total6(k) = Total6(k) + (AMOUNT2 * Amt)
+         Total7(k) = Total7(k) + (AMOUNT2 * Amt)
          Total3(k) = -1
          Total4(k) = 2 'บอกว่าเป็นข้อมูลต้นทุนขาย
          
@@ -797,6 +931,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + Amt
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
+         Total7(k) = Total7(k) + Amt
          Total3(k) = -2
 
          GP = (Cost - Cost2)
@@ -810,6 +945,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1
          
@@ -823,6 +959,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลต้นทุนขายคิดที่ จำนวนถุง
 
@@ -836,6 +973,7 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + Amt
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
+         Total7(k) = Total7(k) + Amt
          Total3(k) = -2
          
          Amt = MyDiff(GP, Cost) * 100 '%GP
@@ -848,8 +986,29 @@ Dim AMOUNT2 As Double
          Total2(k) = Total2(k) + (AMOUNT * Amt)
          Total5(k) = Total5(k) + (AMOUNT * Amt)
          Total6(k) = Total6(k) + (AMOUNT * Amt)
+         Total7(k) = Total7(k) + (AMOUNT * Amt)
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลต้นทุนขาย
+         
+         If mcolParam("SHOW_DOCUMENT_NO") = 1 Then
+            k = k + 1
+            Set HeadCf = m_Headers1.Fields(k)
+            TempStr = Di.DOCUMENT_NO
+            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+            Call m_Details1.AddField(BodyCf)
+            
+            k = k + 1
+            Set HeadCf = m_Headers1.Fields(k)
+            TempStr = Di.CUSTOMER_CODE
+            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+            Call m_Details1.AddField(BodyCf)
+            
+            k = k + 1
+            Set HeadCf = m_Headers1.Fields(k)
+            TempStr = Di.CUSTOMER_NAME
+            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+            Call m_Details1.AddField(BodyCf)
+         End If
 
          If mcolParam("SHOW_DETAIL_PART") = 1 Then
             Call m_Details1.GetString(1, TempStr1, TempStr2)
@@ -860,6 +1019,13 @@ Dim AMOUNT2 As Double
          Rs.MoveNext
       Wend
    
+'''      Call GenerateFooter("รวม " & PrevKey4 & " กก.", "", "", Total7, m_Details1, 0, Total3, Total4)
+'''      Call m_Details1.GetString(1, TempStr1, TempStr2)
+'''      strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+'''      Vsp.FontBold = True
+'''      Call Vsp.AddTable(strFormat, "", TempStr2)
+'''      Vsp.FontBold = False
+            
       If mcolParam("SHOW_DETAIL_PART") = 1 Then
          PrevKey3 = "รวม : " & PrevKey3
       End If
@@ -927,7 +1093,7 @@ Dim Amt As Double
         If TotT(J) = 1 Then
          Amt = MyDiffEx(Tot(J), Tot(3))
         ElseIf TotT(J) = 2 Then
-         Amt = MyDiffEx(Tot(J), Tot(12))
+         Amt = MyDiffEx(Tot(J), Tot(13))
         End If
       ElseIf TotS(J) = -2 Then
           Amt = Tot(J)

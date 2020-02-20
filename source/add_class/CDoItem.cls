@@ -1009,7 +1009,7 @@ Dim GroupByStr As String
       
 '      WhereStr = " WHERE PI.PART_ITEM_ID >0  "
    ElseIf Ind = 49 Then 'CreportProfit009
-      SelectStr1 = "SELECT IVD.DOCUMENT_NO,CM.CUSTOMER_TYPE,CT.CSTTYPE_NAME,MR1.KEY_NAME,PM.PART_MASTER_NO, PI.PART_NO,NM.LONG_NAME CUSTOMER_NAME,CM.CUSTOMER_ID,PI.PART_TYPE, PI.WEIGHT_PER_PACK,PI.PRODUCT_TYPE_ID,LT.TOTAL_INCLUDE_PRICE,LT.TX_AMOUNT,UG.*  "
+      SelectStr1 = "SELECT IVD.DOCUMENT_NO,IVD.PRICE_THINK_TYPE,CM.CUSTOMER_TYPE,CM.CUSTOMER_CODE,CT.CSTTYPE_NAME,MR1.KEY_NAME,PM.PART_MASTER_NO, PI.PART_NO,NM.LONG_NAME CUSTOMER_NAME,CM.CUSTOMER_ID,PI.PART_TYPE, PI.WEIGHT_PER_PACK,PI.PRODUCT_TYPE_ID,LT.TOTAL_INCLUDE_PRICE,LT.TX_AMOUNT,UG.*  "
       SelectStr2 = "SELECT COUNT(*)  "
 
       FromStr = "FROM DO_ITEM UG "
@@ -1271,7 +1271,23 @@ Dim GroupByStr As String
          End If
       End If
    End If
-         
+   
+     If Trim(PART_MASTER_NO) <> "" Then
+      If WildCard(PART_MASTER_NO, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(PM.PART_MASTER_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(PM.PART_MASTER_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (PM.PART_MASTER_NO = '" & ChangeQuote(Trim(PART_MASTER_NO)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (PM.PART_MASTER_NO = '" & ChangeQuote(Trim(PART_MASTER_NO)) & "')"
+         End If
+      End If
+   End If
+   
    If Trim(PART_NO) <> "" Then
       If WildCard(PART_NO, SubLen, NewStr) Then
          If WhereStr = "" Then
@@ -1629,7 +1645,7 @@ Dim GroupByStr As String
    ElseIf Ind = 48 Then
      OrderByStr = "ORDER BY BD.BILLING_DOC_ID  "
    ElseIf Ind = 49 Then
-      OrderByStr = "ORDER BY CM.CUSTOMER_TYPE ASC,MR1.KEY_NAME ASC,PM.PART_MASTER_NO ASC,PART_NO  "
+      OrderByStr = "ORDER BY CM.CUSTOMER_TYPE ASC,MR1.KEY_NAME ASC,PM.PART_MASTER_NO ASC,PI.WEIGHT_PER_PACK ASC,PART_NO  "
    ElseIf Ind = 50 Then
       OrderByStr = "ORDER BY CM.CUSTOMER_CODE ASC,IVD.DOCUMENT_DATE ASC,IVD.DOCUMENT_NO  "
    ElseIf Ind = 53 Then
@@ -2756,6 +2772,11 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PRICE_PER_PACK = NVLD(Rs("PRICE_PER_PACK"), 0)
       PART_MASTER_NO = NVLS(Rs("PART_MASTER_NO"), "")
       CUSTOMER_NAME = NVLS(Rs("CUSTOMER_NAME"), "")
+      RATE_DRIVER_TRANSPORT = NVLD(Rs("RATE_DRIVER_TRANSPORT"), 0)
+      CUSTOMER_CODE = NVLS(Rs("CUSTOMER_CODE"), "")
+      PRICE_THINK_TYPE = NVLI(Rs("PRICE_THINK_TYPE"), 0)
+      RATE_CUSTOMER = NVLD(Rs("RATE_CUSTOMER"), 0)
+      DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
    ElseIf Ind = 50 Then
       DO_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
       DOCUMENT_NO = NVLS(Rs("DOCUMENT_NO"), "")
@@ -2845,7 +2866,7 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim TempID1 As String
 Dim TempID2 As String
@@ -2912,7 +2933,7 @@ Dim TempID10  As String
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("DO_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("DO_ITEM_SEQ", id, glbErrorLog)
       
       SQL1 = "INSERT INTO DO_ITEM " & _
                      "( " & _
@@ -2990,7 +3011,7 @@ Dim TempID10  As String
                      "VALUES "
             SQL1 = SQL1 & _
                      "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "" & DO_ID & "," & _
                          "" & PART_ITEM_ID & "," & _
                          "" & LOCATION_ID & "," & _
@@ -3061,7 +3082,7 @@ Dim TempID10  As String
                         DISCOUNT_AMOUNT_DLC & "," & _
                         "'" & USER_APPLOVE_PRICE & "'" & _
                      ") "
-         DO_ITEM_ID = ID
+         DO_ITEM_ID = id
    Else 'Show edit
 '      Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       

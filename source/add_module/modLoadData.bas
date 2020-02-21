@@ -14729,27 +14729,30 @@ Public Sub InitReport9_2_2Orderby(C As ComboBox)
    
    C.AddItem (MapText("เลขที่เอกสาร"))
    C.ItemData(1) = 1
+   
+   C.AddItem (MapText("วันที่เอกสาร"))
+   C.ItemData(2) = 2
 
    C.AddItem (MapText("รหัสลูกค้า"))
-   C.ItemData(2) = 2
-   
-   C.AddItem (MapText("ชื่อลูกค้า"))
    C.ItemData(3) = 3
    
-   C.AddItem (MapText("ทะเบียนรถ"))
+   C.AddItem (MapText("ชื่อลูกค้า"))
    C.ItemData(4) = 4
    
-   C.AddItem (MapText("วันที่รถเข้า"))
+   C.AddItem (MapText("ทะเบียนรถ"))
    C.ItemData(5) = 5
    
-   C.AddItem (MapText("เวลารถเข้า"))
+   C.AddItem (MapText("วันที่รถเข้า"))
    C.ItemData(6) = 6
    
-   C.AddItem (MapText("วันที่รถออก"))
+   C.AddItem (MapText("เวลารถเข้า"))
    C.ItemData(7) = 7
    
-   C.AddItem (MapText("เวลารถออก"))
+   C.AddItem (MapText("วันที่รถออก"))
    C.ItemData(8) = 8
+   
+   C.AddItem (MapText("เวลารถออก"))
+   C.ItemData(9) = 9
 End Sub
 Public Sub InitExpenseOrderBy(C As ComboBox)
    C.Clear

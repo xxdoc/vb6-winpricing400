@@ -161,6 +161,8 @@ Dim iCount As Long
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(3, "^", "เลขที่เอกสาร", "^")
    Call m_Headers1.AddField(Cf)
+   Call Cf.SetFieldValue(2, "^", "วันที่เอกสาร", "^")
+   Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "รหัสลูกค้า", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(8, "^", "ชื่อลูกค้า", "<")
@@ -169,11 +171,11 @@ Dim iCount As Long
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "วันที่รถเข้า", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "เวลารถเข้า", "^")
+   Call Cf.SetFieldValue(2, "^", "เวลาเข้า", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "วันที่รถออก", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "เวลารถออก", "^")
+   Call Cf.SetFieldValue(2, "^", "เวลาออก", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(5, "^", "ชื่อสินค้า", "<")
    Call m_Headers1.AddField(Cf)
@@ -344,6 +346,12 @@ Dim PrevKey2 As String
          
          J = J + 1
          Set HeadCf = m_Headers1.Fields(J)
+         TempStr = DateToStringExtEx2(IWD.DOCUMENT_DATE)
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+         
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
          TempStr = IWD.CUSTOMER_CODE
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
@@ -386,6 +394,12 @@ Dim PrevKey2 As String
          
          Else
          Call m_Details1.ClearField
+         
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
+         TempStr = ""
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
          
          J = J + 1
          Set HeadCf = m_Headers1.Fields(J)

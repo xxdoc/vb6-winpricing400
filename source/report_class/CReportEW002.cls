@@ -542,7 +542,7 @@ Dim TempStr As String
          TempStr = TXT2
       ElseIf J = 3 Then
          TempStr = TXT3
-      ElseIf J = 11 Or J = 13 Then
+      ElseIf J = 12 Or J = 14 Then
          TempStr = FormatNumber(Tot(J), 0)
       Else
          TempStr = ""

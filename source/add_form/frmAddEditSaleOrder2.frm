@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmAddEditSaleOrder2 
    ClientHeight    =   9855
    ClientLeft      =   60
@@ -140,8 +140,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   4
          Top             =   1350
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlDate uctlDocumentDate 
          Height          =   405
@@ -149,8 +149,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   2
          Top             =   930
          Width           =   3855
-         _extentx        =   6800
-         _extenty        =   714
+         _ExtentX        =   6800
+         _ExtentY        =   714
       End
       Begin MSComctlLib.TabStrip TabStrip1 
          Height          =   555
@@ -183,8 +183,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   0
          Top             =   900
          Width           =   2535
-         _extentx        =   5001
-         _extenty        =   767
+         _ExtentX        =   5001
+         _ExtentY        =   767
       End
       Begin MSComDlg.CommonDialog dlgAdd 
          Left            =   0
@@ -250,8 +250,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   9
          Top             =   2670
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtTotalDiscount 
          Height          =   435
@@ -260,8 +260,8 @@ Begin VB.Form frmAddEditSaleOrder2
          Top             =   2670
          Visible         =   0   'False
          Width           =   1335
-         _extentx        =   2408
-         _extenty        =   767
+         _ExtentX        =   2408
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtNetTotal 
          Height          =   435
@@ -269,8 +269,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   11
          Top             =   2670
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlSellByLookup 
          Height          =   435
@@ -278,8 +278,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   14
          Top             =   4020
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtDiscount 
          Height          =   435
@@ -287,8 +287,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   12
          Top             =   3120
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtIncludeDiscount 
          Height          =   435
@@ -296,8 +296,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   39
          Top             =   3120
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtDeposit 
          Height          =   435
@@ -305,8 +305,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   44
          Top             =   3570
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtLeft 
          Height          =   435
@@ -314,8 +314,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   13
          Top             =   3570
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlDeliveryCusLookup 
          Height          =   435
@@ -323,8 +323,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   57
          Top             =   4560
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin Threed.SSCommand cmdAccessDeliveryCus 
          Height          =   405
@@ -686,7 +686,7 @@ Private m_ExPromotionDlcItem As Collection
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public Area As Long
 Public DocumentType As Long
 
@@ -716,7 +716,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
             
-      m_BillingDoc.BILLING_DOC_ID = ID
+      m_BillingDoc.BILLING_DOC_ID = id
       If Not glbDaily.QueryBillingDoc(m_BillingDoc, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
          Call EnableForm(Me, True)
@@ -835,7 +835,7 @@ End If
       Exit Function
    End If
 
-   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, ID) Then
+   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtDocumentNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       txtDocumentNo.Text = ""
@@ -850,7 +850,7 @@ End If
    End If
    
    m_BillingDoc.AddEditMode = ShowMode
-   m_BillingDoc.BILLING_DOC_ID = ID
+   m_BillingDoc.BILLING_DOC_ID = id
     m_BillingDoc.DOCUMENT_DATE = uctlDocumentDate.ShowDate
    m_BillingDoc.DOCUMENT_NO = txtDocumentNo.Text
    If Area = 1 Then
@@ -1253,7 +1253,7 @@ Dim ServerDateTime As String
          
          If Cd.GetFieldValue("AUTO_BEGIN_FLAG") = "Y" Then
                
-               If CheckNewMounth And CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo & Format(1, TempStr), ID) Then
+               If CheckNewMounth And CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo & Format(1, TempStr), id) Then
                   GetDocumentNo = GetDocumentNo & Format(1, TempStr) 'เริ่มจาก 1 เสมอ
                   m_BillingDoc.RUNNING_NO = 1
                Else
@@ -1418,7 +1418,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
 Dim lMenuChosen As Long
 Dim oMenu As cPopupMenu
@@ -1436,7 +1436,7 @@ Dim oMenu As cPopupMenu
       End If
    End If
    
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 1 Then
@@ -1469,7 +1469,7 @@ Dim oMenu As cPopupMenu
          frmAddEditSaleOrderItem2.DocumentType = DocumentType
          frmAddEditSaleOrderItem2.DocumentDate = uctlDocumentDate.ShowDate
          frmAddEditSaleOrderItem2.Area = Area
-         frmAddEditSaleOrderItem2.ID = ID
+         frmAddEditSaleOrderItem2.id = id
          frmAddEditSaleOrderItem2.COMMIT_FLAG = m_BillingDoc.COMMIT_FLAG
          Set frmAddEditSaleOrderItem2.TempCollection = m_BillingDoc.SaleOrders
          
@@ -1797,7 +1797,7 @@ Dim ReportMode As Long
    Else
       frmReportConfig.ReportMode = ReportMode
       frmReportConfig.ShowMode = EditMode
-      frmReportConfig.ID = Rc.REPORT_CONFIG_ID
+      frmReportConfig.id = Rc.REPORT_CONFIG_ID
       frmReportConfig.ReportKey = ReportKey
       frmReportConfig.HeaderText = HeaderText
       Load frmReportConfig
@@ -1827,7 +1827,7 @@ Dim Result As Boolean
    End If
    
    ShowMode = SHOW_EDIT
-   ID = m_BillingDoc.BILLING_DOC_ID
+   id = m_BillingDoc.BILLING_DOC_ID
    m_BillingDoc.QueryFlag = 1
    QueryData (True)
    m_HasModify = False
@@ -2302,7 +2302,7 @@ Private Sub txtDiscount_Change()
    Call CalculateAmount
 End Sub
 Private Sub txtDocumentNo_LostFocus()
-   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, ID) Then
+   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtDocumentNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Exit Sub

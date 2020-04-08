@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditTrnGoods 
    ClientHeight    =   10455
@@ -650,6 +650,7 @@ Public DOCUMENT_TYPE As Long
 Private DOCUMENT_TYPE_INPUT As Long
 Public DOCUMENT_DATE As Date
 Public ProcessID As Long
+Public StartDate As Date
 Private Sub QueryData(Flag As Boolean)
 Dim IsOK As Boolean
 Dim ItemCount As Long
@@ -790,7 +791,7 @@ If ShowMode = SHOW_ADD Then
    m_LotItemWh.LOT_ITEM_WH_ID = LotItemWhId
    m_LotItemWh.HEAD_PACK_NO = HeadPackNo
    m_LotItemWh.LOT_ID = LotId
-   m_LotItemWh.START_DATE = GridEX1.Value(7)
+   m_LotItemWh.START_DATE = StartDate 'GridEX1.Value(7)
    m_LotItemWh.LOCK_NO = GridEX1.Value(15)
    m_LotItemWh.PRODUCT_TYPE_ID = GridEX1.Value(13)
    m_LotItemWh.BIN_NO = GridEX1.Value(14)
@@ -1632,6 +1633,7 @@ Dim LTD As CLotDoc
          LotDocId = GridEX1.Value(9) 'LOT_DOC_ID_REF
       End If
    End If
+    StartDate = LTD.START_DATE
 
     LotDocIdRef = GridEX1.Value(9) 'LOT_DOC_ID_REF
     

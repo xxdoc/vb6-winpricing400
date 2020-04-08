@@ -25132,3 +25132,55 @@ ErrorHandler:
       glbErrorLog.ShowUserError
    End If
 End Function
+Public Function Patch_2020_03_27_1_lek() As Boolean
+On Error GoTo ErrorHandler
+Dim SQL As String
+Dim ServerDateTime As String
+Dim HasBegin As Boolean
+Dim VersionStr As String
+
+   VersionStr = "2020_03_27_1_lek"
+   HasBegin = False
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+   SQL = "ALTER TABLE DELIVERY_CUS_ITEM ADD HIDE_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE DELIVERY_CUS_ITEM SET HIDE_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   m_Conn.BeginTrans
+   HasBegin = True
+
+   SQL = "INSERT INTO PATCH_DELIVERY "
+   SQL = SQL & "( "
+   SQL = SQL & "PATCH_DELIVERY_ID, "
+   SQL = SQL & "PATCH_VERSION, "
+   SQL = SQL & "PATCH_DATE, "
+   SQL = SQL & "PATCH_BY "
+   SQL = SQL & ") VALUES "
+   SQL = SQL & "( "
+   SQL = SQL & "GEN_ID(PATCH_DELIVERY_SEQ, 1), "
+   SQL = SQL & "'" & VersionStr & "', "
+   SQL = SQL & "'" & ServerDateTime & "', "
+   SQL = SQL & "" & glbUser.USER_ID & " "
+   SQL = SQL & ")"
+   m_Conn.Execute (SQL)
+
+   m_Conn.CommitTrans
+   HasBegin = False
+
+   glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " done."
+   glbErrorLog.ShowUserError
+   
+   Patch_2020_03_27_1_lek = True
+   Exit Function
+ErrorHandler:
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.1" & m_Conn.Errors(0)
+      glbErrorLog.ShowUserError
+   If HasBegin Then
+      m_Conn.RollbackTrans
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.2"
+      glbErrorLog.ShowUserError
+   End If
+End Function

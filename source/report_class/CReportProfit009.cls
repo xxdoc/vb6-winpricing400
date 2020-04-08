@@ -189,7 +189,7 @@ Dim PP As CParameterProcess
    Call m_Headers0.AddField(Cf)
    Call Cf.SetFieldValue(16, "^", "รายได้จากการขายอาหาร.", "^")
    Call m_Headers0.AddField(Cf)
-   Call Cf.SetFieldValue(4, "^", "รายได้ค่าขนส่ง.", "^")
+   Call Cf.SetFieldValue(6, "^", "รายได้ค่าขนส่ง.", "^")
    Call m_Headers0.AddField(Cf)
    Call Cf.SetFieldValue(14, "^", "ต้นทุนขาย.", "^")
    Call m_Headers0.AddField(Cf)
@@ -226,6 +226,8 @@ Dim PP As CParameterProcess
    Call Cf.SetFieldValue(2, "^", "ค่าขนส่ง/ถุง", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ขนส่ง(บาท)", ">")
+   Call m_Headers1.AddField(Cf)
+   Call Cf.SetFieldValue(2, "^", "คิดแบบ", ">")
    Call m_Headers1.AddField(Cf)
 
    Call Cf.SetFieldValue(0, "^", "ต่อตัน", ">")
@@ -392,6 +394,9 @@ Dim Cost2
 Dim Jip As CJobInput
 Dim AMOUNT As Double
 Dim AMOUNT2 As Double
+Dim BillTranColl As Collection
+Dim TempData As CBillTransport
+Dim RateDelivery As Double
 
 
    RName = "genDoc"
@@ -433,6 +438,7 @@ Dim AMOUNT2 As Double
 '      Di.TO_CUSTOMER_CODE = mcolParam("TO_CUSTOMER_CODE")
       Di.PART_MASTER_NO = mcolParam("PART_MASTER_NO")
       Di.PART_NO = mcolParam("PART_NO")
+      Di.DOCUMENT_NO = mcolParam("DOCUMENT_NO")
       Di.FROM_DATE = mcolParam("FROM_DATE")
       Di.TO_DATE = mcolParam("TO_DATE")
       Di.CUSTOMER_TYPE = mcolParam("CUSTOMER_TYPE")
@@ -691,10 +697,24 @@ Dim AMOUNT2 As Double
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
 
+         'คำนวณค่าขนส่งที่รวมในราคาอาหารก่อน
+            RateDelivery = 0
+            If Di.PRICE_THINK_TYPE = 1 Or Di.PRICE_THINK_TYPE = 2 Then 'กรณีมารับเอง และรวมค่าขนส่ง ให้แยกค่าขนส่งออกจากสินค้าด้วย
+            Set BillTranColl = New Collection
+              Call LoadBillTransportByBillingDocNo(Nothing, BillTranColl, Di.DO_ID)
+              Set TempData = GetObject("CBillTransport", BillTranColl, Trim(str(Di.DO_ID) & "-" & str(Di.WEIGHT_PER_PACK)), False)
+               If Not TempData Is Nothing Then
+                  RateDelivery = MyDiff(TempData.TOTAL_PRICE, TempData.PACK_AMOUNT)
+                  Debug.Print
+               End If
+            End If
+            
          k = k + 1   'ขายจริง/ถุง
          'Amt = Di.PRICE_PER_PACK
          If Di.PRICE_THINK_TYPE = 2 Then
             Amt = Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK - Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC
+         ElseIf Di.PRICE_THINK_TYPE = 1 Then
+            Amt = Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK - RateDelivery
          Else
             Amt = Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK
          End If
@@ -724,10 +744,13 @@ Dim AMOUNT2 As Double
          Total3(k) = -1
          Total4(k) = 1 'บอกว่าเป็นข้อมูลรายได้จากการขาย
          
+               
          If Di.PRICE_THINK_TYPE = 2 Then
             Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK - Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC, Di.WEIGHT_PER_PACK)        'ราคาขาย/กก.
+         ElseIf Di.PRICE_THINK_TYPE = 1 Then
+           Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK - RateDelivery, Di.WEIGHT_PER_PACK)       'ราคาขาย/กก.
          Else
-            Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK, Di.WEIGHT_PER_PACK)         'ราคาขาย/กก.
+            Amt = MyDiff(Di.PRICE_PER_PACK - Di.DISCOUNT_PER_PACK, Di.WEIGHT_PER_PACK)        'ราคาขาย/กก.
          End If
          k = k + 1
          Set HeadCf = m_Headers1.Fields(k)
@@ -756,10 +779,16 @@ Dim AMOUNT2 As Double
          Total7(k) = Total7(k) + Amt
          Total3(k) = -2
          
-         k = k + 1
-         Amt = Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC
-         Set HeadCf = m_Headers1.Fields(k)  'ค่าขนส่ง/ถุง
-         TempStr = IIf(Di.PRICE_THINK_TYPE = 2, "*" & Amt, Amt)
+          k = k + 1
+         If Di.PRICE_THINK_TYPE = 1 Or Di.PRICE_THINK_TYPE = 2 Then 'กรณีมารับเอง และรวมค่าขนส่ง ให้แยกค่าขนส่งออกจากสินค้าด้วย
+            Amt = RateDelivery
+         Else
+            Amt = Di.RATE_CUSTOMER - Di.DISCOUNT_AMOUNT_DLC
+       End If
+
+          Set HeadCf = m_Headers1.Fields(k)  'ค่าขนส่ง/ถุง
+'          TempStr = IIf(Di.PRICE_THINK_TYPE = 2, "*" & Amt, Amt)
+         TempStr = Amt
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
          Total1(k) = Total1(k) + (AMOUNT * Amt)
@@ -781,6 +810,13 @@ Dim AMOUNT2 As Double
          Total5(k) = Total5(k) + Amt
          Total6(k) = Total6(k) + Amt
           Total7(k) = Total7(k) + Amt
+         Total3(k) = -2
+         
+         k = k + 1
+         Set HeadCf = m_Headers1.Fields(k)
+         TempStr = Di.PRICE_THINK_TYPE
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
          Total3(k) = -2
       
       
@@ -1056,6 +1092,8 @@ Dim AMOUNT2 As Double
       Vsp.FontBold = True
       Call Vsp.AddTable(strFormat, "", TempStr2)
       Vsp.FontBold = False
+      
+      Vsp = "หมายเหตุ  1 = มารับเอง, 2 = รวมค่าขนส่ง, 3 = แยกค่าขนส่ง"
 
       Set BodyCf = Nothing
    Vsp.EndDoc

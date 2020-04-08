@@ -142,6 +142,15 @@ Dim TempDate As String
       FromStr = FromStr & "LEFT OUTER JOIN CUSTOMER CM ON (AC.CUSTOMER_ID = CM.CUSTOMER_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN CUSTOMER_NAME CN ON (CM.CUSTOMER_ID = CN.CUSTOMER_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN NAME NM ON (CN.NAME_ID = NM.NAME_ID) "
+   
+   ElseIf Ind = 4 Then
+      SelectStr1 = "SELECT BT.*,BTI.* "
+      SelectStr2 = "SELECT COUNT(*)  "
+            
+      FromStr = "FROM BILL_TRANSPORT BT "
+      FromStr = FromStr & "LEFT OUTER JOIN BILL_TRANSPORT_ITEM BTI ON (BT.BILL_TRANSPORT_ID = BTI.BILL_TRANSPORT_ID)  "
+      
+      WhereStr = ""
    End If
    
    If BILL_TRANSPORT_ID > 0 Then
@@ -212,6 +221,15 @@ Dim TempDate As String
          WhereStr = WhereStr & "AND (SP.SUPPLIER_CODE = '" & SUPPLIER_CODE & "') "
       End If
    End If
+   
+   If Len(CAL_PRICE_IN_PRODUCT) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (BTI.CAL_PRICE_IN_PRODUCT = '" & CAL_PRICE_IN_PRODUCT & "') "
+      Else
+         WhereStr = WhereStr & "AND (BTI.CAL_PRICE_IN_PRODUCT = '" & CAL_PRICE_IN_PRODUCT & "') "
+      End If
+   End If
+   
    
    If Len(CUSTOMER_CODE) > 0 Then
       If Len(WhereStr) <= 0 Then
@@ -288,6 +306,12 @@ Dim TempDate As String
          OrderByStr = "ORDER BY IVD.DOCUMENT_DATE,IVD.DOCUMENT_NO "
       Else
          OrderByStr = "ORDER BY IVD.DOCUMENT_NO  "
+      End If
+   ElseIf Ind = 4 Then
+      If OrderBy = 1 Then
+         OrderByStr = "ORDER BY BT.BILL_TRANSPORT_ID "
+      Else
+        OrderByStr = "ORDER BY BT.BILL_TRANSPORT_ID "
       End If
    Else
       OrderByStr = "ORDER BY BT.BILL_TRANSPORT_ID "
@@ -378,6 +402,12 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
          BILL_TRANSPORT_ITEM_ID = NVLI(Rs("BILL_TRANSPORT_ITEM_ID"), -1)
          CAL_RATE_DELIVERY_TYPE = NVLI(Rs("CAL_RATE_DELIVERY_TYPE"), -1)
          EX_DELIVERY_COST_ITEM_ID = NVLI(Rs("EX_DELIVERY_COST_ITEM_ID"), -1)
+      ElseIf Ind = 4 Then
+        BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
+        PACK_AMOUNT = NVLI(Rs("PACK_AMOUNT"), -1)
+        WEIGHT_PER_UNIT = NVLI(Rs("WEIGHT_PER_UNIT"), -1)
+        RATE_PER_UNIT = NVLD(Rs("RATE_PER_UNIT"), 0)
+        TOTAL_PRICE = NVLD(Rs("TOTAL_PRICE"), 0)
    End If
 End Function
 

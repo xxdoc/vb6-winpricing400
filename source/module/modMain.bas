@@ -4846,7 +4846,11 @@ Dim p As CPatch
   If Not p.IsPatch("2019_11_12_1_lek") Then '354
       Call p.Patch_2019_11_12_1_lek
    End If
-'Patch_2019_11_12_1_lek
+   
+   If Not p.IsPatch("2020_03_27_1_lek") Then '355
+      Call p.Patch_2020_03_27_1_lek
+   End If
+'Patch_2020_03_27_1_lek
    Set p = Nothing
 End Sub
 Public Function MyDiff(ByVal D1 As Double, ByVal D2 As Double) As Double

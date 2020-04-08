@@ -3,7 +3,7 @@ Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
 Begin VB.Form frmAddEditDeliveryCus 
    BackColor       =   &H80000000&
    BorderStyle     =   1  'Fixed Single
-   ClientHeight    =   3735
+   ClientHeight    =   3135
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   10410
@@ -12,17 +12,17 @@ Begin VB.Form frmAddEditDeliveryCus
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   3735
+   ScaleHeight     =   3135
    ScaleWidth      =   10410
    StartUpPosition =   1  'CenterOwner
    Begin Threed.SSFrame SSFrame1 
-      Height          =   3765
+      Height          =   3165
       Left            =   0
       TabIndex        =   4
       Top             =   0
       Width           =   10425
       _ExtentX        =   18389
-      _ExtentY        =   6641
+      _ExtentY        =   5583
       _Version        =   131073
       PictureBackgroundStyle=   2
       Begin prjFarmManagement.uctlTextBox txtName 
@@ -31,8 +31,8 @@ Begin VB.Form frmAddEditDeliveryCus
          TabIndex        =   1
          Top             =   1440
          Width           =   7845
-         _ExtentX        =   13309
-         _ExtentY        =   767
+         _extentx        =   13309
+         _extenty        =   767
       End
       Begin Threed.SSPanel pnlHeader 
          Height          =   705
@@ -51,8 +51,19 @@ Begin VB.Form frmAddEditDeliveryCus
          TabIndex        =   0
          Top             =   990
          Width           =   2355
-         _ExtentX        =   2672
+         _extentx        =   2672
+         _extenty        =   767
+      End
+      Begin Threed.SSCheck chkHide 
+         Height          =   435
+         Left            =   1860
+         TabIndex        =   8
+         Top             =   1920
+         Width           =   1065
+         _ExtentX        =   1879
          _ExtentY        =   767
+         _Version        =   131073
+         Caption         =   "chkHide"
       End
       Begin VB.Label lblName 
          Alignment       =   1  'Right Justify
@@ -77,7 +88,7 @@ Begin VB.Form frmAddEditDeliveryCus
          Height          =   525
          Left            =   5280
          TabIndex        =   3
-         Top             =   2160
+         Top             =   2400
          Width           =   1605
          _ExtentX        =   2831
          _ExtentY        =   926
@@ -88,7 +99,7 @@ Begin VB.Form frmAddEditDeliveryCus
          Height          =   525
          Left            =   3600
          TabIndex        =   2
-         Top             =   2160
+         Top             =   2400
          Width           =   1575
          _ExtentX        =   2778
          _ExtentY        =   926
@@ -115,7 +126,7 @@ Private m_Rs As ADODB.Recordset
 Private m_m_ExDeliveryCostItem As Collection
 
 Public HeaderText As String
-Public ID As Long
+Public id As Long
 Public ID2 As Long
 Public OKClick As Boolean
 Public ParentForm As Form
@@ -150,6 +161,7 @@ Private Sub InitFormLayout()
    
    Call InitNormalLabel(lblCode, MapText("รหัสสถานที่"))
    Call InitNormalLabel(lblName, MapText("ชื่อสถานที่จัดส่ง"))
+   Call InitCheckBox(chkHide, "ยกเลิก")
    
    Call txtCode.SetTextLenType(TEXT_STRING, glbSetting.DESC_TYPE)
    Call txtName.SetTextLenType(TEXT_STRING, glbSetting.DESC_TYPE)
@@ -172,10 +184,11 @@ Dim DC As CDeliveryCus
       
       If ShowMode = SHOW_EDIT Then
       
-         Set DC = TempCollection.Item(ID)
+         Set DC = TempCollection.Item(id)
          
          txtCode.Text = DC.DELIVERY_CUS_ITEM_CODE
          txtName.Text = DC.DELIVERY_CUS_ITEM_NAME
+         chkHide.Value = FlagToCheck(DC.HIDE_FLAG)
       Else
         txtCode.Text = CustomerCode & "-"
       End If
@@ -224,18 +237,23 @@ Dim RealIndex As Long
       DC.Flag = "A"
       DC.DELIVERY_CUS_ITEM_CODE = txtCode.Text
       DC.DELIVERY_CUS_ITEM_NAME = txtName.Text
-'      Call TempCollection.add(DC)
+      DC.HIDE_FLAG = Check2Flag(chkHide.Value)
       Call TempCollection.add(DC, Trim(txtCode.Text))
    Else
-      Set DC = TempCollection.Item(ID)
+      Set DC = TempCollection.Item(id)
       If DC.Flag <> "A" Then
          DC.Flag = "E"
          DC.DELIVERY_CUS_ITEM_CODE = txtCode.Text
          DC.DELIVERY_CUS_ITEM_NAME = txtName.Text
+         DC.HIDE_FLAG = Check2Flag(chkHide.Value)
       End If
    End If
    SaveData = True
 End Function
+
+Private Sub chkHide_Click(Value As Integer)
+   m_HasModify = True
+End Sub
 
 Private Sub cmdExit_Click()
    If Not ConfirmExit(m_HasModify) Then
@@ -270,7 +288,7 @@ Private Sub Form_Activate()
       If ShowMode = SHOW_EDIT Then
          Call QueryData(True)
       ElseIf ShowMode = SHOW_ADD Then
-         ID = 0
+         id = 0
          Call QueryData(True)
       End If
       

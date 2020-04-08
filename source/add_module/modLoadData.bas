@@ -4691,6 +4691,7 @@ Dim I As Long
 
    D.DELIVERY_CUS_ITEM_ID = -1
    D.CUSTOMER_ID = CusID
+   D.HIDE_FLAG = CancelFlag
    Call D.QueryData(Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -4907,6 +4908,62 @@ FUNC_NAME = "LoadExDeliveryCusItem"
          ElseIf KeyType = 4 Then
            Key = Trim(str(TempData.CUSTOMER_ID)) & "-" & Trim(str(TempData.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(TempData.RATE_TYPE)) & "-" & Trim(str(TempData.RATE_TYPE_CUS))
            Call Cl.add(TempData, Key)
+         End If
+      End If
+
+      Set TempData = Nothing
+      Rs.MoveNext
+   Wend
+
+   Set Rs = Nothing
+   Set D = Nothing
+   Exit Sub
+   
+ErrorHandler:
+glbErrorLog.SystemErrorMsg = Err.DESCRIPTION & " , " & FUNC_NAME & " , KEY= " & Key & " , KeyType=" & KeyType
+   glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
+End Sub
+Public Sub LoadBillTransportByBillingDocNo(C As ComboBox, Optional Cl As Collection = Nothing, Optional BillingdocID As Long = -1, Optional KeyType As Byte = 1)
+On Error GoTo ErrorHandler
+Dim D As CBillTransport
+Dim ItemCount As Long
+Dim Rs As ADODB.Recordset
+Dim TempData As CBillTransport
+Dim I As Long
+Dim FUNC_NAME As String
+Dim Key As String
+FUNC_NAME = "LoadBillTransportByBillingDocNo"
+
+   Set D = New CBillTransport
+   Set Rs = New ADODB.Recordset
+
+   D.BILLING_DOC_ID = BillingdocID
+   D.CAL_PRICE_IN_PRODUCT = "Y"
+   
+   Call D.QueryData(4, Rs, ItemCount)
+
+   If Not (C Is Nothing) Then
+      C.Clear
+      I = 0
+      C.AddItem ("")
+   End If
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   While Not Rs.EOF
+      I = I + 1
+      Set TempData = New CBillTransport
+      Call TempData.PopulateFromRS(4, Rs)
+
+      If Not (C Is Nothing) Then
+      End If
+
+      If Not (Cl Is Nothing) Then
+         If KeyType = 1 Then
+             Key = Trim(str(TempData.BILLING_DOC_ID) & "-" & str(TempData.WEIGHT_PER_UNIT))
+             Call Cl.add(TempData, Key)
          End If
       End If
 

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditDeliveryCusMain 
    BackColor       =   &H80000000&
@@ -528,6 +528,10 @@ Private Sub InitGrid1()
    Set Col = GridEX1.Columns.add '4
    Col.Width = 5000
    Col.Caption = MapText("ชื่อสถานที่จัดส่ง")
+   
+   Set Col = GridEX1.Columns.add '4
+   Col.Width = 1500
+   Col.Caption = MapText("สถานะ")
 End Sub
 
 Private Sub InitFormLayout()
@@ -620,6 +624,7 @@ Dim RealIndex As Long
       Values(2) = RealIndex
       Values(3) = DC.DELIVERY_CUS_ITEM_CODE
       Values(4) = DC.DELIVERY_CUS_ITEM_NAME
+      Values(5) = IIf(DC.HIDE_FLAG = "N", "ใช้งาน", "ยกเลิก")
       
    End If
    
@@ -675,7 +680,7 @@ Dim ItemCount As Long
 
    If Flag Then
       Call EnableForm(Me, False)
-      Call LoadDeliveryCus(Nothing, m_DeliveryCus, CustomerID) 'LOAD สถานที่จัดส่ง
+      Call LoadDeliveryCus(Nothing, m_DeliveryCus, CustomerID, , , , "") 'LOAD สถานที่จัดส่ง
    End If
    
    GridEX1.ItemCount = CountItem(m_DeliveryCus)
@@ -696,7 +701,7 @@ Dim Customer As CCustomer
 
    CustomerID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
 '   If CustomerID > 0 Then
-      Call LoadDeliveryCus(Nothing, m_DeliveryCus, CustomerID) 'LOAD สถานที่จัดส่ง
+      Call LoadDeliveryCus(Nothing, m_DeliveryCus, CustomerID, , , , "N") 'LOAD สถานที่จัดส่ง
 '   End If
    
    Call TabStrip1_Click

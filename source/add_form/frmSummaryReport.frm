@@ -5981,6 +5981,9 @@ Dim Offset As Long
    '1 =============================
    Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "PART_NO", , "PART_NO")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสสินค้า/วัตถุดิบ"))
+   
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "DOCUMENT_NO")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("เลขที่เอกสาร"))
 
    Call LoadControl("C", cboGeneric(0).Width, True, "", 1, "PART_TYPE")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("ประเภทสินค้า"))

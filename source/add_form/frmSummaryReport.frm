@@ -1610,6 +1610,10 @@ ElseIf Key = ROOT_TREE & " 8-8" Then
       Set Report = New CReportAR018
       ClassName = "CReportAR018"
       SelectFlag = True
+   ElseIf Key = ROOT_TREE & " A-2-19" Then
+      Set Report = New CReportAR009_3
+      ClassName = "CReportAR009_3"
+      SelectFlag = True
    ElseIf Key = ROOT_TREE & " A-2-21" Then
       Set Report = New CReportAR021
       ClassName = "CReportAR021"
@@ -3592,6 +3596,14 @@ Dim C As CReportControl
                Call InitOrderType(m_Combos(C.ControlIndex))
             End If
          End If
+         
+'         If trvMaster.SelectedItem.Key = ROOT_TREE & " A-2-19" Then
+'            If C.ComboLoadID = 1 Then
+'               Call InitReportA_2_8Orderby(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 2 Then
+'               Call InitOrderType(m_Combos(C.ControlIndex))
+'            End If
+'         End If
          
          If trvMaster.SelectedItem.Key = ROOT_TREE & " J-1-1" Or _
              trvMaster.SelectedItem.Key = ROOT_TREE & " J-1-2" Then
@@ -8709,6 +8721,12 @@ Dim QueryFlag As Boolean
          Exit Sub
       End If
       Call InitReportA_2_18
+   ElseIf Node.Key = ROOT_TREE & " A-2-19" Then
+      If Not VerifyAccessRight("LEDGER_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
+         cmdOK.Enabled = False                                                                                                                                                               '''''''''
+         Exit Sub
+      End If
+      Call InitReportA_2_19
    ElseIf Node.Key = ROOT_TREE & " A-2-9" Then
       If Not VerifyAccessRight("LEDGER_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
@@ -9007,6 +9025,64 @@ Dim Offset As Long
    '4 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 2, "ORDER_TYPE")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงจาก"))
+      
+   Call ShowControl
+   Call LoadComboData
+End Sub
+Private Sub InitReportA_2_19()
+Dim C As CReportControl
+Dim Top As Long
+Dim Left As Long
+Dim LabelWidth As Long
+Dim Offset As Long
+
+   Top = lblGeneric(0).Top
+   Left = lblGeneric(0).Left
+   LabelWidth = lblGeneric(0).Width
+   Offset = 100
+   
+'   '1 =============================
+   Call LoadControl("D", uctlGenericDate(0).Width, True, "", , "FROM_DATE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากวันที่"))
+
+'   2 =============================
+   Call LoadControl("D", uctlGenericDate(0).Width, True, "", , "TO_DATE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงวันที่"))
+   uctlGenericDate(0).Enable = False
+
+'   2 =============================
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "CUSTOMER_CODE", , "CUSTOMER_CODE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสลูกค้า"))
+   uctlGenericDate(0).Enable = False
+   
+   
+   '1 =============================
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "FROM_CUSTOMER_CODE", , "CUSTOMER_CODE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากรหัสลูกค้า"))
+   
+   '1 =============================
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "TO_CUSTOMER_CODE", , "CUSTOMER_CODE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงรหัสลูกค้า"))
+   
+   '1 =============================
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "EMP_CODE", , "EMP_CODE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสพนักงาน"))
+
+   '2 =============================
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "FROM_EMP_CODE", , "EMP_CODE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากรหัสพนักงาน"))
+   
+    '2 =============================
+   Call LoadControl("T", txtGeneric(0).Width \ 2, True, "", , "TO_EMP_CODE", , "EMP_CODE")
+   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงรหัสพนักงาน"))
+   
+'   '3 =============================
+'   Call LoadControl("C", cboGeneric(0).Width, True, "", 1, "ORDER_BY")
+'   Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงตาม"))
+'
+'   '4 =============================
+'   Call LoadControl("C", cboGeneric(0).Width, True, "", 2, "ORDER_TYPE")
+'   Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงจาก"))
       
    Call ShowControl
    Call LoadComboData

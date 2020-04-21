@@ -978,6 +978,15 @@ Dim TempCount As Long
    D.ICON_INDEX2 = 2
    Call Col.add(D)
    Set D = Nothing
+   
+   Set D = New CMenuItem
+   D.MENU_TEXT = MapText("รายงานการรับชำระเงินเรียงตามพนักงานขาย (AR009.2)")
+   D.KEYWORD = ROOT_TREE & " A-2-19"
+   D.PARENT_KEY = ROOT_TREE & " A-2"
+   D.ICON_INDEX1 = 1
+   D.ICON_INDEX2 = 2
+   Call Col.add(D)
+   Set D = Nothing
 
    Set D = New CMenuItem
    D.MENU_TEXT = MapText("รายงานวิเคราะห์อายุดิวเช็ค (AR010)")

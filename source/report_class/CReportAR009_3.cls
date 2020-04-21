@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "CReportAR009_2"
+Attribute VB_Name = "CReportAR009_3"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Option Explicit
 'User Group Report
 Implements CReportInterface
 
-Private Const MODULE_NAME = "CReportAR009_2"
+Private Const MODULE_NAME = "CReportAR009_3"
 Public MODULE_DESC As String
 
 Private WithEvents Vsp As VSPrinter
@@ -184,13 +184,13 @@ Dim iCount As Long
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(3, "^", "วันที่ส่งของ", "^")
    Call m_Headers1.AddField(Cf)
-'   Call Cf.SetFieldValue(0, "^", "ยอดหนี้", ">")
+'   Call Cf.SetFieldValue(2, "^", "ยอดหนี้", ">")
 '   Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ยอดรับชำระ", ">")
    Call m_Headers1.AddField(Cf)
-'   Call Cf.SetFieldValue(0, "^", "ส่วนลดเงินสด", ">")
+'   Call Cf.SetFieldValue(2, "^", "ส่วนลดเงินสด", ">")
 '   Call m_Headers1.AddField(Cf)
-'   Call Cf.SetFieldValue(0, "^", "คงเหลือ", ">")
+'   Call Cf.SetFieldValue(2, "^", "คงเหลือ", ">")
 '   Call m_Headers1.AddField(Cf)
    
    Set Cf = Nothing
@@ -333,6 +333,7 @@ Dim FeeAmount As Double
 Dim Bnk As CBank
 Dim Bbr As CBankBranch
 Dim Ri As CReceiptItem
+Dim K As Long
 
 '   m_ApSupAmounts
 '   m_ApSupPaids
@@ -369,27 +370,52 @@ Dim Ri As CReceiptItem
       Ri.RECEIPT_ITEM_ID = -1
       Ri.FROM_DOC_DATE = mcolParam("FROM_DATE")
       Ri.TO_DOC_DATE = mcolParam("TO_DATE")
-      Ri.OrderBy = 1
+      Ri.OrderBy = 3
       Ri.CUSTOMER_CODE = mcolParam("CUSTOMER_CODE")
       Ri.FROM_CUSTOMER_CODE = mcolParam("FROM_CUSTOMER_CODE")
       Ri.TO_CUSTOMER_CODE = mcolParam("TO_CUSTOMER_CODE")
+      Ri.EMP_CODE = mcolParam("EMP_CODE")
+      Ri.FROM_EMP_CODE = mcolParam("FROM_EMP_CODE")
+      Ri.TO_EMP_CODE = mcolParam("TO_EMP_CODE")
       Ri.OrderType = 1
       Ri.DOCUMENT_TYPE = 2
       Ri.RECEIPT_TYPE = 3
       Call Ri.QueryData(10, Rs, iCount)
     
+       K = 0
       While Not Rs.EOF
          Call Ri.PopulateFromRS(10, Rs)
          I = I + 1
+         K = K + 1
+          If PrevKey1 <> Ri.EMP_CODE And I > 1 Then
+            Call GenerateFooter("รวม", PrevKey1, "", Total1, m_Details1, 0)
+            Call m_Details1.GetString(2, TempStr1, TempStr2)
+            strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+            Vsp.FontBold = True
+            Call Vsp.AddTable(strFormat, "", TempStr2)
+            Vsp.FontBold = False
+
+            For J = 1 To UBound(Total1)
+               Total1(J) = 0
+            Next J
+
+            Vsp = "ชื่อพนักงานขาย  :  " & Ri.SALE_NAME & " " & Ri.SALE_LNAME & " (" & Ri.EMP_CODE & ")"
+            K = 1
+
+         ElseIf I = 1 Then
+            Vsp = "ชื่อพนักงานขาย  :  " & Ri.EMP_NAME & " " & Ri.EMP_LNAME & " (" & Ri.EMP_CODE & ")"
+         End If
+
+         PrevKey1 = Ri.EMP_CODE
          J = 0
          Call m_Details1.ClearField
          
          Ri.PAID_AMOUNT = Val(Format(Ri.PAID_AMOUNT, "0.00"))
          Ri.CASH_DISCOUNT = Val(Format(Ri.CASH_DISCOUNT, "0.00"))
-          
+
           J = J + 1
           Set Hc = m_Headers1.Fields(J)
-         TempStr = I
+         TempStr = K
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
@@ -429,6 +455,15 @@ Dim Ri As CReceiptItem
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
+'          J = J + 1
+'          Set Hc = m_Headers1.Fields(J)
+'         TempStr = FormatNumber(0)
+'         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+'         Call m_Details1.AddField(BodyCf)
+'         Total1(J) = Total1(J) + (0)
+'         Total2(J) = Total2(J) + (0)
+'         Total3(J) = Total3(J) + (0)
+
           J = J + 1
           Set Hc = m_Headers1.Fields(J)
          TempStr = FormatNumber(Ri.PAID_AMOUNT)
@@ -438,21 +473,23 @@ Dim Ri As CReceiptItem
          Total2(J) = Total2(J) + (Ri.PAID_AMOUNT)
          Total3(J) = Total3(J) + (Ri.PAID_AMOUNT)
 
-'          Set Hc = m_Headers1.Fields(10)
+'          J = J + 1
+'          Set Hc = m_Headers1.Fields(J)
 '         TempStr = FormatNumber(Ri.CASH_DISCOUNT)
 '         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
 '         Call m_Details1.AddField(BodyCf)
-'         Total1(8) = Total1(8) + (Ri.CASH_DISCOUNT)
-'         Total2(8) = Total2(8) + (Ri.CASH_DISCOUNT)
+'         Total1(J) = Total1(J) + (Ri.CASH_DISCOUNT)
+'         Total2(J) = Total2(J) + (Ri.CASH_DISCOUNT)
 '         Total3(8) = Total3(8) + (Ri.CASH_DISCOUNT)
 
-'          Set Hc = m_Headers1.Fields(11)
+'          J = J + 1
+'          Set Hc = m_Headers1.Fields(J)
 '         TempStr = FormatNumber(0)
 '         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
 '         Call m_Details1.AddField(BodyCf)
-'         Total1(9) = Total1(9) + (0)
-'         Total2(9) = Total2(9) + (0)
-'         Total3(9) = Total3(9) + (0)
+'         Total1(J) = Total1(J) + (0)
+'         Total2(J) = Total2(J) + (0)
+'         Total3(J) = Total3(J) + (0)
 
          Call m_Details1.GetString(1, TempStr1, TempStr2)
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
@@ -461,13 +498,13 @@ Dim Ri As CReceiptItem
          Rs.MoveNext
       Wend
 
-      Call GenerateFooter("รวม", "ใบเสร็จ", "", Total3, m_Details1, 0)
+      Call GenerateFooter("รวม", PrevKey1, "", Total1, m_Details1, 0)
       Call m_Details1.GetString(2, TempStr1, TempStr2)
       strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
       Vsp.FontBold = True
       Call Vsp.AddTable(strFormat, "", TempStr2)
       Vsp.FontBold = False
-      
+   
 
       Call GenerateFooter("สุทธิ", "", "", Total2, m_Details1, 0)
       Call m_Details1.GetString(2, TempStr1, TempStr2)

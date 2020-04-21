@@ -183,6 +183,8 @@ Public CDN_REF_COUNT2 As Long
 Public TAX_FLAG As String
 Public WH_FLAG As String
 Public EMP_CODE As String
+Public FROM_EMP_CODE As String
+Public TO_EMP_CODE As String
 Public EMP_NAME As String
 Public EMP_LNAME As String
 Public RESOURCE_NO As String
@@ -344,7 +346,7 @@ Dim GroupByStr As String
 
       WhereStr = ""
    ElseIf Ind = 10 Then
-      SelectStr1 = "SELECT IVD2.DOCUMENT_NO RECEIPT_NO, IVD2.DOCUMENT_DATE RECEIPT_DATE, IVD2.DOCUMENT_TYPE, IVD1.DOCUMENT_NO BILL_NO, IVD1.DOCUMENT_DATE BILL_DATE, UG.*, CM2.CUSTOMER_CODE, NM.LONG_NAME CUSTOMER_NAME, UG.DEBIT_CREDIT_AMOUNT, ENM.LONG_NAME SALE_NAME, ENM.LAST_NAME SALE_LNAME "
+      SelectStr1 = "SELECT IVD2.DOCUMENT_NO RECEIPT_NO, IVD2.DOCUMENT_DATE RECEIPT_DATE, IVD2.DOCUMENT_TYPE, IVD1.DOCUMENT_NO BILL_NO, IVD1.DOCUMENT_DATE BILL_DATE, UG.*, CM2.CUSTOMER_CODE, NM.LONG_NAME CUSTOMER_NAME, UG.DEBIT_CREDIT_AMOUNT, ED.EMP_CODE,ENM.LONG_NAME SALE_NAME, ENM.LAST_NAME SALE_LNAME "
       SelectStr2 = "SELECT COUNT(*)  "
 
       FromStr = "FROM RECEIPT_ITEM UG "
@@ -803,7 +805,55 @@ Dim GroupByStr As String
       End If
    End If
    
-      If Trim(FREELANCE_CODE) <> "" Then
+   If Trim(EMP_CODE) <> "" Then
+      If WildCard(EMP_CODE, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(ED.EMP_CODE,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(ED.EMP_CODE,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (ED.EMP_CODE = '" & ChangeQuote(Trim(EMP_CODE)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (ED.EMP_CODE = '" & ChangeQuote(Trim(EMP_CODE)) & "')"
+         End If
+      End If
+   End If
+   
+    If Len(Trim(FROM_EMP_CODE)) > 0 Then
+      If WildCard(FROM_EMP_CODE, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(EMP_CODE,1," & SubLen & ") >= '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(EMP_CODE,1," & SubLen & ") >= '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (EMP_CODE >= '" & ChangeQuote(Trim(FROM_EMP_CODE)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (EMP_CODE >= '" & ChangeQuote(Trim(FROM_EMP_CODE)) & "')"
+         End If
+      End If
+   End If
+   
+   If Len(Trim(TO_EMP_CODE)) > 0 Then
+      If WildCard(TO_EMP_CODE, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(EMP_CODE,1," & SubLen & ") <= '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(EMP_CODE,1," & SubLen & ") <= '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (EMP_CODE <= '" & ChangeQuote(Trim(TO_EMP_CODE)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (EMP_CODE <= '" & ChangeQuote(Trim(TO_EMP_CODE)) & "')"
+         End If
+      End If
+   End If
+   
+   If Trim(FREELANCE_CODE) <> "" Then
       If WildCard(FREELANCE_CODE, SubLen, NewStr) Then
          If WhereStr = "" Then
             WhereStr = "WHERE (SUBSTR(FREELANCE_CODE,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
@@ -971,6 +1021,8 @@ Dim GroupByStr As String
          OrderByStr = "ORDER BY IVD1.DOCUMENT_NO ASC, IVD1.DOCUMENT_DATE "
       ElseIf OrderBy = 2 Then
          OrderByStr = "ORDER BY CM2.CUSTOMER_CODE ASC, IVD2.DOCUMENT_DATE ASC, IVD2.DOCUMENT_NO, IVD1.DOCUMENT_DATE ASC, IVD1.DOCUMENT_NO "
+      ElseIf OrderBy = 3 Then
+         OrderByStr = "ORDER BY ED.EMP_CODE ASC, IVD2.DOCUMENT_DATE ASC, IVD2.DOCUMENT_NO, IVD1.DOCUMENT_DATE ASC, IVD1.DOCUMENT_NO "
       Else
          OrderByStr = "ORDER BY CM2.CUSTOMER_CODE ASC, IVD2.DOCUMENT_DATE ASC, IVD2.DOCUMENT_NO, IVD1.DOCUMENT_DATE ASC, IVD1.DOCUMENT_NO "
       End If
@@ -1112,6 +1164,8 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       CUSTOMER_CODE = NVLS(Rs("CUSTOMER_CODE"), "")
       CUSTOMER_NAME = NVLS(Rs("CUSTOMER_NAME"), "")
       DOCUMENT_TYPE = NVLI(Rs("DOCUMENT_TYPE"), -1)
+      
+      EMP_CODE = NVLS(Rs("EMP_CODE"), "")
       SALE_NAME = NVLS(Rs("SALE_NAME"), "")
       SALE_LNAME = NVLS(Rs("SALE_LNAME"), "")
       SALE_NAME = SALE_NAME & " " & SALE_LNAME
@@ -1405,9 +1459,9 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
-Dim Bd As CBillingDoc
+Dim BD As CBillingDoc
 Dim TempID1 As String
 Dim TempID2 As String
 
@@ -1427,7 +1481,7 @@ Dim TempID2 As String
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("RECEIPT_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("RECEIPT_ITEM_SEQ", id, glbErrorLog)
       
       SQL1 = "INSERT INTO RECEIPT_ITEM " & _
                      "( " & _
@@ -1480,7 +1534,7 @@ Dim TempID2 As String
                      "VALUES " & _
                      "( "
       SQL1 = SQL1 & _
-                         ID & "," & _
+                         id & "," & _
                          "" & BILLING_DOC_ID & "," & _
                          "" & DO_ID & "," & _
                          "" & RECEIPT_ITEM_AMOUNT & "," & _
@@ -1526,7 +1580,7 @@ Dim TempID2 As String
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         RECEIPT_ITEM_ID = ID
+         RECEIPT_ITEM_ID = id
    Else 'Show edit
       SQL1 = "UPDATE RECEIPT_ITEM SET " & _
                      "   BILLING_DOC_ID = " & BILLING_DOC_ID & ", " & _
@@ -1574,25 +1628,25 @@ Dim TempID2 As String
    If (AddEditMode = SHOW_ADD) Or (AddEditMode = SHOW_EDIT) Then
       m_Conn.Execute (SQL1)
       
-      Set Bd = New CBillingDoc
-      Bd.BILLING_DOC_ID = DO_ID
-      Call Bd.UpdatePaidAmount
-      Call Bd.UpdateCnDnAmount
-      Set Bd = Nothing
+      Set BD = New CBillingDoc
+      BD.BILLING_DOC_ID = DO_ID
+      Call BD.UpdatePaidAmount
+      Call BD.UpdateCnDnAmount
+      Set BD = Nothing
    End If
 End Function
 Public Function DeleteData()
 Dim SQL1 As String
-Dim Bd As CBillingDoc
+Dim BD As CBillingDoc
 
    SQL1 = "DELETE FROM RECEIPT_ITEM WHERE RECEIPT_ITEM_ID = " & RECEIPT_ITEM_ID
    m_Conn.Execute (SQL1)
    
-   Set Bd = New CBillingDoc
-   Bd.BILLING_DOC_ID = DO_ID
-   Call Bd.UpdatePaidAmount
-   Call Bd.UpdateCnDnAmount
-   Set Bd = Nothing
+   Set BD = New CBillingDoc
+   BD.BILLING_DOC_ID = DO_ID
+   Call BD.UpdatePaidAmount
+   Call BD.UpdateCnDnAmount
+   Set BD = Nothing
 End Function
 Public Function CopyObjectFromDo(Ind As Long, TempObj As CDoItem)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' FOR DOITEM

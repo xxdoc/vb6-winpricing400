@@ -507,6 +507,9 @@ Dim MI As CMenuItem
       
          Set Node = trvMaster.Nodes.add(ROOT_TREE & " 4-A", tvwChild, ROOT_TREE & " 4-8-1", MapText("รายงานสรุปการซื้อวัตถุดิบ 2 (RM002.2)"), 1, 2)
          Node.Expanded = False
+         
+         Set Node = trvMaster.Nodes.add(ROOT_TREE & " 4-A", tvwChild, ROOT_TREE & " 4-8-2", MapText("รายงานสรุปการซื้อวัตถุดิบ 2 แยกตามวันที่รับ (RM002.3)"), 1, 2)
+         Node.Expanded = False
       
          Set Node = trvMaster.Nodes.add(ROOT_TREE & " 4-A", tvwChild, ROOT_TREE & " 4-9", MapText("รายงานสรุปยอดซื้อตามผู้ขาย (RM003)"), 1, 2)
          Node.Expanded = False
@@ -856,7 +859,7 @@ Dim TempID As Long
       (Node.Key = ROOT_TREE & " 4-12-3") Or _
       (Node.Key = ROOT_TREE & " 4-12-5") Or _
       (Node.Key = ROOT_TREE & " 4-8") Or _
-      (Node.Key = ROOT_TREE & " 4-8-1") Or _
+      (Node.Key = ROOT_TREE & " 4-8-1") Or (Node.Key = ROOT_TREE & " 4-8-2") Or _
       (Node.Key = ROOT_TREE & " 4-9") Or _
       (Node.Key = ROOT_TREE & " 4-10") Or _
       (Node.Key = ROOT_TREE & " 4-A-1") Or _
@@ -1125,6 +1128,10 @@ Dim ClassName As String
    ElseIf Key = ROOT_TREE & " 4-8-1" Then
       Set Report = New CReportInventory008_1
       ClassName = "CReportInventory008_1"
+      SelectFlag = True
+   ElseIf Key = ROOT_TREE & " 4-8-2" Then
+      Set Report = New CReportInventory008_2
+      ClassName = "CReportInventory008_2"
       SelectFlag = True
    ElseIf Key = ROOT_TREE & " 4-9" Then
       Set Report = New CReportInventory009
@@ -2491,7 +2498,7 @@ Dim C As CReportControl
             End If
          End If
             
-         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-8-1" Then
+         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-8-1" Or trvMaster.SelectedItem.Key = ROOT_TREE & " 4-8-2" Then
             If C.ComboLoadID = 1 Then
                Call LoadPartGroup(m_Combos(C.ControlIndex))
             ElseIf C.ComboLoadID = 2 Then
@@ -5466,6 +5473,7 @@ Dim Offset As Long
    Call LoadControl("C", cboGeneric(0).Width, True, "", 3, "LOCATION_ID", "LOCATION_NAME")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("สถานที่จัดเก็บ"))
    
+    If TempKey = ROOT_TREE & " 4-8-1" Then
    '3 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 4, "ORDER_BY")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงตาม"))
@@ -5473,6 +5481,7 @@ Dim Offset As Long
    '4 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 5, "ORDER_TYPE")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงจาก"))
+   End If
    
    Call ShowControl
    Call LoadComboData
@@ -8033,6 +8042,13 @@ Dim QueryFlag As Boolean
       End If
       Call InitReport4_8
    ElseIf Node.Key = ROOT_TREE & " 4-8-1" Then
+      If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
+         cmdOK.Enabled = False                                                                                                                                                               '''''''''
+         Exit Sub
+      End If
+      TempKey = Node.Key
+      Call InitReport4_8
+   ElseIf Node.Key = ROOT_TREE & " 4-8-2" Then
       If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub

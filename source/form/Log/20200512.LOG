@@ -1,0 +1,33 @@
+2020/05/12 10:09:52  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <ConnectDatabase> : Local error message <Runtime error.> : System error message <SQLCODE=-902:
+I/O error for file "D:\ibdata\WINPricing400_MM5.GDB"
+Error while trying to open file
+The system cannot find the file specified. 
+IBCODE=isc_io_error
+>
+2020/05/12 10:09:55  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <DisConnectDatabase> : Local error message <Runtime error.> : System error message <Operation is not allowed when the object is closed.>
+2020/05/12 10:10:28  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <ConnectDatabase> : Local error message <Runtime error.> : System error message <SQLCODE=-902:
+I/O error for file "D:\ibdata3\WINPricing400_MM.GDB"
+Error while trying to open file
+The system cannot find the path specified. 
+IBCODE=isc_io_error
+>
+2020/05/12 10:10:36  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <DisConnectDatabase> : Local error message <Runtime error.> : System error message <Operation is not allowed when the object is closed.>
+2020/05/12 10:11:27  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <ConnectDatabase> : Local error message <Runtime error.> : System error message <SQLCODE=-902:
+database D:\ibdata\WINPricing400_MM.GDB shutdown
+IBCODE=isc_shutdown
+>
+2020/05/12 10:32:12  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <DisConnectDatabase> : Local error message <Runtime error.> : System error message <Operation is not allowed when the object is closed.>
+2020/05/12 10:42:02  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <ConnectDatabase> : Local error message <Runtime error.> : System error message <SQLCODE=-902:
+I/O error for file "G:\GDBR\WINPricing400_MM.GDB"
+Error while trying to open file
+The system cannot find the path specified. 
+IBCODE=isc_io_error
+>
+2020/05/12 10:42:04  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <DisConnectDatabase> : Local error message <Runtime error.> : System error message <Operation is not allowed when the object is closed.>
+2020/05/12 13:08:05  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <ConnectDatabase> : Local error message <Runtime error.> : System error message <SQLCODE=-902:
+database file appears corrupt (G:\GDB\WINPRICING400_MM.GDB)
+wrong page type
+page 81219 is of wrong type (expected 5, found 7)
+IBCODE=isc_db_corrupt
+>
+2020/05/12 13:08:12  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <DisConnectDatabase> : Local error message <Runtime error.> : System error message <Operation is not allowed when the object is closed.>

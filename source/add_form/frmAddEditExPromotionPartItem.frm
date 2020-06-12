@@ -106,7 +106,7 @@ Begin VB.Form frmAddEditExPromotionPartItem
       End
       Begin Threed.SSPanel pnlHeader 
          Height          =   705
-         Left            =   0
+         Left            =   10
          TabIndex        =   7
          Top             =   0
          Width           =   11835
@@ -141,6 +141,18 @@ Begin VB.Form frmAddEditExPromotionPartItem
          Width           =   5385
          _ExtentX        =   9499
          _ExtentY        =   714
+      End
+      Begin Threed.SSCheck chkEditPrice 
+         Height          =   345
+         Left            =   7920
+         TabIndex        =   23
+         Top             =   3240
+         Width           =   1845
+         _ExtentX        =   3254
+         _ExtentY        =   609
+         _Version        =   131073
+         Caption         =   "chkEditPrice"
+         TripleState     =   -1  'True
       End
       Begin VB.Label lblPartLookup 
          Alignment       =   1  'Right Justify
@@ -263,11 +275,12 @@ Public ParentForm As Form
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public SocID As Long
 Public TempCollection As Collection
 Public m_ExPromotionPartItem As Collection
 Public ID_MUM As Long
+Private CurrentKey As String
 
 Private Sub QueryData(Flag As Boolean)
 Dim IsOK As Boolean
@@ -277,14 +290,15 @@ Dim D As CExPromotionPartItem
    If Flag Then
       Call EnableForm(Me, False)
 
-      Set D = TempCollection.Item(ID)
+      Set D = TempCollection.Item(id)
       uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, D.CUSTOMER_ID)
-    
-         uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
-         uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
-
-     txtDiscountRate.Text = Val(D.DISCOUNT_AMOUNT)
-
+      
+      uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
+      uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
+      txtDiscountRate.Text = Val(D.DISCOUNT_AMOUNT)
+      chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+      
+      CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.PART_ITEM_ID))
 
       Call EnableForm(Me, True)
    End If
@@ -299,7 +313,7 @@ End Sub
 Private Function SaveData() As Boolean
 Dim IsOK As Boolean
 Dim EPPI As CExPromotionPartItem
-Dim TempEPPI As CExPromotionPartItem
+Dim tempEPPI As CExPromotionPartItem
 
    If Not VerifyCombo(lblCustomerLookup, uctlCustomerLookup.MyCombo, False) Then
       Exit Function
@@ -333,17 +347,19 @@ Dim TempEPPI As CExPromotionPartItem
    Dim TempEWP2 As CExWorksPrice
    Dim PartID As Long
    Dim CusID As Long
+   Dim Key As String
    PartID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
    CusID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
-
-   Set TempEWP = GetObject("CExWorksPrice", m_ExPromotionPartItem, Trim(str(CusID)) & "-" & Trim(str(PartID)), False)
+   Key = Trim(str(CusID)) & "-" & Trim(str(PartID))
+   Set TempEWP = GetObject("CExWorksPrice", m_ExPromotionPartItem, Key, False)
     If Not TempEWP Is Nothing Then
-       If TempEWP.EX_PROMOTION_PART_ITEM_ID <> ID_MUM Or TempEWP.Flag = "A" Then
+       'If (TempEWP.EX_PROMOTION_PART_ITEM_ID <> ID_MUM And TempEWP.EX_PROMOTION_PART_ITEM_ID > 0) Or ShowMode = SHOW_ADD Then 'ถ้าไม่เป็นการแก้ไขตัวเอง หรือเป็นการเพิ่มใหม่
+        If (TempEWP.EX_PROMOTION_PART_ITEM_ID <> ID_MUM) Or CurrentKey <> Key Then
           glbErrorLog.LocalErrorMsg = "มีข้อมูลของลูกค้า " & uctlCustomerLookup.MyCombo.Text & " และเบอร์สินค้า " & uctlPartLookup.MyCombo.Text & " ในเอกสารชุดนี้แล้ว"
           glbErrorLog.ShowUserError
           Exit Function
        End If
-    Else
+    ElseIf ShowMode = SHOW_ADD Then
        Set TempEWP2 = New CExWorksPrice
        TempEWP2.Flag = "A"
        Call m_ExPromotionPartItem.add(TempEWP2, Trim(str(CusID)) & "-" & Trim(str(PartID)))
@@ -358,32 +374,40 @@ Dim TempEPPI As CExPromotionPartItem
       EPPI.PART_NO = uctlPartLookup.MyTextBox.Text
       EPPI.PART_DESC = uctlPartLookup.MyCombo.Text
       EPPI.DISCOUNT_AMOUNT = Val(txtDiscountRate.Text)
+      EPPI.LAST_EDIT_FLAG = "Y" 'ถ้าเป็นการเพิ่มใหม่บังคับให้ Flag แก้ไขราคาเปิดใช้อัตโนมัติ
+      EPPI.DECLARE_NEW_FLAG = "Y"
       EPPI.RATE_TYPE = 1
       EPPI.Flag = "A"
       Call TempCollection.add(EPPI)
-'      Set TempEPPI = GetObject("CExPromotionPartItem", TempCollection, str(EPPI.PART_ITEM_ID), False)
-'      If TempEPPI Is Nothing Then
-'         Call TempCollection.add(EPPI, str(EPPI.PART_ITEM_ID))
-'      Else
-'         glbErrorLog.LocalErrorMsg = "มีข้อมูลของสินค้าเบอร์ " & EPPI.PART_NO & " ในเอกสารชุดนี้แล้ว"
-'         glbErrorLog.ShowUserError
-'      End If
    Else
-      Set TempEPPI = TempCollection(ID)
-      TempEPPI.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
-      TempEPPI.PART_TYPE = uctlPartTypeLookup.MyCombo.ItemData(Minus2Zero(uctlPartTypeLookup.MyCombo.ListIndex))
-      TempEPPI.PART_ITEM_ID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
-      TempEPPI.PART_NO = uctlPartLookup.MyTextBox.Text
-      TempEPPI.PART_DESC = uctlPartLookup.MyCombo.Text
-      TempEPPI.DISCOUNT_AMOUNT = Val(txtDiscountRate.Text)
-      TempEPPI.RATE_TYPE = 1
-      TempEPPI.Flag = "E"
+      Set tempEPPI = TempCollection(id)
+      If Check2Flag(chkEditPrice.Value) = "Y" Then 'ต้องให้กดติ๊กเลือก แก้ไขข้อมูลก่อน
+         tempEPPI.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
+         tempEPPI.PART_TYPE = uctlPartTypeLookup.MyCombo.ItemData(Minus2Zero(uctlPartTypeLookup.MyCombo.ListIndex))
+         tempEPPI.PART_ITEM_ID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
+         tempEPPI.PART_NO = uctlPartLookup.MyTextBox.Text
+         tempEPPI.PART_DESC = uctlPartLookup.MyCombo.Text
+         tempEPPI.DISCOUNT_AMOUNT = Val(txtDiscountRate.Text)
+         
+         tempEPPI.VERIFY_FLAG = "N"
+         tempEPPI.VERIFY_NAME = ""
+         tempEPPI.APPROVED_FLAG = "N"
+         tempEPPI.APPROVED_NAME = ""
+      
+         tempEPPI.RATE_TYPE = 1
+         tempEPPI.LAST_EDIT_FLAG = Check2Flag(chkEditPrice.Value)
+       If tempEPPI.Flag <> "A" Then
+         tempEPPI.Flag = "E"
+       End If
+      End If
    End If
-
-
    Call EnableForm(Me, True)
    SaveData = True
 End Function
+
+Private Sub chkEditPrice_Click(Value As Integer)
+   m_HasModify = True
+End Sub
 
 Private Sub cmdNext_Click()
 Dim D As CExPromotionPartItem
@@ -393,17 +417,21 @@ Dim Pt As CPartItem
       Exit Sub
    End If
 If ShowMode = SHOW_EDIT Then
-   ID = GetNextID(ID, TempCollection)
-   Set D = TempCollection(ID)
+   id = GetNextID(id, TempCollection)
+   Set D = TempCollection(id)
    uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, D.CUSTOMER_ID)
    uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
    uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
    txtDiscountRate.Text = Val(D.DISCOUNT_AMOUNT)
+   
+   ID_MUM = D.EX_PROMOTION_PART_ITEM_ID
+   CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.PART_ITEM_ID))
+   chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
 Else
-  ID = GetNextID(ID, uctlPartLookup.MyCollection)
-  Set Cm = uctlCustomerLookup.MyCollection(ID)
+  id = GetNextID(id, uctlPartLookup.MyCollection)
+  Set Cm = uctlCustomerLookup.MyCollection(id)
   uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, Cm.CUSTOMER_ID)
-  Set Pt = uctlPartLookup.MyCollection(ID)
+  Set Pt = uctlPartLookup.MyCollection(id)
   uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, Pt.PART_TYPE)
   uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, Pt.PART_ITEM_ID)
    txtDiscountRate.Text = ""
@@ -428,15 +456,19 @@ Dim Pt As CPartItem
       Exit Sub
    End If
 If ShowMode = SHOW_EDIT Then
-   ID = GetPrevID(ID, TempCollection)
-   Set D = TempCollection(ID)
+   id = GetPrevID(id, TempCollection)
+   Set D = TempCollection(id)
    uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, D.CUSTOMER_ID)
    uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
    uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
    txtDiscountRate.Text = Val(D.DISCOUNT_AMOUNT)
+   
+   ID_MUM = D.EX_PROMOTION_PART_ITEM_ID
+   CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.PART_ITEM_ID))
+   chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
 Else
-  ID = GetPrevID(ID, uctlPartLookup.MyCollection)
-  Set Pt = uctlPartLookup.MyCollection(ID)
+  id = GetPrevID(id, uctlPartLookup.MyCollection)
+  Set Pt = uctlPartLookup.MyCollection(id)
   uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.CUSTOMER_ID)
   uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
   uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, Pt.PART_ITEM_ID)
@@ -549,6 +581,12 @@ Private Sub InitFormLayout()
          Call InitNormalLabel(lblDiscountRate, MapText("ส่วนลด/หน่วย"))
      End If
    Call InitNormalLabel(lblBath1, MapText("บาท"))
+   
+   chkEditPrice.Visible = False
+   If ShowMode = SHOW_EDIT Then
+      Call InitCheckBox(chkEditPrice, "ปรับปรุงข้อมูล")
+      chkEditPrice.Visible = True
+   End If
    
    Call InitMainButton(cmdExit, MapText("ยกเลิก (ESC)"))
    Call InitMainButton(cmdOK, MapText("ตกลง (F2)"))

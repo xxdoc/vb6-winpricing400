@@ -597,7 +597,7 @@ Private m_HasModify As Boolean
 Private m_Rs As ADODB.Recordset
 
 Public HeaderText As String
-Public ID As Long
+Public id As Long
 Public OKClick As Boolean
 Public TempCollection As Collection
 Public TempCollection2 As Collection
@@ -736,7 +736,7 @@ End Sub
 
 Private Sub cmdEditCon_Click()
    EditPriceFlag = False
-   If Val(txtPricePerPack.Text) = 0 Then
+   If Val(txtPricePerPack.Text) <= 0 Then
       glbErrorLog.LocalErrorMsg = "ไม่สามารถปรับลดราคาได้เนื่องจากยังไม่มีการกำหนดราคา กรุณากำหนดราคา ของรายการนี้ก่อน"
       glbErrorLog.ShowUserError
       Exit Sub
@@ -1006,7 +1006,7 @@ Dim Ei As CLotItem
          If DocumentType = 18 Then
             Dim Ri As CReceiptItem
            
-            Set Ri = TempCollection.Item(ID)
+            Set Ri = TempCollection.Item(id)
                     
             Call ShowConfigFlag(Ri.CONFIG_CODE)
              
@@ -1036,7 +1036,7 @@ Dim Ei As CLotItem
          Else
             Dim Di As CSaleOrder
            
-            Set Di = TempCollection.Item(ID)
+            Set Di = TempCollection.Item(id)
                     
             Call ShowConfigFlag(Di.CONFIG_CODE)
             TempUserName2 = Di.USER_APPLOVE_PRICE
@@ -1293,7 +1293,7 @@ Dim OldPackAmount As Double
          Di.Flag = "A"
          Call TempCollection.add(Di)
       Else
-         Set Di = TempCollection.Item(ID)
+         Set Di = TempCollection.Item(id)
          If Di.Flag <> "A" Then
             Di.Flag = "E"
          End If
@@ -1598,6 +1598,11 @@ If radFeature.Value Then
    Exit Sub
 End If
  txtPricePerPack.Text = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionDlc)
+If txtPricePerPack.Text > 0 Then
+   txtPricePerPack.Enabled = True
+Else
+  txtPricePerPack.Enabled = False
+End If
 If radFeature.Value Then
   txtDiscountPerPack.Text = ExPromotionDlc
 ElseIf radStock.Value Then
@@ -1636,7 +1641,7 @@ Private Sub Form_Activate()
       If ShowMode = SHOW_EDIT Then
          Call QueryData(True)
       ElseIf ShowMode = SHOW_ADD Then
-         ID = 0
+         id = 0
          radFeature.Value = True
          Call QueryData(True)
          
@@ -2085,7 +2090,7 @@ Private Sub CheckPricePerPack()
    End If
    
    If Val(txtPricePerPack.Text) < CurrentPricePerPack Then
-       txtPricePerPack.Text = CurrentPricePerPack
+      txtPricePerPack.Text = CurrentPricePerPack
       glbErrorLog.LocalErrorMsg = "ราคาใหม่ที่ระบุต้องมากกว่าราคาเดิม"
       glbErrorLog.ShowUserError
        Exit Sub
@@ -2106,6 +2111,16 @@ Dim Temp As Double
    
   If Not EditPriceFlag Then
     Call CheckPricePerPack
+  ElseIf EditPriceFlag Then
+   Dim nPrice As Double
+   nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, 0, 0)
+   'การลดห้ามลดเกิน 5 บาท
+             If nPrice - Val(txtPricePerPack.Text) > 5 Then
+               txtPricePerPack.Text = CurrentPricePerPack
+               glbErrorLog.LocalErrorMsg = "ราคาใหม่ที่ระบุต้องลดไม่มากกว่า 5 บาท"
+               glbErrorLog.ShowUserError
+               Exit Sub
+             End If
   End If
   If SuccessFlag = "C" Then
     chkUpdatePrice.Value = ssCBChecked
@@ -2327,18 +2342,17 @@ Private Sub uctlPartLookup_LostFocus()
       PartItemID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
       If PartItemID > 0 Then
          Set Pi = GetPartItem(m_Parts, Trim(str(PartItemID)))
-'         Call InitNormalLabel(lblUnit, Pi.UNIT_NAME)
-'         txtManualCode.Text = Pi.BARCODE_NO
-'         txtManualName.Text = Pi.BILL_DESC
-'         txtWeightPerPack.Text = Pi.WEIGHT_PER_PACK
-'         PartType = Pi.PART_TYPE
-'         WeigthPerPack = Pi.WEIGHT_PER_PACK
-   
          If Len(TempUserName2) = 0 Or (PartItemID <> OldPartItemId And OldPartItemId <> 0) Then
                'ส่วนของคิดราคาแบบใหม่
                Dim ExPromotionPart As Double
                Dim ExPromotionDlc As Double
-              txtPricePerPack.Text = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionDlc)
+               Dim nPrice As Double
+               nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionDlc)
+               If nPrice = -1 Then
+                  txtPricePerPack.Enabled = False
+               End If
+               
+               txtPricePerPack.Text = nPrice
               CurrentPricePerPack = Val(txtPricePerPack.Text)
               NewPricePerPack = Val(txtPricePerPack.Text)
               If radFeature.Value Then

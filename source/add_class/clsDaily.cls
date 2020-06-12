@@ -3971,7 +3971,7 @@ Dim I As Long
                            Set PD = New CPalletDoc
                            Call PD.PopulateFromRS(2, m_Rs3)
                            PD.Flag = "I"
-                           Call LTD.C_PalletDoc.add(PD, Trim(PD.PALLET_DOC_NO & "-" & str(LTD.LOT_ID)))
+                          Call LTD.C_PalletDoc.add(PD, Trim(PD.PALLET_DOC_NO & "-" & str(LTD.LOT_ID)))
 'Call LTD.C_PalletDoc.add(PD)
                            Set PD = Nothing
                            m_Rs3.MoveNext
@@ -9138,6 +9138,13 @@ Dim iCount As Long
       Dim EWPI As CExWorksPriceItem
       Set EWPI = New CExWorksPriceItem
       EWPI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
+      
+      EWPI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EWPI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EWPI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EWPI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EWPI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EWPI.PART_NO = Ua.PART_NO_SEARCH
       EWPI.EX_WORKS_PRICE_ITEM_ID = -1
       EWPI.OrderBy = 1
@@ -9160,6 +9167,13 @@ Dim iCount As Long
       EDCI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
       EDCI.EX_DELIVERY_COST_ITEM_ID = -1
       EDCI.CUSTOMER_CODE = Ua.CUSTOMER_CODE_SEARCH
+      
+      EDCI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EDCI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EDCI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EDCI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EDCI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EDCI.OrderBy = 2
       EDCI.OrderType = 1
       Call EDCI.QueryData(1, m_Rs1, iCount)
@@ -9181,6 +9195,13 @@ Dim iCount As Long
       EPPI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
       EPPI.EX_PROMOTION_PART_ITEM_ID = -1
       EPPI.PART_NO = Ua.PART_NO_SEARCH
+      
+      EPPI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EPPI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EPPI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EPPI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EPPI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EPPI.OrderBy = 1
       Call EPPI.QueryData(1, m_Rs1, iCount)
       Set EPPI = Nothing
@@ -9201,6 +9222,13 @@ Dim iCount As Long
       EPDI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
       EPDI.EX_PROMOTION_DLC_ITEM_ID = -1
       EPDI.CUSTOMER_CODE = Ua.CUSTOMER_CODE_SEARCH
+      
+      EPDI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EPDI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EPDI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EPDI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EPDI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EPDI.OrderBy = 1
       Call EPDI.QueryData(1, m_Rs1, iCount)
       Set EPDI = Nothing
@@ -9451,6 +9479,7 @@ Dim ACRate As CAcRate
       If EWPI.Flag = "A" Then
          EWPI.AddEditMode = SHOW_ADD
          EWPI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EWPI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EWPI.AddEditData
 
       ElseIf EWPI.Flag = "E" Then
@@ -15391,6 +15420,7 @@ Dim ItemCount As Long
    Ug.AddEditMode = SHOW_ADD
    Ug.EX_WORKS_PRICE_ID = -1
    Ug.EX_WORKS_PRICE_CODE = Ug.EX_WORKS_PRICE_CODE & "***"
+   Ug.EX_WORKS_PRICE_DESC = "COPY " & DateToStringExtEx3(Now)
    
    If Ug.EX_WORKS_PRICE_TYPE = 1 Then
    Dim Cmss As CExWorksPriceItem

@@ -4850,7 +4850,11 @@ Dim p As CPatch
    If Not p.IsPatch("2020_03_27_1_lek") Then '355
       Call p.Patch_2020_03_27_1_lek
    End If
-'Patch_2020_03_27_1_lek
+   
+   If Not p.IsPatch("2020_05_28_1_lek") Then '356
+      Call p.Patch_2020_05_28_1_lek
+   End If
+'Patch_2020_05_28_1_lek
    Set p = Nothing
 End Sub
 Public Function MyDiff(ByVal D1 As Double, ByVal D2 As Double) As Double
@@ -5571,6 +5575,8 @@ Public Function ConvertPerPack(id As Integer) As String
       ConvertPerPack = MapText("BAG")
    ElseIf id = 21 Then
       ConvertPerPack = MapText("BULK")
+   Else
+     ConvertPerPack = MapText("")
    End If
 End Function
 
@@ -7547,24 +7553,28 @@ Set TempData = New Collection
             If Not RateWotkPriceFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาสินค้า กรุณากำหนดราคาสินค้าก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = -1
                Exit Function
             End If
          ElseIf PRICE_THINK_TYPE = 2 Then
              If Not RateWotkPriceFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาสินค้า กรุณากำหนดราคาสินค้าก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = -1
                Exit Function
             End If
             
             If Not RateDeliveryCostFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาค่าขนส่ง กรุณากำหนดราคาค่าขนส่งก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = -1
                Exit Function
             End If
          ElseIf PRICE_THINK_TYPE = 3 Then
              If Not RateWotkPriceFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาสินค้า กรุณากำหนดราคาสินค้าก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = -1
                Exit Function
             End If
          End If

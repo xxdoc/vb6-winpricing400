@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditPartItem 
    BackColor       =   &H80000000&
@@ -466,7 +466,7 @@ Private m_Rs As ADODB.Recordset
 Private m_PartItem As CPartItem
 Private m_Sp As CSystemParam
 
-Public ID As Long
+Public id As Long
 Public OKClick As Boolean
 Public ShowMode As SHOW_MODE_TYPE
 Public HeaderText As String
@@ -600,18 +600,18 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
       
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 3 Then
-      frmAddEditPartItemSpec.ID = ID
+      frmAddEditPartItemSpec.id = id
       Set frmAddEditPartItemSpec.TempCollection = m_PartItem.HumidRates
       frmAddEditPartItemSpec.HeaderText = MapText("แก้ไขเกณฑ์ความชื้น")
       frmAddEditPartItemSpec.ShowMode = SHOW_EDIT
@@ -628,7 +628,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 4 Then
-        frmAddEditPartItemPicture.ID = ID
+        frmAddEditPartItemPicture.id = id
          Set frmAddEditPartItemPicture.ParentForm = Me
          Set frmAddEditPartItemPicture.TempCollection = m_PartItem.Pictures
          frmAddEditPartItemPicture.ShowMode = SHOW_EDIT
@@ -669,7 +669,7 @@ Dim lMenuChosen  As Long
       End If
       
       ShowMode = SHOW_EDIT
-      ID = m_PartItem.PART_ITEM_ID
+      id = m_PartItem.PART_ITEM_ID
       m_PartItem.QueryFlag = 1
       QueryData (True)
       m_HasModify = False
@@ -840,7 +840,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
       
-      m_PartItem.PART_ITEM_ID = ID
+      m_PartItem.PART_ITEM_ID = id
       m_PartItem.QueryFlag = 1
       If Not glbDaily.QueryPartItem(m_PartItem, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -1070,7 +1070,8 @@ Dim IsOK As Boolean
       If Not VerifyCombo(lblProductType, cboProductType, False) Then
          Exit Function
       End If
-      'ProductType
+      
+      'uctlPartMaster
       
    End If
    
@@ -1092,7 +1093,7 @@ Dim IsOK As Boolean
       End If
    End If
    
-   If Not CheckUniqueNs(PARTNO_UNIQUE, txtPartNo.Text, ID) Then
+   If Not CheckUniqueNs(PARTNO_UNIQUE, txtPartNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtPartNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Exit Function
@@ -1103,7 +1104,7 @@ Dim IsOK As Boolean
       Exit Function
    End If
    
-   m_PartItem.PART_ITEM_ID = ID
+   m_PartItem.PART_ITEM_ID = id
    m_PartItem.AddEditMode = ShowMode
    m_PartItem.PIG_FLAG = Check2Flag(chkPigFlag.Value)
    m_PartItem.CANCEL_FLAG = Check2Flag(chkCancelFlag.Value)
@@ -1162,7 +1163,7 @@ Private Sub Form_Activate()
          Call QueryData(True)
       ElseIf ShowMode = SHOW_ADD Then
          Call LoadPartType(cboPartType, , PartGroupID)
-         ID = 0
+         id = 0
       End If
       
       m_HasModify = False

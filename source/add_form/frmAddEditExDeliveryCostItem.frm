@@ -122,7 +122,7 @@ Begin VB.Form frmAddEditExDeliveryCostItem
       End
       Begin Threed.SSPanel pnlHeader 
          Height          =   705
-         Left            =   0
+         Left            =   10
          TabIndex        =   11
          Top             =   0
          Width           =   11835
@@ -175,6 +175,18 @@ Begin VB.Form frmAddEditExDeliveryCostItem
          Width           =   1455
          _ExtentX        =   6165
          _ExtentY        =   767
+      End
+      Begin Threed.SSCheck chkEditPrice 
+         Height          =   345
+         Left            =   9120
+         TabIndex        =   32
+         Top             =   2040
+         Width           =   1845
+         _ExtentX        =   3254
+         _ExtentY        =   609
+         _Version        =   131073
+         Caption         =   "chkEditPrice"
+         TripleState     =   -1  'True
       End
       Begin Threed.SSCommand cmdDeliveryCusData 
          Height          =   405
@@ -337,11 +349,12 @@ Public ParentForm As Form
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public SocID As Long
 Public TempCollection As Collection
 Public m_ExDeliveryCostItem As Collection
 Public ID_MUM As Long
+Private CurrentKey As String
 
 Private Sub QueryData(Flag As Boolean)
 Dim IsOK As Boolean
@@ -351,7 +364,7 @@ Dim D As CExDeliveryCostItem
    If Flag Then
       Call EnableForm(Me, False)
 
-      Set D = TempCollection.Item(ID)
+      Set D = TempCollection.Item(id)
       uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, D.CUSTOMER_ID)
       uctlDeliveryCusLookup.MyCombo.ListIndex = IDToListIndex(uctlDeliveryCusLookup.MyCombo, D.DELIVERY_CUS_ITEM_ID)
      txtRateDelivery.Text = Val(D.RATE_DELIVERY)
@@ -360,7 +373,10 @@ Dim D As CExDeliveryCostItem
      txtWeightPerPackCus.Text = Val(D.WEIGHT_PER_PACK_CUS)
      cboUnit.ListIndex = IDToListIndex(cboUnit, D.RATE_TYPE)
      cboUnit2.ListIndex = IDToListIndex(cboUnit2, D.RATE_TYPE_CUS)
-
+     chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+     
+     CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(D.RATE_TYPE)) & "-" & Trim(str(D.RATE_TYPE_CUS))
+  
       Call EnableForm(Me, True)
    End If
 
@@ -438,7 +454,7 @@ Dim TempEDC  As CExDeliveryCostItem
      Key = Trim(str(CusID)) & "-" & Trim(str(DelCusItemId)) & "-" & Trim(str(RateType)) & "-" & Trim(str(RateTypeCus))
      Set TempEWP = GetObject("CExWorksPrice", m_ExDeliveryCostItem, Key, False)
       If Not TempEWP Is Nothing Then
-         If TempEWP.EX_DELIVERY_COST_ITEM_ID <> ID_MUM Or TempEWP.Flag = "A" Then
+         If (TempEWP.EX_DELIVERY_COST_ITEM_ID <> ID_MUM) Or CurrentKey <> Key Then
             glbErrorLog.LocalErrorMsg = "มีข้อมูลของสถานที่จัดส่ง " & uctlDeliveryCusLookup.MyCombo.Text & " ในเอกสารชุดนี้แล้ว"
             glbErrorLog.ShowUserError
             Exit Function
@@ -465,31 +481,35 @@ Dim TempEDC  As CExDeliveryCostItem
       EDC.WEIGHT_PER_PACK_CUS = Val(txtWeightPerPackCus.Text)
       EDC.RATE_TYPE = cboUnit.ItemData(Minus2Zero(cboUnit.ListIndex))
       EDC.RATE_TYPE_CUS = cboUnit2.ItemData(Minus2Zero(cboUnit2.ListIndex))
+      EDC.LAST_EDIT_FLAG = "Y" 'ถ้าเป็นการเพิ่มใหม่บังคับให้ Flag แก้ไขราคาเปิดใช้อัตโนมัติ
+      EDC.DECLARE_NEW_FLAG = "Y"
       EDC.Flag = "A"
       Call TempCollection.add(EDC)
-'      Set TempEDC = GetObject("CExDeliveryCostItem", TempCollection, str(EDC.CUSTOMER_ID) & "-" & str(EDC.DELIVERY_CUS_ITEM_ID) & "-" & str(EDC.RATE_TYPE) & "-" & str(EDC.RATE_TYPE_CUS), False)
-'      If TempEDC Is Nothing Then
-'         Call TempCollection.add(EDC, str(EDC.CUSTOMER_ID) & "-" & str(EDC.DELIVERY_CUS_ITEM_ID) & "-" & str(EDC.RATE_TYPE) & "-" & str(EDC.RATE_TYPE_CUS))
-'      Else
-'         glbErrorLog.LocalErrorMsg = "มีข้อมูลค่าขนส่งของ รหัสลูกค้า " & EDC.CUSTOMER_CODE & " และรหัสสถานที่ " & EDC.DELIVERY_CUS_ITEM_NAME & " ในเอกสารชุดนี้แล้ว"
-'         glbErrorLog.ShowUserError
-'         SaveData = False
-'         Exit Function
-'      End If
    Else
-      Set EDC = TempCollection(ID)
-      EDC.CUSTOMER_CODE = uctlCustomerLookup.MyTextBox.Text
-      EDC.CUSTOMER_NAME = uctlCustomerLookup.MyCombo.Text
-      EDC.DELIVERY_CUS_ITEM_ID = uctlDeliveryCusLookup.MyCombo.ItemData(Minus2Zero(uctlDeliveryCusLookup.MyCombo.ListIndex))
-      EDC.DELIVERY_CUS_ITEM_CODE = uctlDeliveryCusLookup.MyTextBox.Text
-      EDC.DELIVERY_CUS_ITEM_NAME = uctlDeliveryCusLookup.MyCombo.Text
-      EDC.RATE_DELIVERY = Val(txtRateDelivery.Text)
-      EDC.RATE_CUSTOMER = Val(txtRateCustomer.Text)
-      EDC.WEIGHT_PER_PACK = Val(txtWeightPerPack.Text)
-      EDC.WEIGHT_PER_PACK_CUS = Val(txtWeightPerPackCus.Text)
-      EDC.RATE_TYPE = cboUnit.ItemData(Minus2Zero(cboUnit.ListIndex))
-      EDC.RATE_TYPE_CUS = cboUnit2.ItemData(Minus2Zero(cboUnit2.ListIndex))
-      EDC.Flag = "E"
+      Set EDC = TempCollection(id)
+      If Check2Flag(chkEditPrice.Value) = "Y" Then 'ต้องให้กดติ๊กเลือก แก้ไขข้อมูลก่อน
+         EDC.CUSTOMER_CODE = uctlCustomerLookup.MyTextBox.Text
+         EDC.CUSTOMER_NAME = uctlCustomerLookup.MyCombo.Text
+         EDC.DELIVERY_CUS_ITEM_ID = uctlDeliveryCusLookup.MyCombo.ItemData(Minus2Zero(uctlDeliveryCusLookup.MyCombo.ListIndex))
+         EDC.DELIVERY_CUS_ITEM_CODE = uctlDeliveryCusLookup.MyTextBox.Text
+         EDC.DELIVERY_CUS_ITEM_NAME = uctlDeliveryCusLookup.MyCombo.Text
+         EDC.RATE_DELIVERY = Val(txtRateDelivery.Text)
+         EDC.RATE_CUSTOMER = Val(txtRateCustomer.Text)
+         EDC.WEIGHT_PER_PACK = Val(txtWeightPerPack.Text)
+         EDC.WEIGHT_PER_PACK_CUS = Val(txtWeightPerPackCus.Text)
+         EDC.RATE_TYPE = cboUnit.ItemData(Minus2Zero(cboUnit.ListIndex))
+         EDC.RATE_TYPE_CUS = cboUnit2.ItemData(Minus2Zero(cboUnit2.ListIndex))
+         
+         EDC.VERIFY_FLAG = "N"
+         EDC.VERIFY_NAME = ""
+         EDC.APPROVED_FLAG = "N"
+         EDC.APPROVED_NAME = ""
+      
+         EDC.LAST_EDIT_FLAG = Check2Flag(chkEditPrice.Value)
+         If EDC.Flag <> "A" Then
+            EDC.Flag = "E"
+         End If
+      End If
    End If
 
    Call EnableForm(Me, True)
@@ -501,6 +521,7 @@ Private Sub cboUnit_Change()
 End Sub
 
 Private Sub cboUnit_Click()
+   m_HasModify = True
    If cboUnit.ListIndex = 1 Then
       txtWeightPerPack.Enabled = True
    ElseIf cboUnit.ListIndex = 2 Then
@@ -523,6 +544,7 @@ Private Sub cboUnit2_Change()
 End Sub
 
 Private Sub cboUnit2_Click()
+   m_HasModify = True
   If cboUnit2.ListIndex = 1 Then
       txtWeightPerPackCus.Enabled = True
    ElseIf cboUnit2.ListIndex = 2 Then
@@ -532,6 +554,10 @@ Private Sub cboUnit2_Click()
       txtWeightPerPackCus.Enabled = False
       txtWeightPerPackCus.Text = "999"
    End If
+End Sub
+
+Private Sub chkEditPrice_Click(Value As Integer)
+   m_HasModify = True
 End Sub
 
 Private Sub cmdDeliveryCusData_Click()
@@ -554,8 +580,8 @@ Dim DC As CDeliveryCus
       Exit Sub
    End If
 If ShowMode = SHOW_EDIT Then
-   ID = GetNextID(ID, TempCollection)
-   Set D = TempCollection(ID)
+   id = GetNextID(id, TempCollection)
+   Set D = TempCollection(id)
       uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, D.CUSTOMER_ID)
       uctlDeliveryCusLookup.MyCombo.ListIndex = IDToListIndex(uctlDeliveryCusLookup.MyCombo, D.DELIVERY_CUS_ITEM_ID)
      txtRateDelivery.Text = Val(D.RATE_DELIVERY)
@@ -564,9 +590,13 @@ If ShowMode = SHOW_EDIT Then
      txtWeightPerPackCus.Text = Val(D.WEIGHT_PER_PACK_CUS)
      cboUnit.ListIndex = IDToListIndex(cboUnit, D.RATE_TYPE)
      cboUnit2.ListIndex = IDToListIndex(cboUnit2, D.RATE_TYPE_CUS)
+     
+     ID_MUM = D.EX_DELIVERY_COST_ITEM_ID
+     CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(D.RATE_TYPE)) & "-" & Trim(str(D.RATE_TYPE_CUS))
+     chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
 Else
-  ID = GetNextID(ID, uctlDeliveryCusLookup.MyCollection)
-  Set DC = uctlDeliveryCusLookup.MyCollection(ID)
+  id = GetNextID(id, uctlDeliveryCusLookup.MyCollection)
+  Set DC = uctlDeliveryCusLookup.MyCollection(id)
   uctlDeliveryCusLookup.MyCombo.ListIndex = IDToListIndex(uctlDeliveryCusLookup.MyCombo, DC.DELIVERY_CUS_ITEM_ID)
    txtRateDelivery.Text = ""
    txtRateCustomer.Text = ""
@@ -595,8 +625,8 @@ Dim DC As CDeliveryCus
       Exit Sub
    End If
 If ShowMode = SHOW_EDIT Then
-   ID = GetPrevID(ID, TempCollection)
-   Set D = TempCollection(ID)
+   id = GetPrevID(id, TempCollection)
+   Set D = TempCollection(id)
       uctlCustomerLookup.MyCombo.ListIndex = IDToListIndex(uctlCustomerLookup.MyCombo, D.CUSTOMER_ID)
       uctlDeliveryCusLookup.MyCombo.ListIndex = IDToListIndex(uctlDeliveryCusLookup.MyCombo, D.DELIVERY_CUS_ITEM_ID)
      txtRateDelivery.Text = Val(D.RATE_DELIVERY)
@@ -605,9 +635,13 @@ If ShowMode = SHOW_EDIT Then
      txtWeightPerPackCus.Text = Val(D.WEIGHT_PER_PACK_CUS)
      cboUnit.ListIndex = IDToListIndex(cboUnit, D.RATE_TYPE)
      cboUnit2.ListIndex = IDToListIndex(cboUnit2, D.RATE_TYPE_CUS)
+     
+     ID_MUM = D.EX_DELIVERY_COST_ITEM_ID
+     CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(D.RATE_TYPE)) & "-" & Trim(str(D.RATE_TYPE_CUS))
+     chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
 Else
-  ID = GetPrevID(ID, uctlDeliveryCusLookup.MyCollection)
-  Set DC = uctlDeliveryCusLookup.MyCollection(ID)
+  id = GetPrevID(id, uctlDeliveryCusLookup.MyCollection)
+  Set DC = uctlDeliveryCusLookup.MyCollection(id)
   uctlDeliveryCusLookup.MyCombo.ListIndex = IDToListIndex(uctlDeliveryCusLookup.MyCombo, DC.DELIVERY_CUS_ITEM_ID)
    txtRateDelivery.Text = ""
    txtRateCustomer.Text = ""
@@ -766,6 +800,12 @@ Private Sub InitFormLayout()
    Call InitNormalLabel(lblWeightPerPackCus, MapText("น้ำหนัก(กก.)"))
    Call InitNormalLabel(lblUnit, MapText("หน่วย"))
    Call InitNormalLabel(lblUnit2, MapText("หน่วย"))
+   
+   chkEditPrice.Visible = False
+   If ShowMode = SHOW_EDIT Then
+      Call InitCheckBox(chkEditPrice, "ปรับปรุงข้อมูล")
+      chkEditPrice.Visible = True
+   End If
    
    Call InitCombo(cboUnit)
    Call InitCombo(cboUnit2)

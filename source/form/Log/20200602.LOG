@@ -1,0 +1,12 @@
+2020/06/02 17:39:11  Project name <prjWINPricing400> : Module name <frmAddEditExWorksPrice> :Routine name <UnboundReadData> : Local error message <frmAddEditExWorksPrice> : System error message <This key is already associated with an element of this collection , LoadExWorksPriceItem , KEY= 1775 , KeyType=2>
+2020/06/02 17:39:19  Project name <prjWINPricing400> : Module name <frmAddEditExWorksPrice> :Routine name <UnboundReadData> : Local error message <frmAddEditExWorksPrice> : System error message <This key is already associated with an element of this collection , LoadExWorksPriceItem , KEY= 1775 , KeyType=2>
+2020/06/02 17:39:55  Project name <prjWINPricing400> : Module name <frmAddEditExWorksPrice> :Routine name <UnboundReadData> : Local error message <frmAddEditExWorksPrice> : System error message <This key is already associated with an element of this collection , LoadExWorksPriceItem , KEY= 1775 , KeyType=2>
+2020/06/02 19:06:05  Project name <prjWINPricing400> : Module name <clsDatabaseMngr> :Routine name <GetRs> : Local error message <Run time error. Can't get record set. SQL1 -> SELECT EWP.* FROM EX_WORKS_PRICE  EWP WHERE (EWP.EX_WORKS_PRICE_ID = 74) AND (EWP.EX_WORKS_PRICE_LEVEL = 'Y') AND (EWP.EX_WORKS_PRICE_TYPE = 1) AND (EWP.EX_WORKS_PRICE_CODE = 'P0053***')AND (EWP.EX_WORKS_PRICE_DESC = 'COPY 02/06/2563 19:05:49')AND (EWP.EX_WORKS_PRICE_DATE >= '2020-06-01 00:00:00')AND (EWP.FROM_ACTIVE_DATE >= '2020-06-01 00:00:00')AND (EWP.TO_VALID_DATE <= '2020-06-30 00:00:00')AND (EWPI.APPROVED_FLAG = 'N') ORDER BY EWP.EX_WORKS_PRICE_CODE  DESC  SQL2 -> SELECT COUNT(*)  FROM EX_WORKS_PRICE  EWP WHERE (EWP.EX_WORKS_PRICE_ID = 74) AND (EWP.EX_WORKS_PRICE_LEVEL = 'Y') AND (EWP.EX_WORKS_PRICE_TYPE = 1) AND (EWP.EX_WORKS_PRICE_CODE = 'P0053***')AND (EWP.EX_WORKS_PRICE_DESC = 'COPY 02/06/2563 19:05:49')AND (EWP.EX_WORKS_PRICE_DATE >= '2020-06-01 00:00:00')AND (EWP.FROM_ACTIVE_DATE >= '2020-06-01 00:00:00')AND (EWP.TO_VALID_DATE <= '2020-06-30 00:00:00')AND (EWPI.APPROVED_FLAG = 'N') > : System error message <Prepare:
+SQLCODE=-206:
+Dynamic SQL Error
+SQL error code = -206
+Column unknown
+EWPI.APPROVED_FLAG
+At line 1, column 412
+IBCODE=isc_dsql_error
+>

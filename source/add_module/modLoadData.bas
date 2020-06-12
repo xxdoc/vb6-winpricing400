@@ -3132,6 +3132,7 @@ Dim I As Long
 
       If Not (Cl Is Nothing) Then
          If KeyType = 1 Then
+           Debug.Print Trim(TempData.LOT_NO) & "-" & Trim(TempData.PALLET_DOC_NO)
             Call Cl.add(TempData, Trim(TempData.LOT_NO) & "-" & Trim(TempData.PALLET_DOC_NO))
           End If
       End If
@@ -4678,7 +4679,7 @@ ErrorHandler:
    glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Sub LoadDeliveryCus(C As ComboBox, Optional Cl As Collection = Nothing, Optional CusID As Long = -1, Optional PigFlag As String = "", Optional PigType As String = "", Optional KeyType As Byte = 1, Optional CancelFlag As String = "N")
+Public Sub LoadDeliveryCus(C As ComboBox, Optional Cl As Collection = Nothing, Optional CusID As Long = -1, Optional PigFlag As String = "", Optional PigType As String = "", Optional KeyType As Byte = 1, Optional CancelFlag As String = "")
 On Error GoTo ErrorHandler
 Dim D As CDeliveryCus
 Dim ItemCount As Long
@@ -4789,7 +4790,7 @@ ErrorHandler:
    glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Sub LoadExWorksPriceItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1)
+Public Sub LoadExWorksPriceItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "Y")
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -4806,6 +4807,7 @@ FUNC_NAME = "LoadExWorksPriceItem"
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
    D.EX_WORKS_PRICE_TYPE = 1
    D.BETWEEN_DATE = FromDate
+   D.APPROVED_FLAG = ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(2, Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -4850,7 +4852,7 @@ ErrorHandler:
   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION & " , " & FUNC_NAME & " , KEY= " & Key & " , KeyType=" & KeyType
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Sub LoadExDeliveryCusItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1)
+Public Sub LoadExDeliveryCusItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "N")
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -4867,6 +4869,7 @@ FUNC_NAME = "LoadExDeliveryCusItem"
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
    D.EX_WORKS_PRICE_TYPE = 2
    D.BETWEEN_DATE = FromDate
+   ''D.APPROVED_FLAG = "" 'ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(3, Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -4980,7 +4983,7 @@ glbErrorLog.SystemErrorMsg = Err.DESCRIPTION & " , " & FUNC_NAME & " , KEY= " & 
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 
-Public Sub LoadExPromotionPartItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1)
+Public Sub LoadExPromotionPartItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "Y")
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -4994,6 +4997,7 @@ Dim I As Long
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
    D.EX_WORKS_PRICE_TYPE = 3
    D.BETWEEN_DATE = FromDate
+   D.APPROVED_FLAG = ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(4, Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -5036,7 +5040,7 @@ ErrorHandler:
    glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Sub LoadExPromotionDlcItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1)
+Public Sub LoadExPromotionDlcItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "N")
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -5050,6 +5054,7 @@ Dim I As Long
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
    D.EX_WORKS_PRICE_TYPE = 4
    D.BETWEEN_DATE = FromDate
+'   D.APPROVED_FLAG = ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(5, Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -18400,7 +18405,238 @@ ErrorHandler:
    glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Function LoadPlanVersion(FromDate As Date, ToDate As Date, Optional PlanArea As Integer) As Long
+Public Function LoadDeclareCountList(C As ComboBox, Optional Cl As Collection = Nothing, Optional id As Long = -1, Optional Area As Long = -1)
+On Error GoTo ErrorHandler
+Dim EWPI As CExWorksPriceItem
+Dim EDCI As CExDeliveryCostItem
+Dim EPPI As CExPromotionPartItem
+Dim EPDI As CExPromotionDlcItem
+Dim ItemCount As Long
+Dim Rs As ADODB.Recordset
+Dim I As Long
+
+Set Rs = New ADODB.Recordset
+ If Area = 1 Then
+   Set EWPI = New CExWorksPriceItem
+   EWPI.EX_WORKS_PRICE_ID = id
+   Call EWPI.QueryData(3, Rs, ItemCount)
+   
+   If Not (C Is Nothing) Then
+      C.Clear
+      I = 0
+      C.AddItem ("")
+   End If
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   
+   While Not Rs.EOF
+      I = I + 1
+      Set EWPI = New CExWorksPriceItem
+      Call EWPI.PopulateFromRS(3, Rs)
+   
+      If Not (C Is Nothing) Then
+        If EWPI.DECLARE_COUNT > 0 Then
+            C.AddItem (EWPI.DECLARE_COUNT)
+            C.ItemData(I) = EWPI.DECLARE_COUNT
+        End If
+      End If
+           
+      Set EWPI = Nothing
+      Rs.MoveNext
+   Wend
+ElseIf Area = 2 Then
+   Set EDCI = New CExDeliveryCostItem
+   EDCI.EX_WORKS_PRICE_ID = id
+   Call EDCI.QueryData(3, Rs, ItemCount)
+   
+   If Not (C Is Nothing) Then
+      C.Clear
+      I = 0
+      C.AddItem ("")
+   End If
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   
+   While Not Rs.EOF
+      I = I + 1
+      Set EDCI = New CExDeliveryCostItem
+      Call EDCI.PopulateFromRS(3, Rs)
+   
+      If Not (C Is Nothing) Then
+        If EDCI.DECLARE_COUNT > 0 Then
+            C.AddItem (EDCI.DECLARE_COUNT)
+            C.ItemData(I) = EDCI.DECLARE_COUNT
+        End If
+      End If
+           
+      Set EDCI = Nothing
+      Rs.MoveNext
+   Wend
+ElseIf Area = 3 Then
+   Set EPPI = New CExPromotionPartItem
+   EPPI.EX_WORKS_PRICE_ID = id
+   Call EPPI.QueryData(3, Rs, ItemCount)
+   
+   If Not (C Is Nothing) Then
+      C.Clear
+      I = 0
+      C.AddItem ("")
+   End If
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   
+   While Not Rs.EOF
+      I = I + 1
+      Set EPPI = New CExPromotionPartItem
+      Call EPPI.PopulateFromRS(3, Rs)
+   
+      If Not (C Is Nothing) Then
+        If EPPI.DECLARE_COUNT > 0 Then
+            C.AddItem (EPPI.DECLARE_COUNT)
+            C.ItemData(I) = EPPI.DECLARE_COUNT
+        End If
+      End If
+           
+      Set EPPI = Nothing
+      Rs.MoveNext
+   Wend
+ElseIf Area = 4 Then
+   Set EPDI = New CExPromotionDlcItem
+   EPDI.EX_WORKS_PRICE_ID = id
+   Call EPDI.QueryData(3, Rs, ItemCount)
+   
+   If Not (C Is Nothing) Then
+      C.Clear
+      I = 0
+      C.AddItem ("")
+   End If
+
+   If Not (Cl Is Nothing) Then
+      Set Cl = Nothing
+      Set Cl = New Collection
+   End If
+   
+   While Not Rs.EOF
+      I = I + 1
+      Set EPDI = New CExPromotionDlcItem
+      Call EPDI.PopulateFromRS(3, Rs)
+   
+      If Not (C Is Nothing) Then
+        If EPDI.DECLARE_COUNT > 0 Then
+            C.AddItem (EPDI.DECLARE_COUNT)
+            C.ItemData(I) = EPDI.DECLARE_COUNT
+        End If
+      End If
+           
+      Set EPDI = Nothing
+      Rs.MoveNext
+   Wend
+End If
+   
+   Set Rs = Nothing
+   Set EWPI = Nothing
+   Set EDCI = Nothing
+   Set EPPI = Nothing
+   Set EPDI = Nothing
+   Exit Function
+   
+ErrorHandler:
+   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
+   glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
+End Function
+Public Function LoadDeclareCount(Optional id As Long, Optional Area As Long) As Long
+On Error GoTo ErrorHandler
+Dim ItemCount As Long
+Dim Rs As ADODB.Recordset
+Dim EWPI As CExWorksPriceItem
+Dim EDCI As CExDeliveryCostItem
+Dim EPPI As CExPromotionPartItem
+Dim EPDI As CExPromotionDlcItem
+Dim I As Long
+   
+Set Rs = New ADODB.Recordset
+ If Area = 1 Then
+   Set EWPI = New CExWorksPriceItem
+   EWPI.EX_WORKS_PRICE_ID = id
+   
+   Call EWPI.QueryData(2, Rs, ItemCount)
+   If Not EWPI Is Nothing Then
+      Set EWPI = New CExWorksPriceItem
+      While Not Rs.EOF
+        Call EWPI.PopulateFromRS(2, Rs)
+        Rs.MoveNext
+      Wend
+      LoadDeclareCount = IIf(EWPI.DECLARE_COUNT < 0, 0, EWPI.DECLARE_COUNT)
+   Else
+      LoadDeclareCount = 0
+   End If
+ElseIf Area = 2 Then
+   Set EDCI = New CExDeliveryCostItem
+   EDCI.EX_WORKS_PRICE_ID = id
+
+   Call EDCI.QueryData(2, Rs, ItemCount)
+   If Not EDCI Is Nothing Then
+      Set EDCI = New CExDeliveryCostItem
+      While Not Rs.EOF
+        Call EDCI.PopulateFromRS(2, Rs)
+        Rs.MoveNext
+      Wend
+      LoadDeclareCount = IIf(EDCI.DECLARE_COUNT < 0, 0, EDCI.DECLARE_COUNT)
+   Else
+      LoadDeclareCount = 0
+   End If
+ElseIf Area = 3 Then
+   Set EPPI = New CExPromotionPartItem
+   EPPI.EX_WORKS_PRICE_ID = id
+   
+   Call EPPI.QueryData(2, Rs, ItemCount)
+   If Not EPPI Is Nothing Then
+      Set EPPI = New CExPromotionPartItem
+      While Not Rs.EOF
+        Call EPPI.PopulateFromRS(2, Rs)
+        Rs.MoveNext
+      Wend
+      LoadDeclareCount = IIf(EPPI.DECLARE_COUNT < 0, 0, EPPI.DECLARE_COUNT)
+   Else
+      LoadDeclareCount = 0
+   End If
+ElseIf Area = 4 Then
+   Set EPDI = New CExPromotionDlcItem
+   EPDI.EX_WORKS_PRICE_ID = id
+   
+   Call EPDI.QueryData(2, Rs, ItemCount)
+   If Not EPDI Is Nothing Then
+      Set EPDI = New CExPromotionDlcItem
+      While Not Rs.EOF
+        Call EPDI.PopulateFromRS(2, Rs)
+        Rs.MoveNext
+      Wend
+      LoadDeclareCount = IIf(EPDI.DECLARE_COUNT < 0, 0, EPDI.DECLARE_COUNT)
+   Else
+      LoadDeclareCount = 0
+   End If
+End If
+   Set Rs = Nothing
+   Set EWPI = Nothing
+   Set EDCI = Nothing
+   Set EPPI = Nothing
+   Set EPDI = Nothing
+   Exit Function
+   
+ErrorHandler:
+   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
+   glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
+End Function
+Public Function LoadPlanVersion(FromDate As Date, ToDate As Date, Optional PlanArea As Long) As Long
 On Error GoTo ErrorHandler
 Dim ItemCount As Long
 Dim Rs As ADODB.Recordset

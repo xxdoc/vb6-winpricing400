@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmAddEditSaleOrder2 
    ClientHeight    =   9855
    ClientLeft      =   60
@@ -1045,7 +1045,7 @@ ElseIf lMenuChosen = 5 Then
 End If
 
  If CUSTOMER_ID > 0 Then
-   Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID) 'LOAD สถานที่จัดส่ง
+   Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง
    Set uctlDeliveryCusLookup.MyCollection = m_DeliveryCus
 End If
 Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 3, uctlDocumentDate.ShowDate) 'ส่ง 3 ไปดึงค่าขนส่งที่คิดให้รถรับจ้าง
@@ -1098,9 +1098,9 @@ Dim oMenu As cPopupMenu
             frmAddEditSaleOrderItem2.AccountID = cboAccount.ItemData(cboAccount.ListIndex)
          End If
          
-         Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
+         Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
-         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate)
+         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
          
          frmAddEditSaleOrderItem2.DocumentType = DocumentType
@@ -1454,9 +1454,9 @@ Dim oMenu As cPopupMenu
          
 
          If lMenuChosen = 1 Then
-            Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
+            Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
-            Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate)
+            Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
             
              frmAddEditSaleOrderItem2.TypeSale = 1 'แก้ไขขายสินค้าและค่าขนส่ง
@@ -1516,90 +1516,6 @@ Dim oMenu As cPopupMenu
    If OKClick Then
       m_HasModify = True
    End If
-'Dim IsOK As Boolean
-'Dim ItemCount As Long
-'Dim IsCanLock As Boolean
-'Dim ID As Long
-'Dim OKClick As Boolean
-'
-'   If Not VerifyGrid(GridEX1.Value(1)) Then
-'      Exit Sub
-'   End If
-'
-'   If Area = 1 Then
-'      If Not VerifyCombo(lblAccountNo, cboAccount) Then
-'         Exit Sub
-'      End If
-'      If Not VerifyDate(lblDocumentDate, uctlDocumentDate) Then
-'         Exit Sub
-'      End If
-'   End If
-'
-'   ID = Val(GridEX1.Value(2))
-'   OKClick = False
-'
-'   If TabStrip1.SelectedItem.Index = 1 Then
-'
-'       If Area = 1 Then
-'         frmAddEditSaleOrderItem2.AccountID = cboAccount.ItemData(cboAccount.ListIndex)
-'      End If
-'
-'      Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
-'      Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
-'      Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate)
-'      Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
-'
-'      frmAddEditSaleOrderItem2.DocumentType = DocumentType
-'      frmAddEditSaleOrderItem2.DocumentDate = uctlDocumentDate.ShowDate
-'      frmAddEditSaleOrderItem2.Area = Area
-'      frmAddEditSaleOrderItem2.ID = ID
-'      frmAddEditSaleOrderItem2.COMMIT_FLAG = m_BillingDoc.COMMIT_FLAG
-'      Set frmAddEditSaleOrderItem2.TempCollection = m_BillingDoc.SaleOrders
-'
-'      Set frmAddEditSaleOrderItem2.m_Customers = m_Customers
-'      Set frmAddEditSaleOrderItem2.m_ExWorkPricesItem = m_ExWorkPricesItem
-'      Set frmAddEditSaleOrderItem2.m_ExDeliveryCostItem = m_ExDeliveryCostItem
-'      Set frmAddEditSaleOrderItem2.m_ExPromotionPartItem = m_ExPromotionPartItem
-'      Set frmAddEditSaleOrderItem2.m_ExPromotionDlcItem = m_ExPromotionDlcItem
-'      Set frmAddEditSaleOrderItem2.m_DeliveryCus = m_DeliveryCus
-'      frmAddEditSaleOrderItem2.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
-'      frmAddEditSaleOrderItem2.DELIVERY_CUS_ITEM_ID = uctlDeliveryCusLookup.MyCombo.ItemData(Minus2Zero(uctlDeliveryCusLookup.MyCombo.ListIndex))
-'      frmAddEditSaleOrderItem2.PRICE_THINK_TYPE = PRICE_THINK_TYPE 'cboRateType.ListIndex
-'      frmAddEditSaleOrderItem2.CAL_RATE_DELIVERY_TYPE = CAL_RATE_DELIVERY_TYPE
-'      frmAddEditSaleOrderItem2.CAL_PRICE_PART_CENTER_FLAG = CAL_PRICE_PART_CENTER_FLAG
-'      frmAddEditSaleOrderItem2.CAL_PRICE_DLC_CENTER_FLAG = CAL_PRICE_DLC_CENTER_FLAG
-'      frmAddEditSaleOrderItem2.ISuctlDeliveryCusLookup = ISuctlDeliveryCusLookup
-'      frmAddEditSaleOrderItem2.TypeSale = 3 'แก้ไขขายสินค้าและค่าขนส่ง
-'      frmAddEditSaleOrderItem2.SuccessFlag = m_BillingDoc.SUCCESS_FLAG
-'
-'      frmAddEditSaleOrderItem2.HeaderText = MapText("แก้ไขรายการใบ SO")
-'      frmAddEditSaleOrderItem2.ParentShowMode = ShowMode
-'      frmAddEditSaleOrderItem2.ShowMode = SHOW_EDIT
-'      Load frmAddEditSaleOrderItem2
-'      frmAddEditSaleOrderItem2.Show 1
-'
-'      OKClick = frmAddEditSaleOrderItem2.OKClick
-'      NewUpdatePrice = frmAddEditSaleOrderItem2.NewUpdatePrice
-'
-'      ISuctlDeliveryCusLookup = frmAddEditSaleOrderItem2.ISuctlDeliveryCusLookup
-'
-'      Unload frmAddEditSaleOrderItem2
-'      Set frmAddEditSaleOrderItem2 = Nothing
-'
-'      If OKClick Then
-'         Call GetTotalPrice
-'         GridEX1.ItemCount = CountItem(m_BillingDoc.SaleOrders)
-'         GridEX1.Rebind
-'      End If
-'   ElseIf TabStrip1.SelectedItem.Index = 2 Then
-'   ElseIf TabStrip1.SelectedItem.Index = 3 Then
-'   ElseIf TabStrip1.SelectedItem.Index = 4 Then
-'   ElseIf TabStrip1.SelectedItem.Index = 5 Then
-'   End If
-'
-'   If OKClick Then
-'      m_HasModify = True
-'   End If
 End Sub
 
 Private Sub CalculateIncludePrice()
@@ -2406,7 +2322,11 @@ Dim TempD2 As CCustomer
    
      
    If CUSTOMER_ID > 0 Then
-       Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID) 'LOAD สถานที่จัดส่ง
+    If ShowMode = SHOW_ADD Then
+       Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง เฉพาะที่ ที่เปิดใช้งาน
+   Else
+      Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID) 'LOAD สถานที่จัดส่ง ทุกที่
+   End If
       Set uctlDeliveryCusLookup.MyCollection = m_DeliveryCus
      
      Set TempD2 = GetObject("CCustomer", m_Customers, Trim(str(CUSTOMER_ID)), False)

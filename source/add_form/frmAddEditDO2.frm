@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmAddEditDO2 
    ClientHeight    =   10080
    ClientLeft      =   2580
@@ -1250,8 +1250,8 @@ Private m_Employees As Collection
 Private m_Resources As Collection
 Private m_CustomerPictures As Collection
 Private m_DeliveryCus As Collection
-Private m_ExWorkPricesItem As Collection
-Private m_ExDeliveryCostItem As Collection
+'Private m_ExWorkPricesItem As Collection
+'Private m_ExDeliveryCostItem As Collection
 Private m_Cd As Collection
 
 Public HeaderText As String
@@ -2580,7 +2580,6 @@ Dim OKClick As Boolean
       frmAddEditDoItem2.SubscriberID = -1
       frmAddEditDoItem2.Area = Area
       frmAddEditDoItem2.id = id
-'      frmAddEditDoItem.DeliveryCostFlag = EditDeliveryCostFlag
       frmAddEditDoItem2.COMMIT_FLAG = m_BillingDoc.OLD_COMMIT_FLAG
       Set frmAddEditDoItem2.TempCollection = m_BillingDoc.DoItems
       frmAddEditDoItem2.HeaderText = MapText("แก้ไขรายการใบส่งสินค้า")
@@ -3205,8 +3204,8 @@ Private Sub Form_Activate()
          
       End If
       DocAdd = 0
-      Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
-      Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
+'      Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
+'      Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
       
       Call EnableForm(Me, True)
       m_HasModify = False
@@ -3267,8 +3266,8 @@ Private Sub Form_Unload(Cancel As Integer)
    Set m_Resources = Nothing
    Set m_CustomerPictures = Nothing
    Set m_DeliveryCus = Nothing
-   Set m_ExWorkPricesItem = Nothing
-   Set m_ExDeliveryCostItem = Nothing
+'   Set m_ExWorkPricesItem = Nothing
+'   Set m_ExDeliveryCostItem = Nothing
    Set m_Cd = Nothing
 End Sub
 
@@ -3680,8 +3679,8 @@ Private Sub Form_Load()
    Set m_Resources = New Collection
    Set m_CustomerPictures = New Collection
    Set m_DeliveryCus = New Collection
-   Set m_ExWorkPricesItem = New Collection
-   Set m_ExDeliveryCostItem = New Collection
+'   Set m_ExWorkPricesItem = New Collection
+'   Set m_ExDeliveryCostItem = New Collection
    Set m_Cd = New Collection
 End Sub
 

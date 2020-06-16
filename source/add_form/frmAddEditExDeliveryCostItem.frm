@@ -176,16 +176,16 @@ Begin VB.Form frmAddEditExDeliveryCostItem
          _ExtentX        =   6165
          _ExtentY        =   767
       End
-      Begin Threed.SSCheck chkEditPrice 
+      Begin Threed.SSCheck chkDeclareNew 
          Height          =   345
          Left            =   9120
          TabIndex        =   32
          Top             =   2040
-         Width           =   1845
-         _ExtentX        =   3254
+         Width           =   2685
+         _ExtentX        =   4736
          _ExtentY        =   609
          _Version        =   131073
-         Caption         =   "chkEditPrice"
+         Caption         =   "chkDeclareNew"
          TripleState     =   -1  'True
       End
       Begin Threed.SSCommand cmdDeliveryCusData 
@@ -373,10 +373,9 @@ Dim D As CExDeliveryCostItem
      txtWeightPerPackCus.Text = Val(D.WEIGHT_PER_PACK_CUS)
      cboUnit.ListIndex = IDToListIndex(cboUnit, D.RATE_TYPE)
      cboUnit2.ListIndex = IDToListIndex(cboUnit2, D.RATE_TYPE_CUS)
-     chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
-     
+     chkDeclareNew.Value = FlagToCheck(D.DECLARE_NEW_FLAG)
      CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(D.RATE_TYPE)) & "-" & Trim(str(D.RATE_TYPE_CUS))
-  
+
       Call EnableForm(Me, True)
    End If
 
@@ -487,7 +486,7 @@ Dim TempEDC  As CExDeliveryCostItem
       Call TempCollection.add(EDC)
    Else
       Set EDC = TempCollection(id)
-      If Check2Flag(chkEditPrice.Value) = "Y" Then 'ต้องให้กดติ๊กเลือก แก้ไขข้อมูลก่อน
+      If Check2Flag(chkDeclareNew.Value) = "Y" Then 'เข้าแก้ไขได้ต่อเมื่อ ยังไม่เคยประกาศราคามาก่อนเท่านั้น
          EDC.CUSTOMER_CODE = uctlCustomerLookup.MyTextBox.Text
          EDC.CUSTOMER_NAME = uctlCustomerLookup.MyCombo.Text
          EDC.DELIVERY_CUS_ITEM_ID = uctlDeliveryCusLookup.MyCombo.ItemData(Minus2Zero(uctlDeliveryCusLookup.MyCombo.ListIndex))
@@ -504,11 +503,13 @@ Dim TempEDC  As CExDeliveryCostItem
          EDC.VERIFY_NAME = ""
          EDC.APPROVED_FLAG = "N"
          EDC.APPROVED_NAME = ""
-      
-         EDC.LAST_EDIT_FLAG = Check2Flag(chkEditPrice.Value)
-         If EDC.Flag <> "A" Then
-            EDC.Flag = "E"
-         End If
+         EDC.LAST_EDIT_FLAG = "Y"
+      Else
+         EDC.LAST_EDIT_FLAG = "N"
+      End If
+      EDC.DECLARE_NEW_FLAG = Check2Flag(chkDeclareNew.Value)
+      If EDC.Flag <> "A" Then
+         EDC.Flag = "E"
       End If
    End If
 
@@ -560,6 +561,10 @@ Private Sub chkEditPrice_Click(Value As Integer)
    m_HasModify = True
 End Sub
 
+Private Sub chkDeclareNew_Click(Value As Integer)
+   m_HasModify = True
+End Sub
+
 Private Sub cmdDeliveryCusData_Click()
       frmAddEditDeliveryCusMain.HeaderText = MapText("ข้อมูลสถานที่จัดส่ง")
       frmAddEditDeliveryCusMain.CustomerID = CUSTOMER_ID
@@ -593,7 +598,7 @@ If ShowMode = SHOW_EDIT Then
      
      ID_MUM = D.EX_DELIVERY_COST_ITEM_ID
      CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(D.RATE_TYPE)) & "-" & Trim(str(D.RATE_TYPE_CUS))
-     chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+     chkDeclareNew.Value = FlagToCheck(D.DECLARE_NEW_FLAG)
 Else
   id = GetNextID(id, uctlDeliveryCusLookup.MyCollection)
   Set DC = uctlDeliveryCusLookup.MyCollection(id)
@@ -638,7 +643,7 @@ If ShowMode = SHOW_EDIT Then
      
      ID_MUM = D.EX_DELIVERY_COST_ITEM_ID
      CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.DELIVERY_CUS_ITEM_ID)) & "-" & Trim(str(D.RATE_TYPE)) & "-" & Trim(str(D.RATE_TYPE_CUS))
-     chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+     chkDeclareNew.Value = FlagToCheck(D.DECLARE_NEW_FLAG)
 Else
   id = GetPrevID(id, uctlDeliveryCusLookup.MyCollection)
   Set DC = uctlDeliveryCusLookup.MyCollection(id)
@@ -801,10 +806,10 @@ Private Sub InitFormLayout()
    Call InitNormalLabel(lblUnit, MapText("หน่วย"))
    Call InitNormalLabel(lblUnit2, MapText("หน่วย"))
    
-   chkEditPrice.Visible = False
+   chkDeclareNew.Visible = False
    If ShowMode = SHOW_EDIT Then
-      Call InitCheckBox(chkEditPrice, "ปรับปรุงข้อมูล")
-      chkEditPrice.Visible = True
+      Call InitCheckBox(chkDeclareNew, "ประกาศราคาใหม่")
+      chkDeclareNew.Visible = True
    End If
    
    Call InitCombo(cboUnit)

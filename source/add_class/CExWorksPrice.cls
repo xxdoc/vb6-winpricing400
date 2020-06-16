@@ -484,16 +484,16 @@ End Function
 Public Function AddEditData(Optional AutoGenerateFlag As Boolean = True)
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", id, glbErrorLog)
       If AutoGenerateFlag Then
-         Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", ID, glbErrorLog)
+         Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", id, glbErrorLog)
       Else
-         ID = EX_WORKS_PRICE_ID
+         id = EX_WORKS_PRICE_ID
       End If
       
       SQL1 = "INSERT INTO EX_WORKS_PRICE " & _
@@ -515,7 +515,7 @@ Dim ID As Long
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(EX_WORKS_PRICE_CODE)) & "'," & _
                          "'" & ChangeQuote(Trim(DateToStringInt(EX_WORKS_PRICE_DATE))) & "'," & _
                          "'" & ChangeQuote(Trim(EX_WORKS_PRICE_DESC)) & "'," & _
@@ -530,7 +530,7 @@ Dim ID As Long
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         EX_WORKS_PRICE_ID = ID
+         EX_WORKS_PRICE_ID = id
    Else 'Show edit
       SQL1 = "UPDATE EX_WORKS_PRICE SET " & _
                      "   EX_WORKS_PRICE_CODE = '" & ChangeQuote(Trim(EX_WORKS_PRICE_CODE)) & "', " & _
@@ -570,52 +570,6 @@ Dim SQL1 As String
       SQL1 = "DELETE FROM EX_WORKS_PRICE WHERE EX_WORKS_PRICE_ID = " & EX_WORKS_PRICE_ID
       m_Conn.Execute (SQL1)
 End Function
-Public Function CheckVerify() As Long
-Dim SQL1 As String
-Dim ItemCount As Long
-
-Call glbDatabaseMngr.GetRs("", SQL2, True, ItemCount, Nothing, glbErrorLog)
-End Function
-'Public Sub UpdateApprovedFlag(ProcessType As Long)
-'Dim ServerDateTime As String
-'Dim SQL1 As String
-'Dim strTable As String
-'Dim WhereStr As String
-'
-'   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
-'   If EX_WORKS_PRICE_TYPE = 1 Then
-'      strTable = "EX_WORKS_PRICE_ITEM"
-'   ElseIf EX_WORKS_PRICE_TYPE = 2 Then
-'      strTable = "EX_DELIVERY_COST_ITEM"
-'   ElseIf EX_WORKS_PRICE_TYPE = 3 Then
-'      strTable = "EX_PROMOTION_PART_ITEM"
-'   ElseIf EX_WORKS_PRICE_TYPE = 4 Then
-'      strTable = "EX_PROMOTION_DLC_ITEM"
-'   End If
-'
-'   SQL1 = "UPDATE " & strTable & " SET "
-'   If ProcessType = 1 Or ProcessType = 3 Then
-'      SQL1 = SQL1 & "   APPROVED_FLAG = '" & APPROVED_FLAG & "', "
-'      SQL1 = SQL1 & "   APPROVED_NAME = '" & APPROVED_NAME & "', "
-'      SQL1 = SQL1 & "   LAST_EDIT_FLAG = '" & LAST_EDIT_FLAG & "'"
-'   ElseIf ProcessType = 5 Or ProcessType = 7 Then
-'      SQL1 = SQL1 & "   VERIFY_FLAG = '" & VERIFY_FLAG & "', "
-'      SQL1 = SQL1 & "   VERIFY_NAME = '" & VERIFY_NAME & "'"
-'   End If
-'
-'      SQL1 = SQL1 & "WHERE (EX_WORKS_PRICE_ID = " & EX_WORKS_PRICE_ID & ")"
-'            If ProcessType = 1 Then
-'               SQL1 = SQL1 & " AND (VERIFY_FLAG='Y') " 'ถ้าจะอนุมัติต้องมีการตรวจสอบก่อน
-'            ElseIf ProcessType = 3 Then
-'               SQL1 = SQL1 & " AND (APPROVED_FLAG='Y') " 'ถ้าจะยกเลิกอนุมัติต้องเคยอนุมัติมาก่อน
-'            ElseIf ProcessType = 5 Then
-'               SQL1 = SQL1 & " AND (APPROVED_FLAG='N') " 'ถ้าจะตรวจสอบต้องไม่มีการอนุมัติมาก่อน
-'            ElseIf ProcessType = 7 Then
-'               SQL1 = SQL1 & " AND (VERIFY_FLAG='Y') " 'ถ้าจะยกเลิกการตรวจสอบต้องมีการตรวจสอบมาก่อน
-'            End If
-'
-'    m_Conn.Execute (SQL1)
-'End Sub
 Private Sub Class_Terminate()
    Set ExWorksPriceItem = Nothing
    Set ExDeliveryCost = Nothing

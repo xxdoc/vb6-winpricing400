@@ -159,7 +159,7 @@ Begin VB.Form frmAddEditExWorksPriceItem
          _ExtentX        =   6641
          _ExtentY        =   609
          _Version        =   131073
-         Caption         =   "chkEditPrice"
+         Caption         =   "chkDeclareNew"
          TripleState     =   -1  'True
       End
       Begin VB.Label Label3 
@@ -278,7 +278,7 @@ Public ParentForm As Form
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public ID_MUM As Long
 Private CurrentKey As String
 Public SocID As Long
@@ -295,7 +295,7 @@ Dim D As CExWorksPriceItem
    If Flag Then
       Call EnableForm(Me, False)
 
-      Set D = TempCollection.Item(ID)
+      Set D = TempCollection.Item(id)
      If SocPartType = 3 Then
          uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
          uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
@@ -376,7 +376,7 @@ Dim EWP As CExWorksPriceItem
       
       Call TempCollection.add(EWP)
    Else
-         Set EWP = TempCollection(ID)
+         Set EWP = TempCollection(id)
          If Check2Flag(chkDeclareNew.Value) = "Y" Then 'เข้าแก้ไขได้ต่อเมื่อ ยังไม่เคยประกาศราคามาก่อนเท่านั้น
             EWP.PART_TYPE = uctlPartTypeLookup.MyCombo.ItemData(Minus2Zero(uctlPartTypeLookup.MyCombo.ListIndex))
             EWP.PART_ITEM_ID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
@@ -387,12 +387,12 @@ Dim EWP As CExWorksPriceItem
             EWP.VERIFY_NAME = ""
             EWP.APPROVED_FLAG = "N"
             EWP.APPROVED_NAME = ""
-            EWP.LAST_EDIT_FLAG = "Y" 'Check2Flag(chkDeclareNew.Value)
-            
+            EWP.LAST_EDIT_FLAG = "Y"
             EWP.RATE_TYPE = 1
-            EWP.DECLARE_NEW_FLAG = Check2Flag(chkDeclareNew.Value)
+         Else
+           EWP.LAST_EDIT_FLAG = "N"
          End If
-         
+         EWP.DECLARE_NEW_FLAG = Check2Flag(chkDeclareNew.Value)
          EWP.GP_VALUE = Val(txtGP.Text)
          If EWP.Flag <> "A" Then
             EWP.Flag = "E"
@@ -414,8 +414,8 @@ Dim Pt As CPartItem
       Exit Sub
    End If
 If ShowMode = SHOW_EDIT Then
-   ID = GetNextID(ID, TempCollection)
-   Set D = TempCollection(ID)
+   id = GetNextID(id, TempCollection)
+   Set D = TempCollection(id)
      If SocPartType = 3 Then
          uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
          uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
@@ -427,8 +427,8 @@ If ShowMode = SHOW_EDIT Then
      txtPackageRate.Text = Val(D.PACKAGE_RATE)
      txtGP.Text = (D.GP_VALUE)
 Else
-  ID = GetNextID(ID, uctlPartLookup.MyCollection)
-  Set Pt = uctlPartLookup.MyCollection(ID)
+  id = GetNextID(id, uctlPartLookup.MyCollection)
+  Set Pt = uctlPartLookup.MyCollection(id)
   uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, Pt.PART_ITEM_ID)
    txtPackageRate.Text = ""
    txtPackageRate.SetFocus
@@ -452,8 +452,8 @@ Dim Pt As CPartItem
       Exit Sub
    End If
 If ShowMode = SHOW_EDIT Then
-   ID = GetPrevID(ID, TempCollection)
-   Set D = TempCollection(ID)
+   id = GetPrevID(id, TempCollection)
+   Set D = TempCollection(id)
      If SocPartType = 3 Then
          uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
          uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
@@ -465,8 +465,8 @@ If ShowMode = SHOW_EDIT Then
      txtPackageRate.Text = Val(D.PACKAGE_RATE)
      txtGP.Text = (D.GP_VALUE)
 Else
-  ID = GetPrevID(ID, uctlPartLookup.MyCollection)
-  Set Pt = uctlPartLookup.MyCollection(ID)
+  id = GetPrevID(id, uctlPartLookup.MyCollection)
+  Set Pt = uctlPartLookup.MyCollection(id)
   uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, Pt.PART_ITEM_ID)
    txtPackageRate.Text = ""
    txtPackageRate.SetFocus

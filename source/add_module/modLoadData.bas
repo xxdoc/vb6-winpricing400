@@ -4852,7 +4852,7 @@ ErrorHandler:
   glbErrorLog.SystemErrorMsg = Err.DESCRIPTION & " , " & FUNC_NAME & " , KEY= " & Key & " , KeyType=" & KeyType
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Sub LoadExDeliveryCusItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "N")
+Public Sub LoadExDeliveryCusItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "Y")
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -4869,7 +4869,7 @@ FUNC_NAME = "LoadExDeliveryCusItem"
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
    D.EX_WORKS_PRICE_TYPE = 2
    D.BETWEEN_DATE = FromDate
-   ''D.APPROVED_FLAG = "" 'ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
+   D.APPROVED_FLAG = "" 'ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(3, Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -5040,7 +5040,7 @@ ErrorHandler:
    glbErrorLog.SystemErrorMsg = Err.DESCRIPTION
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
-Public Sub LoadExPromotionDlcItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "N")
+Public Sub LoadExPromotionDlcItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "Y")
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -5054,7 +5054,7 @@ Dim I As Long
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
    D.EX_WORKS_PRICE_TYPE = 4
    D.BETWEEN_DATE = FromDate
-'   D.APPROVED_FLAG = ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
+   D.APPROVED_FLAG = ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(5, Rs, ItemCount)
 
    If Not (C Is Nothing) Then

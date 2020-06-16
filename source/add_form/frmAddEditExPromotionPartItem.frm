@@ -142,16 +142,16 @@ Begin VB.Form frmAddEditExPromotionPartItem
          _ExtentX        =   9499
          _ExtentY        =   714
       End
-      Begin Threed.SSCheck chkEditPrice 
+      Begin Threed.SSCheck chkDeclareNew 
          Height          =   345
-         Left            =   7920
+         Left            =   8040
          TabIndex        =   23
          Top             =   3240
-         Width           =   1845
-         _ExtentX        =   3254
+         Width           =   3765
+         _ExtentX        =   6641
          _ExtentY        =   609
          _Version        =   131073
-         Caption         =   "chkEditPrice"
+         Caption         =   "chkDeclareNew"
          TripleState     =   -1  'True
       End
       Begin VB.Label lblPartLookup 
@@ -296,7 +296,7 @@ Dim D As CExPromotionPartItem
       uctlPartTypeLookup.MyCombo.ListIndex = IDToListIndex(uctlPartTypeLookup.MyCombo, D.PART_TYPE)
       uctlPartLookup.MyCombo.ListIndex = IDToListIndex(uctlPartLookup.MyCombo, D.PART_ITEM_ID)
       txtDiscountRate.Text = Val(D.DISCOUNT_AMOUNT)
-      chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+      chkDeclareNew.Value = FlagToCheck(D.DECLARE_NEW_FLAG)
       
       CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.PART_ITEM_ID))
 
@@ -353,8 +353,7 @@ Dim tempEPPI As CExPromotionPartItem
    Key = Trim(str(CusID)) & "-" & Trim(str(PartID))
    Set TempEWP = GetObject("CExWorksPrice", m_ExPromotionPartItem, Key, False)
     If Not TempEWP Is Nothing Then
-       'If (TempEWP.EX_PROMOTION_PART_ITEM_ID <> ID_MUM And TempEWP.EX_PROMOTION_PART_ITEM_ID > 0) Or ShowMode = SHOW_ADD Then 'ถ้าไม่เป็นการแก้ไขตัวเอง หรือเป็นการเพิ่มใหม่
-        If (TempEWP.EX_PROMOTION_PART_ITEM_ID <> ID_MUM) Or CurrentKey <> Key Then
+       If (TempEWP.EX_PROMOTION_PART_ITEM_ID <> ID_MUM) Or CurrentKey <> Key Then
           glbErrorLog.LocalErrorMsg = "มีข้อมูลของลูกค้า " & uctlCustomerLookup.MyCombo.Text & " และเบอร์สินค้า " & uctlPartLookup.MyCombo.Text & " ในเอกสารชุดนี้แล้ว"
           glbErrorLog.ShowUserError
           Exit Function
@@ -381,7 +380,7 @@ Dim tempEPPI As CExPromotionPartItem
       Call TempCollection.add(EPPI)
    Else
       Set tempEPPI = TempCollection(id)
-      If Check2Flag(chkEditPrice.Value) = "Y" Then 'ต้องให้กดติ๊กเลือก แก้ไขข้อมูลก่อน
+      If Check2Flag(chkDeclareNew.Value) = "Y" Then 'ต้องให้กดติ๊กเลือก แก้ไขข้อมูลก่อน
          tempEPPI.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
          tempEPPI.PART_TYPE = uctlPartTypeLookup.MyCombo.ItemData(Minus2Zero(uctlPartTypeLookup.MyCombo.ListIndex))
          tempEPPI.PART_ITEM_ID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
@@ -393,19 +392,23 @@ Dim tempEPPI As CExPromotionPartItem
          tempEPPI.VERIFY_NAME = ""
          tempEPPI.APPROVED_FLAG = "N"
          tempEPPI.APPROVED_NAME = ""
-      
+         tempEPPI.LAST_EDIT_FLAG = "Y"
          tempEPPI.RATE_TYPE = 1
-         tempEPPI.LAST_EDIT_FLAG = Check2Flag(chkEditPrice.Value)
+      Else
+         tempEPPI.LAST_EDIT_FLAG = "N"
+      End If
+      tempEPPI.DECLARE_NEW_FLAG = Check2Flag(chkDeclareNew.Value)
+         
        If tempEPPI.Flag <> "A" Then
          tempEPPI.Flag = "E"
        End If
-      End If
+      
    End If
    Call EnableForm(Me, True)
    SaveData = True
 End Function
 
-Private Sub chkEditPrice_Click(Value As Integer)
+Private Sub chkDeclareNew_Click(Value As Integer)
    m_HasModify = True
 End Sub
 
@@ -426,7 +429,7 @@ If ShowMode = SHOW_EDIT Then
    
    ID_MUM = D.EX_PROMOTION_PART_ITEM_ID
    CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.PART_ITEM_ID))
-   chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+   chkDeclareNew.Value = FlagToCheck(D.DECLARE_NEW_FLAG)
 Else
   id = GetNextID(id, uctlPartLookup.MyCollection)
   Set Cm = uctlCustomerLookup.MyCollection(id)
@@ -465,7 +468,7 @@ If ShowMode = SHOW_EDIT Then
    
    ID_MUM = D.EX_PROMOTION_PART_ITEM_ID
    CurrentKey = Trim(str(D.CUSTOMER_ID)) & "-" & Trim(str(D.PART_ITEM_ID))
-   chkEditPrice.Value = FlagToCheck(D.LAST_EDIT_FLAG)
+   chkDeclareNew.Value = FlagToCheck(D.DECLARE_NEW_FLAG)
 Else
   id = GetPrevID(id, uctlPartLookup.MyCollection)
   Set Pt = uctlPartLookup.MyCollection(id)
@@ -582,11 +585,17 @@ Private Sub InitFormLayout()
      End If
    Call InitNormalLabel(lblBath1, MapText("บาท"))
    
-   chkEditPrice.Visible = False
+   chkDeclareNew.Visible = False
    If ShowMode = SHOW_EDIT Then
-      Call InitCheckBox(chkEditPrice, "ปรับปรุงข้อมูล")
-      chkEditPrice.Visible = True
+      Call InitCheckBox(chkDeclareNew, "ประกาศราคาใหม่")
+      chkDeclareNew.Visible = True
    End If
+   
+'   chkEditPrice.Visible = False
+'   If ShowMode = SHOW_EDIT Then
+'      Call InitCheckBox(chkEditPrice, "ปรับปรุงข้อมูล")
+'      chkEditPrice.Visible = True
+'   End If
    
    Call InitMainButton(cmdExit, MapText("ยกเลิก (ESC)"))
    Call InitMainButton(cmdOK, MapText("ตกลง (F2)"))

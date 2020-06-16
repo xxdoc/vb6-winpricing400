@@ -49,12 +49,12 @@ Begin VB.Form frmAddEditExWorksPrice
          TabIndex        =   3
          Top             =   2520
          Width           =   4335
-         _extentx        =   7646
-         _extenty        =   873
+         _ExtentX        =   7646
+         _ExtentY        =   873
       End
       Begin Threed.SSPanel pnlHeader 
          Height          =   705
-         Left            =   120
+         Left            =   10
          TabIndex        =   17
          Top             =   0
          Width           =   18975
@@ -69,8 +69,8 @@ Begin VB.Form frmAddEditExWorksPrice
          TabIndex        =   0
          Top             =   1080
          Width           =   2955
-         _extentx        =   5212
-         _extenty        =   767
+         _ExtentX        =   5212
+         _ExtentY        =   767
       End
       Begin GridEX20.GridEX GridEX1 
          Height          =   4455
@@ -143,8 +143,8 @@ Begin VB.Form frmAddEditExWorksPrice
          TabIndex        =   4
          Top             =   3000
          Width           =   4335
-         _extentx        =   7646
-         _extenty        =   873
+         _ExtentX        =   7646
+         _ExtentY        =   873
       End
       Begin prjFarmManagement.uctlDate uctlDocumentDate 
          Height          =   495
@@ -152,8 +152,8 @@ Begin VB.Form frmAddEditExWorksPrice
          TabIndex        =   2
          Top             =   2040
          Width           =   4335
-         _extentx        =   7646
-         _extenty        =   873
+         _ExtentX        =   7646
+         _ExtentY        =   873
       End
       Begin prjFarmManagement.uctlTextBox txtPartNo 
          Height          =   435
@@ -161,8 +161,8 @@ Begin VB.Form frmAddEditExWorksPrice
          TabIndex        =   12
          Top             =   1020
          Width           =   4485
-         _extentx        =   13309
-         _extenty        =   767
+         _ExtentX        =   13309
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtDesc 
          Height          =   435
@@ -170,8 +170,8 @@ Begin VB.Form frmAddEditExWorksPrice
          TabIndex        =   30
          Top             =   1560
          Width           =   4335
-         _extentx        =   7646
-         _extenty        =   767
+         _ExtentX        =   7646
+         _ExtentY        =   767
       End
       Begin VB.Label lblDeclareCount 
          Caption         =   "Label1"
@@ -1458,12 +1458,12 @@ ElseIf Con = 3 Then 'รายการรอการอนุมัติ
       m_ExWorksPrice.APPROVED_FLAG = "N"
       m_ExWorksPrice.VERIFY_FLAG = "Y"
       m_ExWorksPrice.LAST_EDIT_FLAG = "Y"
-      m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"
    ElseIf Area = 4 Then
       m_ExWorksPrice.APPROVED_FLAG = "N"
       m_ExWorksPrice.VERIFY_FLAG = "Y"
       m_ExWorksPrice.LAST_EDIT_FLAG = "Y"
-      m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"
    End If
 ElseIf Con = 5 Then 'รายการประกาศใหม่ที่อนุมัติแล้ว
      If Area = 1 Then
@@ -1477,11 +1477,11 @@ ElseIf Con = 5 Then 'รายการประกาศใหม่ที่อนุมัติแล้ว
       ElseIf Area = 3 Then
          m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
          m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
-         m_ExWorksPrice.DECLARE_NEW_FLAG = ""  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+         m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
       ElseIf Area = 4 Then
          m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
          m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
-         m_ExWorksPrice.DECLARE_NEW_FLAG = ""  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+         m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
       End If
 ElseIf Con = 7 Then 'รายการประกาศทั้งหมดที่อนุมัติแล้ว
    If Area = 1 Then
@@ -1961,14 +1961,14 @@ Dim ReportMode As Long
    Call CONDITION(lMenuChosen)
     If lMenuChosen = 1 Or lMenuChosen = 3 Or lMenuChosen = 5 Or lMenuChosen = 7 Then
          Call QueryData(True)
-         ReportKey = "CReportExWorksPiceApproved"
-         Set Report = New CReportExWorksPiceApproved
+         ReportKey = "CReportExWPAppr"
+         Set Report = New CReportExWPAppr
          ReportFlag = True
          Call Report.AddParam(1, "PREVIEW_TYPE")
    ElseIf lMenuChosen = 11 Then
          Call QueryData(True)
-         ReportKey = "CReportExWorksPiceDeclare"
-         Set Report = New CReportExWorksPiceDeclare
+         ReportKey = "CReportExWPDeclare"
+         Set Report = New CReportExWPDeclare
          ReportFlag = True
          Call Report.AddParam(1, "PREVIEW_TYPE")
          Call Report.AddParam(Val(cboDeclareCount.Text), "DECLARE_COUNT")
@@ -2009,10 +2009,10 @@ Dim ReportMode As Long
       Set Report = Nothing
    Else
    If lMenuChosen = 9 Then
-      ReportKey = "CReportExWorksPiceApproved"
+      ReportKey = "CReportExWPAppr"
       ReportMode = 1
    ElseIf lMenuChosen = 13 Then
-      ReportKey = "CReportExWorksPiceDeclare"
+      ReportKey = "CReportExWPDeclare"
       ReportMode = 1
    End If
       

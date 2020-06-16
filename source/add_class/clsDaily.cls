@@ -9495,6 +9495,7 @@ Dim ACRate As CAcRate
       If EDCI.Flag = "A" Then
          EDCI.AddEditMode = SHOW_ADD
          EDCI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EDCI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EDCI.AddEditData
 
       ElseIf EDCI.Flag = "E" Then
@@ -9510,6 +9511,7 @@ Dim ACRate As CAcRate
       If EPPI.Flag = "A" Then
          EPPI.AddEditMode = SHOW_ADD
          EPPI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EPPI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EPPI.AddEditData
 
       ElseIf EPPI.Flag = "E" Then
@@ -9525,6 +9527,7 @@ Dim ACRate As CAcRate
       If EPDI.Flag = "A" Then
          EPDI.AddEditMode = SHOW_ADD
          EPDI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EPDI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EPDI.AddEditData
 
       ElseIf EPDI.Flag = "E" Then

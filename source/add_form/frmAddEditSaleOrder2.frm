@@ -1099,9 +1099,9 @@ Dim oMenu As cPopupMenu
          End If
          
          Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
-         Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
+         Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y")
-         Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
+         Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          
          frmAddEditSaleOrderItem2.DocumentType = DocumentType
          frmAddEditSaleOrderItem2.DocumentDate = uctlDocumentDate.ShowDate
@@ -1455,9 +1455,9 @@ Dim oMenu As cPopupMenu
 
          If lMenuChosen = 1 Then
             Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
-            Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
+            Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y")
-            Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
+            Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             
              frmAddEditSaleOrderItem2.TypeSale = 1 'แก้ไขขายสินค้าและค่าขนส่ง
              frmAddEditSaleOrderItem2.HeaderText = MapText("แก้ไขรายการใบ SO ขายอาหาร")
@@ -1562,12 +1562,33 @@ Private Sub cmdEditCon_Click()
 End Sub
 
 Private Sub cmdOK_Click()
-   If Not SaveData Then
+Dim oMenu As cPopupMenu
+Dim lMenuChosen  As Long
+
+   Set oMenu = New cPopupMenu
+   lMenuChosen = oMenu.Popup("บันทึก", "-", "บันทึกและออกจากหน้าจอ")
+   If lMenuChosen = 0 Then
       Exit Sub
    End If
    
-   OKClick = True
-   Unload Me
+   If lMenuChosen = 1 Then
+      If Not SaveData Then
+         Exit Sub
+      End If
+      
+      ShowMode = SHOW_EDIT
+      id = m_BillingDoc.BILLING_DOC_ID
+      m_BillingDoc.QueryFlag = 1
+      QueryData (True)
+      m_HasModify = False
+   ElseIf lMenuChosen = 3 Then
+      If Not SaveData Then
+         Exit Sub
+      End If
+   
+      OKClick = True
+      Unload Me
+   End If
 End Sub
 
 Private Sub cmdPictureAdd_Click()

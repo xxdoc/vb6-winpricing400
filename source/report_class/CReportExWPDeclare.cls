@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "CReportExWorksPiceApproved"
+Attribute VB_Name = "CReportExWPDeclare"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Option Explicit
 'User Group Report
 Implements CReportInterface
 
-Private Const MODULE_NAME = "CReportExWorksPiceApproved"
+Private Const MODULE_NAME = "CReportExWPDeclare"
 Public MODULE_DESC As String
 
 Private WithEvents Vsp As VSPrinter
@@ -36,6 +36,7 @@ Private Const DETAIL_SIZE = 12
 
 Private Const TITLE_FORMAT = "<32|<3|<5;"
 
+Private collUserAccount  As Collection
 Public m_TempCol As Collection
 Private m_HeaderFormat1 As String
 Private m_HeaderFormat2 As String
@@ -47,9 +48,16 @@ Private m_Headers1 As CFieldList
 Private m_Details1 As CFieldList
 Private m_Left As Double
 
+Private DocNo As String
+Private DocDesc As String
+Private DocDate As String
+Private FromDate As String
+Private ToDate As String
+
 Private Sub Class_Initialize()
    Set mcolParam = New Collection
    Set m_TempCol = New Collection
+   Set collUserAccount = New Collection
    
    Set m_Headers0 = New CFieldList
    Set m_Headers1 = New CFieldList
@@ -63,6 +71,7 @@ Private Sub Class_Terminate()
    Set mcolParam = Nothing
    Set Vsp = Nothing
    Set m_TempCol = Nothing
+   Set collUserAccount = Nothing
    
    Set m_Headers0 = Nothing
    Set m_Headers1 = Nothing
@@ -136,38 +145,19 @@ Dim Cf As CReportField
    
    Set Cf = New CReportField
 
- If mcolParam("AREA") = 1 Then
-   Call Cf.SetFieldValue(7, "^", "NO.", "^")
+If mcolParam("AREA") = 1 Then
+   Call Cf.SetFieldValue(7, "^", "ลำดับที่", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(25, "^", "รหัสสินค้า", "<")
+   Call Cf.SetFieldValue(10, "^", "เบอร์สินค้า", "<")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(25, "^", "ชื่อสินค้า", "<")
+   Call Cf.SetFieldValue(20, "^", "รหัสสินค้า", "<")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(10, "^", "ราคา/ถุง", ">")
+   Call Cf.SetFieldValue(11, "^", "ราคา/ถุง", ">")
    Call m_Headers1.AddField(Cf)
-    If mcolParam("CAN_SHOW_GP") Then
-       Call Cf.SetFieldValue(8, "^", "% GP", ">")
-       Call m_Headers1.AddField(Cf)
-    End If
-   
-   Call Cf.SetFieldValue(12, "^", "ประเภท", "^")
+   Call Cf.SetFieldValue(20, "^", "ประเภทสินค้า", "^")
    Call m_Headers1.AddField(Cf)
-   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
-      Call Cf.SetFieldValue(0, "^", "ผู้ตรวจสอบ", "^")
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-   End If
-   If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนุมัติแล้วทั้งหมด
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-      Call Cf.SetFieldValue(20, "^", "ผู้อนุมัติ", "^")
-      Call m_Headers1.AddField(Cf)
-   End If
 ElseIf mcolParam("AREA") = 2 Then
-   Call Cf.SetFieldValue(7, "^", "NO.", "^")
+   Call Cf.SetFieldValue(7, "^", "ลำดับที่", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(25, "^", "รหัสลูกค้า", "<")
    Call m_Headers1.AddField(Cf)
@@ -191,23 +181,8 @@ ElseIf mcolParam("AREA") = 2 Then
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(10, "^", "น้ำหนัก(กก.)", ">")
    Call m_Headers1.AddField(Cf)
-
-   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
-      Call Cf.SetFieldValue(0, "^", "ผู้ตรวจสอบ", "^")
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-   End If
-   If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนุมัติแล้วทั้งหมด
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-      Call Cf.SetFieldValue(20, "^", "ผู้อนุมัติ", "^")
-      Call m_Headers1.AddField(Cf)
-   End If
 ElseIf mcolParam("AREA") = 3 Then
-   Call Cf.SetFieldValue(7, "^", "NO.", "^")
+   Call Cf.SetFieldValue(7, "^", "ลำดับที่", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(10, "^", "รหัสลูกค้า", "<")
    Call m_Headers1.AddField(Cf)
@@ -217,26 +192,12 @@ ElseIf mcolParam("AREA") = 3 Then
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(25, "^", "ชื่อสินค้า", "<")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(10, "^", "ส่วนลด/หน่วย", ">")
+   Call Cf.SetFieldValue(10, "^", "ส.ล./หน่วย", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(9, "^", "หน่วย", ">")
    Call m_Headers1.AddField(Cf)
-   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
-      Call Cf.SetFieldValue(0, "^", "ผู้ตรวจสอบ", "^")
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-   End If
-   If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนุมัติแล้วทั้งหมด
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-      Call Cf.SetFieldValue(20, "^", "ผู้อนุมัติ", "^")
-      Call m_Headers1.AddField(Cf)
-   End If
 ElseIf mcolParam("AREA") = 4 Then
-   Call Cf.SetFieldValue(7, "^", "NO.", "^")
+   Call Cf.SetFieldValue(7, "^", "ลำดับที่", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(10, "^", "รหัสลูกค้า", "<")
    Call m_Headers1.AddField(Cf)
@@ -246,28 +207,13 @@ ElseIf mcolParam("AREA") = 4 Then
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(25, "^", "สถานที่จัดส่ง", "<")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(10, "^", "ส่วนลด/หน่วย", ">")
+   Call Cf.SetFieldValue(10, "^", "ส.ล./หน่วย", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(9, "^", "หน่วย", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(9, "^", "น้ำหนัก(กก.)", ">")
    Call m_Headers1.AddField(Cf)
-   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
-      Call Cf.SetFieldValue(0, "^", "ผู้ตรวจสอบ", "^")
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-   End If
-   If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนุมัติแล้วทั้งหมด
-      Call Cf.SetFieldValue(20, "^", "ผู้ตรวจสอบ", "^")
-      Call m_Headers1.AddField(Cf)
-      Call Cf.SetFieldValue(20, "^", "ผู้อนุมัติ", "^")
-      Call m_Headers1.AddField(Cf)
-   End If
 End If
-
   
    Set Cf = Nothing
    
@@ -286,19 +232,15 @@ Dim strDate As String
 Dim TempStr1 As String
 Dim TempStr2 As String
 Dim TempStr3 As String
-Dim DocNo As String
-Dim DocDesc As String
-Dim DocDate As String
-Dim FromDate As String
-Dim ToDate As String
 Dim ReportHeader As String
+Dim DeclareCountStr As String
    
    mstrErrMsg = ""
    mblnHeader = True
    mblnNewPage = True
    mblnEndPage = True
    Vsp.PaperSize = pprA4 '
-   Vsp.ORIENTATION = orLandscape
+   Vsp.ORIENTATION = orPortrait
    Vsp.MarginBottom = 1440
    Vsp.MarginFooter = 1440
    Vsp.MarginHeader = 1440
@@ -308,23 +250,44 @@ Dim ReportHeader As String
    Vsp.FontName = "AngsanaUPC"
    Vsp.FontSize = DETAIL_SIZE
    
+   Call LoadUserAccountByName(Nothing, collUserAccount)
+   
    DocNo = "เลขที่เอกสาร : " & EmptyToString(mcolParam("DOCUMENT_NO"), "N/A")
    DocDesc = "รายละเอียดเอกสาร : " & EmptyToString(mcolParam("DOCUMENT_DESC"), "N/A")
-   DocDate = "วันที่ประกาศ : " & EmptyToString(DateToStringExtEx2(mcolParam("DOCUMENT_DATE")), "N/A")
-   FromDate = "วันที่เริ่มมีผล " & EmptyToString(DateToStringExtEx2(mcolParam("FROM_DATE")), "N/A")
-   ToDate = "วันที่สิ้นสุด " & EmptyToString(DateToStringExtEx2(mcolParam("TO_DATE")), "N/A")
+   DocDate = "ประกาศ ณ วันที่ : " & EmptyToString(DateToStringExtEx2(mcolParam("DOCUMENT_DATE")), "N/A")
+   FromDate = "มีผล วันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("FROM_DATE")), "N/A")
+   ToDate = "สิ้นสุด วันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("TO_DATE")), "N/A")
 
-   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
-      ReportHeader = "รายงานการตรวจสอบราคาสินค้าหน้าโรงงาน"
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงาน"
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Then 'เฉพาะที่ประกาศใหม่ผ่านการอนุมัติแล้วทั้งหมด
-      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงานที่ประกาศใหม่"
-   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ผ่านการอนุมัติแล้วทั้งหมด
-      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงานทั้งหมด"
+'   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
+'      ReportHeader = "รายงานการตรวจสอบราคาสินค้าหน้าโรงงาน"
+'   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
+'      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงาน"
+'   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Then 'เฉพาะที่ประกาศใหม่ผ่านการอนุมัติแล้วทั้งหมด
+'      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงานที่ประกาศใหม่"
+'   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ผ่านการอนุมัติแล้วทั้งหมด
+'      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงานทั้งหมด"
+'   End If
+'   MODULE_DESC = vbCrLf & glbEnterPrise.ENTERPRISE_NAME & " , " & glbEnterPrise.BRANCH_NAME & vbCrLf & _
+'                                      ReportHeader & vbCrLf & DocNo & vbCrLf & DocDate & "  " & FromDate & "  " & ToDate   DECLARE_COUNT
+If Val(mcolParam("DECLARE_COUNT")) > 0 Then
+   DeclareCountStr = " ครั้งที่ " & Val(mcolParam("DECLARE_COUNT"))
+   If Val(mcolParam("DECLARE_COUNT")) > 1 Then
+      DeclareCountStr = DeclareCountStr & " (เพิ่มเติม)"
    End If
-   MODULE_DESC = vbCrLf & glbEnterPrise.ENTERPRISE_NAME & " , " & glbEnterPrise.BRANCH_NAME & vbCrLf & _
-                                      ReportHeader & vbCrLf & DocNo & vbCrLf & DocDate & "  " & FromDate & "  " & ToDate
+   
+   DocDate = DocDate & DeclareCountStr
+End If
+If mcolParam("AREA") = 1 Then
+   ReportHeader = "ใบประกาศราคาอาหารสัตว์ในเครือมิตรภาพ"
+ElseIf mcolParam("AREA") = 2 Then
+   ReportHeader = "ใบประกาศราคาค่าขนส่งในเครือมิตรภาพ"
+ElseIf mcolParam("AREA") = 3 Then
+   ReportHeader = "ใบประกาศส่วนลดราคาอาหารสัตว์ในเครือมิตรภาพ"
+ElseIf mcolParam("AREA") = 4 Then
+   ReportHeader = "ใบประกาศส่วนลดราคาค่าขนส่งในเครือมิตรภาพ"
+End If
+
+   MODULE_DESC = vbCrLf & ReportHeader
    Call SetReportConfig(Vsp, mcolParam("REPORT_KEY"))
    
    mdblWid = Vsp.PageWidth - Vsp.MarginLeft - Vsp.MarginRight
@@ -359,11 +322,17 @@ Dim Amt As Double
 Dim Sum1 As Double
 Dim Count1 As Double
 Dim DOCUMENT_TYPE As Long
+Dim MODIFY_BY As Long
+Dim userApproved As String
+Dim userVerify As String
 
    RName = "genDoc"
 '-----------------------------------------------------------------------------------------------------
 '                                             Query Here
 '-----------------------------------------------------------------------------------------------------
+'   If mcolParam("AREA") <> 1 Then
+'      Exit Function
+'   End If
    
    If Not initDoc Then Exit Function
 
@@ -384,79 +353,57 @@ Dim DOCUMENT_TYPE As Long
    mblnHeader = True
    
       I = 0
+     
+
       Set BodyCf = New CReportField
       DOCUMENT_TYPE = mcolParam("DOCUMENT_TYPE")
-      If mcolParam("AREA") = 1 Then
-         For Each EWPI In m_TempCol
-            I = I + 1
-             J = 0
-            Call m_Details1.ClearField
-            
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = I
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-   
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EWPI.PART_NO
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-   
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EWPI.PART_DESC
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-   
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = FormatNumber(EWPI.PACKAGE_RATE, -1)
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-            
-            If mcolParam("CAN_SHOW_GP") Then
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = FormatNumber(EWPI.GP_VALUE, -1)
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-            End If
-   
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = ConvertPerPack(EWPI.PART_TYPE)
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-            
-            If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = EWPI.VERIFY_NAME
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-            ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนมัติแล้วทั้งหมด
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = EWPI.VERIFY_NAME
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-               
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = EWPI.APPROVED_NAME
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-            End If
-   
-            Call m_Details1.GetString(2, TempStr1, TempStr2)
-            strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
-            Call Vsp.AddTable(strFormat, "", TempStr2)
-            '=====
-         Next EWPI
-      ElseIf mcolParam("AREA") = 2 Then
-         For Each EDCI In m_TempCol
+   If mcolParam("AREA") = 1 Then
+      For Each EWPI In m_TempCol
+         I = I + 1
+          J = 0
+         Call m_Details1.ClearField
+         
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
+         TempStr = I
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+         Call m_Details1.AddField(BodyCf)
+
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
+         TempStr = EWPI.PART_MASTER_NAME
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+         Call m_Details1.AddField(BodyCf)
+
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
+         TempStr = EWPI.PART_NO
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+         Call m_Details1.AddField(BodyCf)
+
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
+         TempStr = FormatNumber(EWPI.PACKAGE_RATE, -1)
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+         Call m_Details1.AddField(BodyCf)
+
+         J = J + 1
+         Set HeadCf = m_Headers1.Fields(J)
+         TempStr = ConvertPerPack(EWPI.PART_TYPE)
+         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+         Call m_Details1.AddField(BodyCf)
+
+         Call m_Details1.GetString(2, TempStr1, TempStr2)
+         strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+         Call Vsp.AddTable(strFormat, "", TempStr2)
+         '=====
+         
+         MODIFY_BY = EWPI.MODIFY_BY
+         userVerify = EWPI.VERIFY_NAME
+         userApproved = EWPI.APPROVED_NAME
+      Next EWPI
+   ElseIf mcolParam("AREA") = 2 Then
+     For Each EDCI In m_TempCol
             I = I + 1
             J = 0
             Call m_Details1.ClearField
@@ -532,34 +479,14 @@ Dim DOCUMENT_TYPE As Long
             TempStr = FormatNumber(EDCI.WEIGHT_PER_PACK_CUS, 0)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
             Call m_Details1.AddField(BodyCf)
-            
-            If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = EDCI.VERIFY_NAME
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-            ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนมัติแล้วทั้งหมด
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = EDCI.VERIFY_NAME
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-               
-               J = J + 1
-               Set HeadCf = m_Headers1.Fields(J)
-               TempStr = EDCI.APPROVED_NAME
-               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-               Call m_Details1.AddField(BodyCf)
-            End If
    
             Call m_Details1.GetString(2, TempStr1, TempStr2)
             strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
             Call Vsp.AddTable(strFormat, "", TempStr2)
             '=====
          Next EDCI
-      ElseIf mcolParam("AREA") = 3 Then
-         For Each EPPI In m_TempCol
+   ElseIf mcolParam("AREA") = 3 Then
+      For Each EPPI In m_TempCol
          I = I + 1
           J = 0
          Call m_Details1.ClearField
@@ -605,34 +532,14 @@ Dim DOCUMENT_TYPE As Long
          TempStr = ConvertPerPack(EPPI.PART_TYPE)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
          Call m_Details1.AddField(BodyCf)
-         
-         If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EPPI.VERIFY_NAME
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-         ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนมัติแล้วทั้งหมด
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EPPI.VERIFY_NAME
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-            
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EPPI.APPROVED_NAME
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-         End If
 
          Call m_Details1.GetString(2, TempStr1, TempStr2)
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
          Call Vsp.AddTable(strFormat, "", TempStr2)
          '=====
       Next EPPI
-      ElseIf mcolParam("AREA") = 4 Then
-         For Each EPDI In m_TempCol
+   ElseIf mcolParam("AREA") = 4 Then
+    For Each EPDI In m_TempCol
          I = I + 1
           J = 0
          Call m_Details1.ClearField
@@ -684,33 +591,21 @@ Dim DOCUMENT_TYPE As Long
          TempStr = FormatNumber(EPDI.WEIGHT_PER_PACK_CUS, 0)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
          Call m_Details1.AddField(BodyCf)
-         
-         If Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EPDI.VERIFY_NAME
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-         ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Or Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ที่ผ่านการอนมัติแล้วทั้งหมด
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EPDI.VERIFY_NAME
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-            
-            J = J + 1
-            Set HeadCf = m_Headers1.Fields(J)
-            TempStr = EPDI.APPROVED_NAME
-            Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-            Call m_Details1.AddField(BodyCf)
-         End If
 
          Call m_Details1.GetString(2, TempStr1, TempStr2)
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
          Call Vsp.AddTable(strFormat, "", TempStr2)
          '=====
       Next EPDI
-      End If
+   End If
+      
+      Vsp = ""
+      Vsp.FontBold = True
+       Vsp = "หมายเหตุ : "
+       Vsp.FontBold = False
+      Vsp = EmptyToString(mcolParam("DOCUMENT_NOTE"), "N/A")
+         
+   Call PrintFooter(alngX, userVerify, userApproved, MODIFY_BY)
 
       Set BodyCf = Nothing
 
@@ -816,14 +711,16 @@ Dim alngX() As Long
    Call Vsp.AddTable(strFormat, "", "|หน้าที่|: " & Vsp.CurrentPage)
    Call Vsp.AddTable(strFormat, "", "|วันที่พิมพ์|: " & DateToStringExt(mdteDate))
    Call Vsp.AddTable(strFormat, "", "|เวลา|: " & Right$(DateToStringExtEx(mdteDate), 8))
-   Call Vsp.AddTable(strFormat, "", "|ผู้ใช้|: " & glbUser.USER_NAME)
+'   Call Vsp.AddTable(strFormat, "", "|ผู้ใช้|: " & glbUser.USER_NAME)
    Vsp.CurrentY = dY(0)
    
    Vsp.FontSize = TITLE_SIZE
    Vsp.FontBold = True
    Vsp.TextAlign = taCenterBottom
    Vsp.Paragraph = MODULE_DESC
-   Vsp.Paragraph = ""
+   Vsp.Paragraph = DocDate
+   Vsp = ""
+   ' vbCrLf & DocDate & vbCrLf & FromDate & vbCrLf & ToDate
    If mblnHeader Then
        Call printHeader
    End If
@@ -841,6 +738,55 @@ End Sub
 Private Sub VSP_StartDoc()
 'This event occur when VSPrinter.StartDoc is used and used to initialize some information before generating printed document
 End Sub
+Private Sub PrintFooter(alngX() As Long, VerifyName As String, ApprovedName As String, MODIFY_BY As Long)
+Dim strFormat As String
+Dim strPrint As String
+Dim tempUserAccount As CUserAccount
+Dim createRealName As String
+Dim approveRealName As String
+Dim modifyRealName As String
+
+   Vsp.TableBorder = tbNone
+   Vsp.FontBold = False
+   
+   strFormat = VSP_CalTable("<10;", mdblWid, alngX)
+   strPrint = ";"
+   Call Vsp.AddTable(strFormat, "", strPrint)
+   
+   Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(MODIFY_BY), False)
+   If Not Temp_LTK Is Nothing Then
+      modifyRealName = "(  " & Temp_LTK.REAL_NAME & "  )"
+   Else
+      modifyRealName = ""
+   End If
+         
+   
+   Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(VerifyName))
+   createRealName = tempUserAccount.REAL_NAME
+   If Len(createRealName) > 0 Then
+      createRealName = "(  " & createRealName & "  )"
+   End If
+   Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(ApprovedName))
+   approveRealName = tempUserAccount.REAL_NAME
+   If Len(approveRealName) > 0 Then
+      approveRealName = "( " & approveRealName & " )"
+   End If
+   
+   If Val(mcolParam("DECLARE_COUNT")) > 0 Then
+      Vsp.FontSize = 15
+      Vsp.FontBold = False
+      strFormat = VSP_CalTable("^15|^15|^15;", mdblWid, alngX)
+      strPrint = modifyRealName & "|" & createRealName & "|" & approveRealName & ";"
+      Call Vsp.AddTable(strFormat, "", strPrint)
+      
+      Vsp.FontSize = 12
+      Vsp.FontBold = True
+      strFormat = VSP_CalTable("^15|^15|^15;", mdblWid, alngX)
+      strPrint = "ผู้จัดทำ|ผู้ตรวจสอบ|ผู้อนุมัติ;"
+      Call Vsp.AddTable(strFormat, "", strPrint)
+   End If
+End Sub
+
 
 
 

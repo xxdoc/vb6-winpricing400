@@ -1,4 +1,4 @@
-frmWinPricingMain = 75, 75, 958, 582, , 260, 28, 1107, 535, C
+frmWinPricingMain = 75, 75, 958, 582, C, 260, 28, 1107, 535, C
 modMain = -361, 100, 633, 607, C
 modRegistry = 78, 78, 375, 712, C
 modTokenLib = 104, 104, 401, 738, C

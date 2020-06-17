@@ -9174,6 +9174,8 @@ Dim iCount As Long
       EDCI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
       EDCI.DECLARE_COUNT = Ua.DECLARE_COUNT
       
+      EDCI.HIDE_FLAG = "N" ' ดึงเฉพาะสถานที่จัดส่งที่ยังใช้งาน
+      
       EDCI.OrderBy = 2
       EDCI.OrderType = 1
       Call EDCI.QueryData(1, m_Rs1, iCount)

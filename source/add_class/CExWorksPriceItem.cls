@@ -48,8 +48,9 @@ Public APPROVED_NAME As String
 Public VERIFY_FLAG As String
 Public VERIFY_NAME As String
 Public DECLARE_COUNT As Long
+Public MODIFY_BY As Long
+Public CREATE_BY As Long
 
-Public Modify_by As Long
 Public SUBSCRIBER_ID As Long
 Public ACCOUNT_ID As Long
 Public ENABLE_FLAG As String
@@ -217,7 +218,8 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       VERIFY_FLAG = NVLS(Rs("VERIFY_FLAG"), "")
       VERIFY_NAME = NVLS(Rs("VERIFY_NAME"), "")
       
-      Modify_by = NVLI(Rs("MODIFY_BY"), -1)
+      MODIFY_BY = NVLI(Rs("MODIFY_BY"), -1)
+      CREATE_BY = NVLI(Rs("CREATE_BY"), -1)
       
       GP_VALUE = NVLD(Rs("GP_VALUE"), 0)
    ElseIf Ind = 2 Then

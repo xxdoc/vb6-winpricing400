@@ -1098,98 +1098,107 @@ If Area = 1 Then
    Col.Caption = MapText("ชื่อสินค้า/บริการ")
 
    Set Col = GridEX1.Columns.add '5
-   Col.Width = 1200
+   Col.Width = 1000
    Col.Caption = MapText("ราคา/ถุง")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '6
-   Col.Width = 1500
-   Col.Caption = MapText("ประเภทสินค้า")
+   Col.Width = 900
+   Col.Caption = MapText("ประเภท")
    Col.TextAlignment = jgexAlignCenter
    
-   Set Col = GridEX1.Columns.add '7
+   
    If canShowGP Then
-      Col.Width = 1100
-   Else
-     Col.Width = 0
+      Set Col = GridEX1.Columns.add '7
+      Col.Width = 800
+      Col.Caption = MapText("% GP")
+     Col.TextAlignment = jgexAlignRight
    End If
-   Col.Caption = MapText("% GP")
-   Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '8
-   Col.Width = 1500
-   Col.Caption = MapText("ผู้ตรวจสอบ")
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '9
-   Col.Width = 1500
-   Col.Caption = MapText("ผู้อนุมัติ")
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '10
    Col.Width = 1200
-   Col.Caption = MapText("แก้ไขราคา")
+   Col.Caption = MapText("ผู้ตรวจสอบ")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '11
    Col.Width = 1200
-   Col.Caption = MapText("ประกาศใหม่")
+   Col.Caption = MapText("ผู้อนุมัติ")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '12
+   Col.Width = 1200
+   Col.Caption = MapText("แก้ไขราคา")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '13
+   Col.Width = 1200
+   Col.Caption = MapText("ประกาศใหม่")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '14
    Col.Width = 1000
    Col.Caption = MapText("ครั้งที่")
    Col.TextAlignment = jgexAlignCenter
 ElseIf Area = 2 Then
    Set Col = GridEX1.Columns.add '1
-   Col.Width = 1200
+   Col.Width = 1000
    Col.Caption = MapText("รหัสลูกค้า")
    
    Set Col = GridEX1.Columns.add '2
-   Col.Width = 3500
+   Col.Width = 2700
    Col.Caption = MapText("ชื่อลูกค้า")
    
    Set Col = GridEX1.Columns.add '3
-   Col.Width = 1300
-   Col.Caption = MapText("รหัสสถานที")
+   Col.Width = 1200
+   Col.Caption = MapText("รหัสสถานที่")
 
    Set Col = GridEX1.Columns.add '4
-   Col.Width = 3500
+   Col.Width = 2800
    Col.Caption = MapText("สถานที่จัดส่ง")
 
    Set Col = GridEX1.Columns.add '5
-   Col.Width = 1600
-   Col.Caption = MapText("ค่าขนส่ง/หน่วย")
+   Col.Width = 1100
+   Col.Caption = MapText("ค่าขนส่ง/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '6
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '7
-   Col.Width = 1300
-   Col.Caption = MapText("น้ำหนัก(กก.)")
+   Col.Width = 850
+   Col.Caption = MapText("นน.(กก.)")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '8
-   Col.Width = 2000
-   Col.Caption = MapText("ประเภทรถขนส่ง")
+   Col.Width = 1000
+   Col.Caption = MapText("ประเภท")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '9
-   Col.Width = 1600
-   Col.Caption = MapText("คิดลูกค้า/หน่วย")
+   Col.Width = 1100
+   Col.Caption = MapText("คิดลูกค้า/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '10
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '11
-   Col.Width = 1300
-   Col.Caption = MapText("น้ำหนัก(กก.)")
+   Col.Width = 850
+   Col.Caption = MapText("นน.(กก.)")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '12
@@ -1200,13 +1209,23 @@ ElseIf Area = 2 Then
    Col.Width = 0
    Col.Caption = MapText("rate_type_cus")
    
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
    Set Col = GridEX1.Columns.add '14
-   Col.Width = 1500
+   Col.Width = 1200
    Col.Caption = MapText("ผู้ตรวจสอบ")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '15
-   Col.Width = 1500
+   Col.Width = 1200
    Col.Caption = MapText("ผู้อนุมัติ")
    Col.TextAlignment = jgexAlignCenter
    
@@ -1226,7 +1245,7 @@ ElseIf Area = 2 Then
    Col.TextAlignment = jgexAlignCenter
 ElseIf Area = 3 Then
    Set Col = GridEX1.Columns.add '1
-   Col.Width = 1200
+   Col.Width = 1000
    Col.Caption = MapText("รหัสลูกค้า")
    
    Set Col = GridEX1.Columns.add '2
@@ -1242,12 +1261,12 @@ ElseIf Area = 3 Then
    Col.Caption = MapText("ชื่อสินค้า")
 
    Set Col = GridEX1.Columns.add '5
-   Col.Width = 1600
-   Col.Caption = MapText("ส่วนลด/หน่วย")
+   Col.Width = 900
+   Col.Caption = MapText("ส่วนลด/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '6
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
@@ -1256,12 +1275,22 @@ ElseIf Area = 3 Then
    Col.Caption = MapText("rate_type_cus")
    
    Set Col = GridEX1.Columns.add '8
-   Col.Width = 1500
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
    Col.Caption = MapText("ผู้ตรวจสอบ")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '9
-   Col.Width = 1500
+   Col.Width = 1200
    Col.Caption = MapText("ผู้อนุมัติ")
    Col.TextAlignment = jgexAlignCenter
    
@@ -1297,12 +1326,12 @@ ElseIf Area = 4 Then
    Col.Caption = MapText("สถานที่จัดส่ง")
    
    Set Col = GridEX1.Columns.add '7
-   Col.Width = 1600
-   Col.Caption = MapText("ส่วนลด/หน่วย")
+   Col.Width = 900
+   Col.Caption = MapText("ส่วนลด/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '8
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
@@ -1315,13 +1344,23 @@ ElseIf Area = 4 Then
    Col.Width = 0
    Col.Caption = MapText("rate_type")
    
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
     Set Col = GridEX1.Columns.add '11
-   Col.Width = 1500
+   Col.Width = 1200
    Col.Caption = MapText("ผู้ตรวจสอบ")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '12
-   Col.Width = 1500
+   Col.Width = 1200
    Col.Caption = MapText("ผู้อนุมัติ")
    Col.TextAlignment = jgexAlignCenter
    
@@ -1519,155 +1558,220 @@ End Sub
 Private Sub GridEX1_UnboundReadData(ByVal RowIndex As Long, ByVal Bookmark As Variant, ByVal Values As GridEX20.JSRowData)
 On Error GoTo ErrorHandler
 Dim RealIndex As Long
-
+Dim I As Long
+I = 0
    glbErrorLog.ModuleName = Me.NAME
    glbErrorLog.RoutineName = "UnboundReadData"
 
    If TabStrip1.SelectedItem.Index = 1 Then
-   If Area = 1 Then
-      If m_ExWorksPrice.ExWorksPriceItem Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EWPI As CExWorksPriceItem
-      If m_ExWorksPrice.ExWorksPriceItem.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EWPI = GetItem(m_ExWorksPrice.ExWorksPriceItem, RowIndex, RealIndex)
-      If EWPI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EWPI.EX_WORKS_PRICE_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EWPI.PART_NO
-      Values(4) = EWPI.PART_DESC
-      Values(5) = FormatNumber(EWPI.PACKAGE_RATE)
-      Values(6) = ConvertPerPack(EWPI.PART_TYPE)
-      If canShowGP Then
-         Values(7) = FormatNumber(EWPI.GP_VALUE)
-      Else
-         Values(7) = ""
-       End If
-      Values(8) = EWPI.VERIFY_NAME
-      Values(9) = EWPI.APPROVED_NAME
-      Values(10) = EWPI.LAST_EDIT_FLAG
-      Values(11) = EWPI.DECLARE_NEW_FLAG
-      Values(12) = IIf(EWPI.DECLARE_COUNT <= 0, "", FormatNumber(EWPI.DECLARE_COUNT, 0))
-   ElseIf Area = 2 Then
-      If m_ExWorksPrice.ExDeliveryCost Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EDCI As CExDeliveryCostItem
-      If m_ExWorksPrice.ExDeliveryCost.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EDCI = GetItem(m_ExWorksPrice.ExDeliveryCost, RowIndex, RealIndex)
-      If EDCI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EDCI.EX_DELIVERY_COST_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EDCI.CUSTOMER_CODE
-      Values(4) = EDCI.CUSTOMER_NAME
-      Values(5) = EDCI.DELIVERY_CUS_ITEM_CODE
-      Values(6) = EDCI.DELIVERY_CUS_ITEM_NAME
+      If Area = 1 Then
+         If m_ExWorksPrice.ExWorksPriceItem Is Nothing Then
+            Exit Sub
+         End If
       
-      Values(7) = FormatNumber(EDCI.RATE_DELIVERY, 3)
-      Values(8) = DeliveryUnit(EDCI.RATE_TYPE)
-      Values(9) = FormatNumber(EDCI.WEIGHT_PER_PACK, 0)
-      Values(10) = DeliveryType(EDCI.RATE_TYPE)
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
       
-      Values(11) = FormatNumber(EDCI.RATE_CUSTOMER, 3)
-      Values(12) = DeliveryUnit(EDCI.RATE_TYPE_CUS)
-      Values(13) = FormatNumber(EDCI.WEIGHT_PER_PACK_CUS, 0)
+         Dim EWPI As CExWorksPriceItem
+         If m_ExWorksPrice.ExWorksPriceItem.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EWPI = GetItem(m_ExWorksPrice.ExWorksPriceItem, RowIndex, RealIndex)
+         If EWPI Is Nothing Then
+            Exit Sub
+         End If
       
+         Values(1) = EWPI.EX_WORKS_PRICE_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EWPI.PART_NO
+         Values(4) = EWPI.PART_DESC
+         Values(5) = FormatNumber(EWPI.PACKAGE_RATE)
+         Values(6) = ConvertPerPack(EWPI.PART_TYPE)
+         I = 7
+         If canShowGP Then
+            Values(I) = FormatNumber(EWPI.GP_VALUE)
+            I = I + 1
+          End If
+          
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EWPI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(I) = Temp_LTK.USER_NAME
+         Else
+            Values(I) = ""
+         End If
+         
+         I = I + 1
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EWPI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(I) = Temp_LTK.USER_NAME
+         Else
+            Values(I) = ""
+         End If
+         
+         I = I + 1
+         Values(I) = EWPI.VERIFY_NAME
+         I = I + 1
+         Values(I) = EWPI.APPROVED_NAME
+         I = I + 1
+         Values(I) = EWPI.LAST_EDIT_FLAG
+         I = I + 1
+         Values(I) = EWPI.DECLARE_NEW_FLAG
+         I = I + 1
+         Values(I) = IIf(EWPI.DECLARE_COUNT <= 0, "", FormatNumber(EWPI.DECLARE_COUNT, 0))
+      ElseIf Area = 2 Then
+         If m_ExWorksPrice.ExDeliveryCost Is Nothing Then
+            Exit Sub
+         End If
       
-      Values(14) = EDCI.RATE_TYPE
-      Values(15) = EDCI.RATE_TYPE_CUS
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
       
-      Values(16) = EDCI.VERIFY_NAME
-      Values(17) = EDCI.APPROVED_NAME
-      Values(18) = EDCI.LAST_EDIT_FLAG
-      Values(19) = EDCI.DECLARE_NEW_FLAG
-      Values(20) = IIf(EDCI.DECLARE_COUNT <= 0, "", FormatNumber(EDCI.DECLARE_COUNT, 0))
-   ElseIf Area = 3 Then
-      If m_ExWorksPrice.ExPromotionPart Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EPPI    As CExPromotionPartItem
-      If m_ExWorksPrice.ExPromotionPart.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EPPI = GetItem(m_ExWorksPrice.ExPromotionPart, RowIndex, RealIndex)
-      If EPPI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EPPI.EX_PROMOTION_PART_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EPPI.CUSTOMER_CODE
-      Values(4) = EPPI.CUSTOMER_NAME
-      Values(5) = EPPI.PART_NO
-      Values(6) = EPPI.PART_DESC
-      Values(7) = FormatNumber(EPPI.DISCOUNT_AMOUNT)
-      Values(8) = ConvertPerPack(EPPI.PART_TYPE)
-      Values(9) = EPPI.RATE_TYPE
-      Values(10) = EPPI.VERIFY_NAME
-      Values(11) = EPPI.APPROVED_NAME
-      Values(12) = EPPI.LAST_EDIT_FLAG
-      Values(13) = EPPI.DECLARE_NEW_FLAG
-      Values(14) = IIf(EPPI.DECLARE_COUNT <= 0, "", FormatNumber(EPPI.DECLARE_COUNT, 0))
-   ElseIf Area = 4 Then
-      If m_ExWorksPrice.ExPromotionDlc Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EPDI As CExPromotionDlcItem
-      If m_ExWorksPrice.ExPromotionDlc.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EPDI = GetItem(m_ExWorksPrice.ExPromotionDlc, RowIndex, RealIndex)
-      If EPDI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EPDI.EX_PROMOTION_DLC_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EPDI.CUSTOMER_CODE
-      Values(4) = EPDI.CUSTOMER_NAME
-      Values(5) = EPDI.DELIVERY_CUS_ITEM_CODE
-      Values(6) = EPDI.DELIVERY_CUS_ITEM_NAME
+         Dim EDCI As CExDeliveryCostItem
+         If m_ExWorksPrice.ExDeliveryCost.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EDCI = GetItem(m_ExWorksPrice.ExDeliveryCost, RowIndex, RealIndex)
+         If EDCI Is Nothing Then
+            Exit Sub
+         End If
       
-      Values(7) = FormatNumber(EPDI.DISCOUNT_AMOUNT, 3)
-      Values(8) = DeliveryUnit(EPDI.RATE_TYPE_CUS)
-      Values(9) = FormatNumber(EPDI.WEIGHT_PER_PACK_CUS, 0)
-      Values(10) = EPDI.RATE_TYPE_CUS
-      Values(11) = EPDI.VERIFY_NAME
-      Values(12) = EPDI.APPROVED_NAME
-      Values(13) = EPDI.LAST_EDIT_FLAG
-      Values(14) = EPDI.DECLARE_NEW_FLAG
-      Values(15) = IIf(EPDI.DECLARE_COUNT <= 0, "", FormatNumber(EPDI.DECLARE_COUNT, 0))
-   End If
+         Values(1) = EDCI.EX_DELIVERY_COST_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EDCI.CUSTOMER_CODE
+         Values(4) = EDCI.CUSTOMER_NAME
+         Values(5) = EDCI.DELIVERY_CUS_ITEM_CODE
+         Values(6) = EDCI.DELIVERY_CUS_ITEM_NAME
+         
+         Values(7) = FormatNumber(EDCI.RATE_DELIVERY, 3)
+         Values(8) = DeliveryUnit(EDCI.RATE_TYPE)
+         Values(9) = FormatNumber(EDCI.WEIGHT_PER_PACK, 0)
+         Values(10) = DeliveryType(EDCI.RATE_TYPE)
+         
+         Values(11) = FormatNumber(EDCI.RATE_CUSTOMER, 3)
+         Values(12) = DeliveryUnit(EDCI.RATE_TYPE_CUS)
+         Values(13) = FormatNumber(EDCI.WEIGHT_PER_PACK_CUS, 0)
+         
+         
+         Values(14) = EDCI.RATE_TYPE
+         Values(15) = EDCI.RATE_TYPE_CUS
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EDCI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(16) = Temp_LTK.USER_NAME
+         Else
+            Values(16) = ""
+         End If
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EDCI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(17) = Temp_LTK.USER_NAME
+         Else
+            Values(17) = ""
+         End If
+         
+         Values(18) = EDCI.VERIFY_NAME
+         Values(19) = EDCI.APPROVED_NAME
+         Values(20) = EDCI.LAST_EDIT_FLAG
+         Values(21) = EDCI.DECLARE_NEW_FLAG
+         Values(22) = IIf(EDCI.DECLARE_COUNT <= 0, "", FormatNumber(EDCI.DECLARE_COUNT, 0))
+      ElseIf Area = 3 Then
+         If m_ExWorksPrice.ExPromotionPart Is Nothing Then
+            Exit Sub
+         End If
+      
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
+      
+         Dim EPPI    As CExPromotionPartItem
+         If m_ExWorksPrice.ExPromotionPart.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EPPI = GetItem(m_ExWorksPrice.ExPromotionPart, RowIndex, RealIndex)
+         If EPPI Is Nothing Then
+            Exit Sub
+         End If
+      
+         Values(1) = EPPI.EX_PROMOTION_PART_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EPPI.CUSTOMER_CODE
+         Values(4) = EPPI.CUSTOMER_NAME
+         Values(5) = EPPI.PART_NO
+         Values(6) = EPPI.PART_DESC
+         Values(7) = FormatNumber(EPPI.DISCOUNT_AMOUNT)
+         Values(8) = ConvertPerPack(EPPI.PART_TYPE)
+         Values(9) = EPPI.RATE_TYPE
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPPI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(10) = Temp_LTK.USER_NAME
+         Else
+            Values(10) = ""
+         End If
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPPI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(11) = Temp_LTK.USER_NAME
+         Else
+            Values(11) = ""
+         End If
+         
+         Values(12) = EPPI.VERIFY_NAME
+         Values(13) = EPPI.APPROVED_NAME
+         Values(14) = EPPI.LAST_EDIT_FLAG
+         Values(15) = EPPI.DECLARE_NEW_FLAG
+         Values(16) = IIf(EPPI.DECLARE_COUNT <= 0, "", FormatNumber(EPPI.DECLARE_COUNT, 0))
+      ElseIf Area = 4 Then
+         If m_ExWorksPrice.ExPromotionDlc Is Nothing Then
+            Exit Sub
+         End If
+      
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
+      
+         Dim EPDI As CExPromotionDlcItem
+         If m_ExWorksPrice.ExPromotionDlc.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EPDI = GetItem(m_ExWorksPrice.ExPromotionDlc, RowIndex, RealIndex)
+         If EPDI Is Nothing Then
+            Exit Sub
+         End If
+      
+         Values(1) = EPDI.EX_PROMOTION_DLC_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EPDI.CUSTOMER_CODE
+         Values(4) = EPDI.CUSTOMER_NAME
+         Values(5) = EPDI.DELIVERY_CUS_ITEM_CODE
+         Values(6) = EPDI.DELIVERY_CUS_ITEM_NAME
+         
+         Values(7) = FormatNumber(EPDI.DISCOUNT_AMOUNT, 3)
+         Values(8) = DeliveryUnit(EPDI.RATE_TYPE_CUS)
+         Values(9) = FormatNumber(EPDI.WEIGHT_PER_PACK_CUS, 0)
+         Values(10) = EPDI.RATE_TYPE_CUS
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPDI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(11) = Temp_LTK.USER_NAME
+         Else
+            Values(11) = ""
+         End If
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPDI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(12) = Temp_LTK.USER_NAME
+         Else
+            Values(12) = ""
+         End If
+         Values(13) = EPDI.VERIFY_NAME
+         Values(14) = EPDI.APPROVED_NAME
+         Values(15) = EPDI.LAST_EDIT_FLAG
+         Values(16) = EPDI.DECLARE_NEW_FLAG
+         Values(17) = IIf(EPDI.DECLARE_COUNT <= 0, "", FormatNumber(EPDI.DECLARE_COUNT, 0))
+      End If
    End If
    
    Exit Sub

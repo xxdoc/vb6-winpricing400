@@ -49,6 +49,8 @@ Public APPROVED_FLAG As String
 Public APPROVED_NAME As String
 Public VERIFY_FLAG As String
 Public VERIFY_NAME As String
+Public MODIFY_BY As Long
+Public CREATE_BY As Long
 
 Private Sub Class_Initialize()
    Set m_Conn = glbDatabaseMngr.DBConnection
@@ -195,6 +197,9 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       APPROVED_NAME = NVLS(Rs("APPROVED_NAME"), "")
       VERIFY_FLAG = NVLS(Rs("VERIFY_FLAG"), "")
       VERIFY_NAME = NVLS(Rs("VERIFY_NAME"), "")
+      
+      MODIFY_BY = NVLI(Rs("MODIFY_BY"), -1)
+      CREATE_BY = NVLI(Rs("CREATE_BY"), -1)
    ElseIf Ind = 2 Then
       DECLARE_COUNT = NVLI(Rs("DECLARE_COUNT"), -1)
    ElseIf Ind = 3 Then

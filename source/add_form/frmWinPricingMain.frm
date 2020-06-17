@@ -219,7 +219,7 @@ Begin VB.Form frmWinPricingMain
          Left            =   360
          TabIndex        =   5
          Top             =   5490
-         Width           =   3045
+         Width           =   4005
       End
       Begin VB.Label lblUserName 
          Caption         =   "Label1"
@@ -227,7 +227,7 @@ Begin VB.Form frmWinPricingMain
          Left            =   360
          TabIndex        =   4
          Top             =   4980
-         Width           =   3045
+         Width           =   4005
       End
    End
    Begin Threed.SSPanel pnlHeader 
@@ -2465,7 +2465,7 @@ Private Sub Timer1_Timer()
    lblUsername.Caption = MapText("ผู้ใช้ : ") & " " & glbUser.USER_NAME
    lblUserGroup.Caption = MapText("กลุ่มผู้ใช้ : ") & " " & glbUser.GROUP_NAME
    
- Timer1.Enabled = True
+Timer1.Enabled = True
 End Sub
 Private Sub trvMain_NodeClick(ByVal Node As MSComctlLib.Node)
    If Node Is Nothing Then

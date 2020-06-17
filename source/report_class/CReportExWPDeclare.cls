@@ -37,6 +37,7 @@ Private Const DETAIL_SIZE = 12
 Private Const TITLE_FORMAT = "<32|<3|<5;"
 
 Private collUserAccount  As Collection
+Private collUser As Collection
 Public m_TempCol As Collection
 Private m_HeaderFormat1 As String
 Private m_HeaderFormat2 As String
@@ -58,6 +59,7 @@ Private Sub Class_Initialize()
    Set mcolParam = New Collection
    Set m_TempCol = New Collection
    Set collUserAccount = New Collection
+   Set collUser = New Collection
    
    Set m_Headers0 = New CFieldList
    Set m_Headers1 = New CFieldList
@@ -72,6 +74,7 @@ Private Sub Class_Terminate()
    Set Vsp = Nothing
    Set m_TempCol = Nothing
    Set collUserAccount = Nothing
+   Set collUser = Nothing
    
    Set m_Headers0 = Nothing
    Set m_Headers1 = Nothing
@@ -252,6 +255,7 @@ Dim DeclareCountStr As String
    
    Call LoadUserAccountByName(Nothing, collUserAccount)
    
+   
    DocNo = "เลขที่เอกสาร : " & EmptyToString(mcolParam("DOCUMENT_NO"), "N/A")
    DocDesc = "รายละเอียดเอกสาร : " & EmptyToString(mcolParam("DOCUMENT_DESC"), "N/A")
    DocDate = "ประกาศ ณ วันที่ : " & EmptyToString(DateToStringExtEx2(mcolParam("DOCUMENT_DATE")), "N/A")
@@ -299,6 +303,31 @@ End If
    initDoc = True
 End Function
 
+Private Sub getUser(Key As String, UserID As String)
+Dim tmpUser As CUser
+Dim Keys As String
+Keys = Key & "-" & Trim(UserID)
+ Set tmpUser = GetObject("CUser", collUser, Trim(Keys), False)
+      If tmpUser Is Nothing Then
+          Set tmpUser = New CUser
+          tmpUser.GROUP_ID = Key
+          tmpUser.USER_NAME = UserID
+          
+         Call collUser.add(tmpUser, Trim(Keys))
+         Set tmpUser = Nothing
+      End If
+
+
+'   If User <> UserCompare And Len(UserCompare) > 0 Then
+'     If User = "" Then
+'       User = UserCompare
+'     Else
+'       User = User & "," & UserCompare
+'     End If
+'   End If
+'   getUser = collTemp
+End Sub
+
 Private Function genDoc(isPreview As Boolean) As Boolean
 On Error GoTo ErrHandler
 Dim RName As String
@@ -323,8 +352,10 @@ Dim Sum1 As Double
 Dim Count1 As Double
 Dim DOCUMENT_TYPE As Long
 Dim MODIFY_BY As Long
+Dim CREATE_BY As String
 Dim userApproved As String
 Dim userVerify As String
+Dim PrevKey As String
 
    RName = "genDoc"
 '-----------------------------------------------------------------------------------------------------
@@ -355,8 +386,8 @@ Dim userVerify As String
       I = 0
      
 
-      Set BodyCf = New CReportField
-      DOCUMENT_TYPE = mcolParam("DOCUMENT_TYPE")
+   Set BodyCf = New CReportField
+   DOCUMENT_TYPE = mcolParam("DOCUMENT_TYPE")
    If mcolParam("AREA") = 1 Then
       For Each EWPI In m_TempCol
          I = I + 1
@@ -398,9 +429,12 @@ Dim userVerify As String
          Call Vsp.AddTable(strFormat, "", TempStr2)
          '=====
          
-         MODIFY_BY = EWPI.MODIFY_BY
-         userVerify = EWPI.VERIFY_NAME
-         userApproved = EWPI.APPROVED_NAME
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(str(EWPI.CREATE_BY)), False)
+         If Not Temp_LTK Is Nothing Then
+             Call getUser("1", Temp_LTK.USER_NAME)
+         End If
+         Call getUser("2", EWPI.VERIFY_NAME)
+         Call getUser("3", EWPI.APPROVED_NAME)
       Next EWPI
    ElseIf mcolParam("AREA") = 2 Then
      For Each EDCI In m_TempCol
@@ -484,6 +518,12 @@ Dim userVerify As String
             strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
             Call Vsp.AddTable(strFormat, "", TempStr2)
             '=====
+            Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(str(EDCI.CREATE_BY)), False)
+            If Not Temp_LTK Is Nothing Then
+                Call getUser("1", Temp_LTK.USER_NAME)
+            End If
+            Call getUser("2", EDCI.VERIFY_NAME)
+            Call getUser("3", EDCI.APPROVED_NAME)
          Next EDCI
    ElseIf mcolParam("AREA") = 3 Then
       For Each EPPI In m_TempCol
@@ -537,6 +577,12 @@ Dim userVerify As String
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
          Call Vsp.AddTable(strFormat, "", TempStr2)
          '=====
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(str(EPPI.CREATE_BY)), False)
+         If Not Temp_LTK Is Nothing Then
+             Call getUser("1", Temp_LTK.USER_NAME)
+         End If
+         Call getUser("2", EPPI.VERIFY_NAME)
+         Call getUser("3", EPPI.APPROVED_NAME)
       Next EPPI
    ElseIf mcolParam("AREA") = 4 Then
     For Each EPDI In m_TempCol
@@ -596,6 +642,12 @@ Dim userVerify As String
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
          Call Vsp.AddTable(strFormat, "", TempStr2)
          '=====
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(str(EPDI.CREATE_BY)), False)
+         If Not Temp_LTK Is Nothing Then
+             Call getUser("1", Temp_LTK.USER_NAME)
+         End If
+         Call getUser("2", EPDI.VERIFY_NAME)
+         Call getUser("3", EPDI.APPROVED_NAME)
       Next EPDI
    End If
       
@@ -605,7 +657,7 @@ Dim userVerify As String
        Vsp.FontBold = False
       Vsp = EmptyToString(mcolParam("DOCUMENT_NOTE"), "N/A")
          
-   Call PrintFooter(alngX, userVerify, userApproved, MODIFY_BY)
+   Call PrintFooter(alngX, userVerify, userApproved, CREATE_BY)
 
       Set BodyCf = Nothing
 
@@ -738,13 +790,16 @@ End Sub
 Private Sub VSP_StartDoc()
 'This event occur when VSPrinter.StartDoc is used and used to initialize some information before generating printed document
 End Sub
-Private Sub PrintFooter(alngX() As Long, VerifyName As String, ApprovedName As String, MODIFY_BY As Long)
+Private Sub PrintFooter(alngX() As Long, VerifyName As String, ApprovedName As String, CREATE_BY As String)
 Dim strFormat As String
 Dim strPrint As String
 Dim tempUserAccount As CUserAccount
 Dim createRealName As String
 Dim approveRealName As String
 Dim modifyRealName As String
+Dim strUser() As String
+Dim I As Long
+Dim tempUsers As CUser
 
    Vsp.TableBorder = tbNone
    Vsp.FontBold = False
@@ -753,38 +808,50 @@ Dim modifyRealName As String
    strPrint = ";"
    Call Vsp.AddTable(strFormat, "", strPrint)
    
-   Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(MODIFY_BY), False)
-   If Not Temp_LTK Is Nothing Then
-      modifyRealName = "(  " & Temp_LTK.REAL_NAME & "  )"
-   Else
-      modifyRealName = ""
-   End If
-         
+   For Each tempUsers In collUser
+     If tempUsers.GROUP_ID = 1 Then
+         Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(tempUsers.USER_NAME))
+         If Len(modifyRealName) = 0 Then
+          modifyRealName = "(  " & tempUserAccount.REAL_NAME & "  )"
+        Else
+         modifyRealName = modifyRealName & vbCrLf & "(  " & tempUserAccount.REAL_NAME & "  )"
+        End If
+      End If
+   Next tempUsers
    
-   Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(VerifyName))
-   createRealName = tempUserAccount.REAL_NAME
-   If Len(createRealName) > 0 Then
-      createRealName = "(  " & createRealName & "  )"
-   End If
-   Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(ApprovedName))
-   approveRealName = tempUserAccount.REAL_NAME
-   If Len(approveRealName) > 0 Then
-      approveRealName = "( " & approveRealName & " )"
-   End If
+   For Each tempUsers In collUser
+     If tempUsers.GROUP_ID = 2 Then
+         Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(tempUsers.USER_NAME))
+         If Len(createRealName) = 0 Then
+          createRealName = "(  " & tempUserAccount.REAL_NAME & "  )"
+        Else
+         createRealName = createRealName & vbCrLf & "(  " & tempUserAccount.REAL_NAME & "  )"
+        End If
+      End If
+   Next tempUsers
    
-   If Val(mcolParam("DECLARE_COUNT")) > 0 Then
-      Vsp.FontSize = 15
-      Vsp.FontBold = False
-      strFormat = VSP_CalTable("^15|^15|^15;", mdblWid, alngX)
-      strPrint = modifyRealName & "|" & createRealName & "|" & approveRealName & ";"
-      Call Vsp.AddTable(strFormat, "", strPrint)
-      
-      Vsp.FontSize = 12
-      Vsp.FontBold = True
-      strFormat = VSP_CalTable("^15|^15|^15;", mdblWid, alngX)
-      strPrint = "ผู้จัดทำ|ผู้ตรวจสอบ|ผู้อนุมัติ;"
-      Call Vsp.AddTable(strFormat, "", strPrint)
-   End If
+   For Each tempUsers In collUser
+     If tempUsers.GROUP_ID = 3 Then
+         Set tempUserAccount = GetObject("CUserAccount", collUserAccount, Trim(tempUsers.USER_NAME))
+         If Len(approveRealName) = 0 Then
+          approveRealName = "(  " & tempUserAccount.REAL_NAME & "  )"
+        Else
+         approveRealName = approveRealName & vbCrLf & "(  " & tempUserAccount.REAL_NAME & "  )"
+        End If
+      End If
+   Next tempUsers
+   
+   Vsp.FontSize = 15
+   Vsp.FontBold = False
+   strFormat = VSP_CalTable("^15|^15|^15;", mdblWid, alngX)
+   strPrint = modifyRealName & "|" & createRealName & "|" & approveRealName & ";"
+   Call Vsp.AddTable(strFormat, "", strPrint)
+   
+   Vsp.FontSize = 12
+   Vsp.FontBold = True
+   strFormat = VSP_CalTable("^15|^15|^15;", mdblWid, alngX)
+   strPrint = "ผู้จัดทำ|ผู้ตรวจสอบ|ผู้อนุมัติ;"
+   Call Vsp.AddTable(strFormat, "", strPrint)
 End Sub
 
 

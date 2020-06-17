@@ -38,6 +38,7 @@ Public CUSTOMER_NAME As String
 Public DELIVERY_CUS_ITEM_ID As Long
 Public DELIVERY_CUS_ITEM_CODE As String
 Public DELIVERY_CUS_ITEM_NAME As String
+Public HIDE_FLAG As String
 Public SocPartType As Long
 
 Public DECLARE_COUNT As Long
@@ -47,6 +48,8 @@ Public APPROVED_FLAG As String
 Public APPROVED_NAME As String
 Public VERIFY_FLAG As String
 Public VERIFY_NAME As String
+Public MODIFY_BY As Long
+Public CREATE_BY As Long
 
 Private Sub Class_Initialize()
    Set m_Conn = glbDatabaseMngr.DBConnection
@@ -162,6 +165,15 @@ Dim SubLen As Long
       End If
    End If
    
+   If Trim(HIDE_FLAG) <> "" Then
+      If WhereStr = "" Then
+         WhereStr = "WHERE (DCI.HIDE_FLAG = '" & ChangeQuote(Trim(HIDE_FLAG)) & "')"
+      Else
+         WhereStr = WhereStr & "AND (DCI.HIDE_FLAG = '" & ChangeQuote(Trim(HIDE_FLAG)) & "')"
+      End If
+   End If
+   '
+   
    OrderByStr = ""
    OrderTypeStr = ""
       
@@ -217,6 +229,9 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       APPROVED_NAME = NVLS(Rs("APPROVED_NAME"), "")
       VERIFY_FLAG = NVLS(Rs("VERIFY_FLAG"), "")
       VERIFY_NAME = NVLS(Rs("VERIFY_NAME"), "")
+      
+      MODIFY_BY = NVLI(Rs("MODIFY_BY"), -1)
+      CREATE_BY = NVLI(Rs("CREATE_BY"), -1)
    ElseIf Ind = 2 Then
       DECLARE_COUNT = NVLI(Rs("DECLARE_COUNT"), -1)
    ElseIf Ind = 3 Then

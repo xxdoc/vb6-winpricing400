@@ -489,6 +489,7 @@ Else
    txtRateCustomer.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 Private Sub cmdOK_Click()
@@ -528,6 +529,7 @@ Else
    txtRateCustomer.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 Private Sub Form_Activate()

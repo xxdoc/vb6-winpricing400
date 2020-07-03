@@ -135,26 +135,38 @@ Begin VB.Form frmAddEditExWorksPriceItem
       End
       Begin prjFarmManagement.uctlTextBox txtGP 
          Height          =   435
-         Left            =   6960
+         Left            =   10200
          TabIndex        =   4
-         Top             =   2520
+         Top             =   1140
          Width           =   855
          _ExtentX        =   1508
          _ExtentY        =   767
       End
+      Begin Threed.SSCheck chkEditGP 
+         Height          =   345
+         Left            =   10200
+         TabIndex        =   25
+         Top             =   1680
+         Width           =   3765
+         _ExtentX        =   6641
+         _ExtentY        =   609
+         _Version        =   131073
+         Caption         =   "chkEditGP"
+         TripleState     =   -1  'True
+      End
       Begin VB.Label lblGP 
          Alignment       =   1  'Right Justify
          Height          =   315
-         Left            =   5280
+         Left            =   9120
          TabIndex        =   24
-         Top             =   2520
-         Width           =   1575
+         Top             =   1140
+         Width           =   975
       End
       Begin Threed.SSCheck chkDeclareNew 
          Height          =   345
-         Left            =   8520
+         Left            =   8040
          TabIndex        =   5
-         Top             =   2640
+         Top             =   2520
          Width           =   3765
          _ExtentX        =   6641
          _ExtentY        =   609
@@ -377,7 +389,7 @@ Dim EWP As CExWorksPriceItem
       Call TempCollection.add(EWP)
    Else
          Set EWP = TempCollection(id)
-         If Check2Flag(chkDeclareNew.Value) = "Y" Then 'เข้าแก้ไขได้ต่อเมื่อ ยังไม่เคยประกาศราคามาก่อนเท่านั้น
+         If Check2Flag(chkDeclareNew.Value) = "Y" And Check2Flag(chkEditGP.Value) = "N" Then 'เข้าแก้ไขได้ต่อเมื่อ ยังไม่เคยประกาศราคามาก่อนเท่านั้น
             EWP.PART_TYPE = uctlPartTypeLookup.MyCombo.ItemData(Minus2Zero(uctlPartTypeLookup.MyCombo.ListIndex))
             EWP.PART_ITEM_ID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
             EWP.PART_NO = uctlPartLookup.MyTextBox.Text
@@ -389,11 +401,17 @@ Dim EWP As CExWorksPriceItem
             EWP.APPROVED_NAME = ""
             EWP.LAST_EDIT_FLAG = "Y"
             EWP.RATE_TYPE = 1
+            
+            txtGP.Text = ""
          Else
            EWP.LAST_EDIT_FLAG = "N"
          End If
          EWP.DECLARE_NEW_FLAG = Check2Flag(chkDeclareNew.Value)
-         EWP.GP_VALUE = Val(txtGP.Text)
+         
+        ' If Check2Flag(chkEditGP.Value) = "Y" Then
+            EWP.GP_VALUE = Val(txtGP.Text)
+        ' End If
+         
          If EWP.Flag <> "A" Then
             EWP.Flag = "E"
          End If
@@ -434,6 +452,7 @@ Else
    txtPackageRate.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 Private Sub cmdOK_Click()
@@ -472,7 +491,7 @@ Else
    txtPackageRate.SetFocus
    Call ParentForm.ShowGridItem
 End If
-
+m_HasModify = False
 End Sub
 
 '
@@ -584,10 +603,15 @@ Private Sub InitFormLayout()
    Call InitNormalLabel(lblGP, MapText("% GP"))
    
    chkDeclareNew.Visible = False
+   chkEditGP.Visible = False
    If ShowMode = SHOW_EDIT Then
       Call InitCheckBox(chkDeclareNew, "ประกาศราคาใหม่")
       chkDeclareNew.Visible = True
+      
+      Call InitCheckBox(chkEditGP, "แก้ไข GP")
+      chkEditGP.Visible = True
    End If
+   
    
    Call InitMainButton(cmdExit, MapText("ยกเลิก (ESC)"))
    Call InitMainButton(cmdOK, MapText("ตกลง (F2)"))
@@ -596,6 +620,7 @@ Private Sub InitFormLayout()
    If Not canShowGP Then
       lblGP.Visible = False
       txtGP.Visible = False
+      chkEditGP.Visible = False
    End If
 
 End Sub

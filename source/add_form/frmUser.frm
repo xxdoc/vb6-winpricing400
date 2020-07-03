@@ -299,7 +299,7 @@ Private Sub cmdDelete_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
    If Not VerifyAccessRight("ADMIN_USER_DELETE") Then
       Call EnableForm(Me, True)
       Exit Sub
@@ -308,26 +308,26 @@ Dim ID As Long
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
-   ID = GridEX1.Value(1)
+   id = GridEX1.Value(1)
    
-   Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
    If Not ConfirmDelete(GridEX1.Value(2)) Then
-      Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
       Exit Sub
    End If
 
    Call EnableForm(Me, False)
-   If Not glbAdmin.DeleteUserAccount(ID, IsOK, True, glbErrorLog) Then
+   If Not glbAdmin.DeleteUserAccount(id, IsOK, True, glbErrorLog) Then
       m_User.USER_ID = -1
       glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
-      Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
       Call EnableForm(Me, True)
       Exit Sub
    End If
    
    Call QueryData(True)
    
-   Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
    Call EnableForm(Me, True)
 End Sub
 
@@ -335,17 +335,17 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
    
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(1))
-   Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   id = Val(GridEX1.Value(1))
+   Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
                
-   frmAddEditUser.ID = ID
+   frmAddEditUser.id = id
    frmAddEditUser.HeaderText = MapText("แก้ไขผู้ใช้งาน")
    frmAddEditUser.ShowMode = SHOW_EDIT
    Load frmAddEditUser
@@ -359,7 +359,7 @@ Dim OKClick As Boolean
    If OKClick Then
       Call QueryData(True)
    End If
-   Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
 
 End Sub
 
@@ -399,11 +399,11 @@ Dim Temp As Long
       m_User.GROUP_ID = cboUserGroup.ItemData(Minus2Zero(cboUserGroup.ListIndex))
       Temp = cboUserStatus.ItemData(Minus2Zero(cboUserStatus.ListIndex))
       If Temp = 1 Then
-         m_User.USER_STATUS2 = "Y"
+         m_User.USER_STATUS3 = "Y"
       ElseIf Temp = 2 Then
-         m_User.USER_STATUS2 = "N"
+         m_User.USER_STATUS3 = "N"
       Else
-         m_User.USER_STATUS2 = ""
+         m_User.USER_STATUS3 = ""
       End If
       If Not glbAdmin.QueryUserAccount(m_User, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -605,7 +605,7 @@ Dim RealIndex As Long
    Values(3) = m_TempUser.GROUP_NAME
    Values(4) = m_TempUser.USER_DESC
    Values(5) = m_TempUser.REAL_NAME
-   Values(6) = m_TempUser.USER_STATUS2
+   Values(6) = m_TempUser.USER_STATUS3
    Values(7) = LogonStatus2Text(m_TempUser.LOGON_STATUS)
    Exit Sub
    

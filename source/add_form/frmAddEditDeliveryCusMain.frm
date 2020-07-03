@@ -4,15 +4,15 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditDeliveryCusMain 
    BackColor       =   &H80000000&
-   ClientHeight    =   9435
+   ClientHeight    =   9450
    ClientLeft      =   120
    ClientTop       =   405
-   ClientWidth     =   11910
+   ClientWidth     =   11970
    Icon            =   "frmAddEditDeliveryCusMain.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
-   ScaleHeight     =   9435
-   ScaleWidth      =   11910
+   ScaleHeight     =   9450
+   ScaleWidth      =   11970
    StartUpPosition =   1  'CenterOwner
    Begin Threed.SSFrame SSFrame1 
       Height          =   9495

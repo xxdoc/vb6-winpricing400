@@ -59,6 +59,7 @@ Begin VB.Form frmAddEditDeliveryCus
          Left            =   1860
          TabIndex        =   8
          Top             =   1920
+         Visible         =   0   'False
          Width           =   1065
          _ExtentX        =   1879
          _ExtentY        =   767
@@ -161,7 +162,7 @@ Private Sub InitFormLayout()
    
    Call InitNormalLabel(lblCode, MapText("รหัสสถานที่"))
    Call InitNormalLabel(lblName, MapText("ชื่อสถานที่จัดส่ง"))
-   Call InitCheckBox(chkHide, "ยกเลิก")
+'   Call InitCheckBox(chkHide, "ยกเลิก")
    
    Call txtCode.SetTextLenType(TEXT_STRING, glbSetting.DESC_TYPE)
    Call txtName.SetTextLenType(TEXT_STRING, glbSetting.DESC_TYPE)
@@ -188,7 +189,7 @@ Dim DC As CDeliveryCus
          
          txtCode.Text = DC.DELIVERY_CUS_ITEM_CODE
          txtName.Text = DC.DELIVERY_CUS_ITEM_NAME
-         chkHide.Value = FlagToCheck(DC.HIDE_FLAG)
+'         chkHide.Value = FlagToCheck(DC.HIDE_FLAG)
       Else
         txtCode.Text = CustomerCode & "-"
       End If
@@ -237,7 +238,7 @@ Dim RealIndex As Long
       DC.Flag = "A"
       DC.DELIVERY_CUS_ITEM_CODE = txtCode.Text
       DC.DELIVERY_CUS_ITEM_NAME = txtName.Text
-      DC.HIDE_FLAG = Check2Flag(chkHide.Value)
+'      DC.HIDE_FLAG = Check2Flag(chkHide.Value)
       Call TempCollection.add(DC, Trim(txtCode.Text))
    Else
       Set DC = TempCollection.Item(id)
@@ -245,15 +246,15 @@ Dim RealIndex As Long
          DC.Flag = "E"
          DC.DELIVERY_CUS_ITEM_CODE = txtCode.Text
          DC.DELIVERY_CUS_ITEM_NAME = txtName.Text
-         DC.HIDE_FLAG = Check2Flag(chkHide.Value)
+'         DC.HIDE_FLAG = Check2Flag(chkHide.Value)
       End If
    End If
    SaveData = True
 End Function
 
-Private Sub chkHide_Click(Value As Integer)
-   m_HasModify = True
-End Sub
+'Private Sub chkHide_Click(Value As Integer)
+'   m_HasModify = True
+'End Sub
 
 Private Sub cmdExit_Click()
    If Not ConfirmExit(m_HasModify) Then

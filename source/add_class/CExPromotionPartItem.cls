@@ -162,7 +162,7 @@ Dim SubLen As Long
       
    If Ind = 1 Then
       If OrderBy = 1 Then
-         OrderByStr = "ORDER BY  PI.PART_NO "
+         OrderByStr = "ORDER BY  CM.CUSTOMER_CODE ASC,PI.PART_NO "
       ElseIf OrderBy = 2 Then
          OrderByStr = "ORDER BY EPPI.EX_PROMOTION_PART_ITEM_ID "
       Else

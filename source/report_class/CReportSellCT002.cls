@@ -162,32 +162,51 @@ Dim iCount As Long
    
    Set Cf = New CReportField
    
+   Call Cf.SetFieldValue(8, "^", "ข้อมูลเอกสาร", "^")
+   Call m_Headers0.AddField(Cf)
+   If mcolParam("SHOW_PART_NO_FLAG") = 1 Then
+      Call Cf.SetFieldValue(18, "^", "ข้อมูลราคาสินค้า/หน่วย", "^")
+   Else
+       Call Cf.SetFieldValue(13, "^", "ข้อมูลราคาสินค้า/หน่วย", "^")
+   End If
+   Call m_Headers0.AddField(Cf)
+   Call Cf.SetFieldValue(6, "^", "ข้อมูลราคาค่าขนส่ง/หน่วย", "^")
+   Call m_Headers0.AddField(Cf)
+   Call Cf.SetFieldValue(12, "^", "ข้อมูลอื่นๆที่คิดเพิ่มจากราคาประกาศ/หน่วย", "^")
+   Call m_Headers0.AddField(Cf)
+   If mcolParam("SHOW_EDIT_PRICE_FLAG") = 1 Then
+      Call Cf.SetFieldValue(11, "^", "ข้อมูลราคาขายจริง", "^")
+   Else
+      Call Cf.SetFieldValue(9, "^", "ข้อมูลราคาขายจริง", "^")
+   End If
+   Call m_Headers0.AddField(Cf)
+   
    Call Cf.SetFieldValue(2, "^", "NO.", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "เลขที่เอกสาร", "^")
+   Call Cf.SetFieldValue(3, "^", "เลขที่", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "วันที่เอกสาร", "^")
+   Call Cf.SetFieldValue(3, "^", "วันที่", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(5, "^", "รหัสสินค้า", "<")
+   Call Cf.SetFieldValue(5, "^", "รหัส", "<")
    Call m_Headers1.AddField(Cf)
    If mcolParam("SHOW_PART_NO_FLAG") = 1 Then
-      Call Cf.SetFieldValue(5, "^", "ชื่อสินค้า", "<")
+      Call Cf.SetFieldValue(5, "^", "ชื่อ", "<")
       Call m_Headers1.AddField(Cf)
    Else
-      Call Cf.SetFieldValue(0, "^", "ชื่อสินค้า", "<")
+      Call Cf.SetFieldValue(0, "^", "ชื่อ", "<")
       Call m_Headers1.AddField(Cf)
    End If
    Call Cf.SetFieldValue(2, "^", "จำนวน", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ราคา/หน่วย", ">")
+   Call Cf.SetFieldValue(2, "^", "ราคา", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ลดปรกติ", ">")
+   Call Cf.SetFieldValue(2, "^", "ลดหน้าบิล", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ลดเพิ่ม", ">")
+   Call Cf.SetFieldValue(2, "^", "ลดหลังบิล", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ค่าขนส่ง", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ลดปรกติ", ">")
+   Call Cf.SetFieldValue(2, "^", "ส่วนลด", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ลดเพิ่ม", ">")
    Call m_Headers1.AddField(Cf)
@@ -207,20 +226,25 @@ Dim iCount As Long
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "คิดแบบ", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "รวมขายเฉลี่ย", ">")
+   Call Cf.SetFieldValue(2, "^", "ขายจริง", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(3, "^", "มูลค่าขาย", ">")
    Call m_Headers1.AddField(Cf)
    If mcolParam("SHOW_EDIT_PRICE_FLAG") = 1 Then
-      Call Cf.SetFieldValue(2, "^", "ผู้อนุมัติราคา", "^")
+      Call Cf.SetFieldValue(2, "^", "อนุมัติ", "^")
       Call m_Headers1.AddField(Cf)
     Else
-      Call Cf.SetFieldValue(0, "^", "ผู้อนุมัติราคา", "^")
+      Call Cf.SetFieldValue(0, "^", "อนุมัติ", "^")
       Call m_Headers1.AddField(Cf)
    End If
    
    Set Cf = Nothing
-            
+
+   Call m_Headers0.GetString(1, TempStr1, TempStr1_1)
+   strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+   strPrint = TempStr1_1
+   Call Vsp.AddTable(strFormat, "", strPrint)
+   
   Call m_Headers1.GetString(1, TempStr1, TempStr1_1)
    strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
    strPrint = TempStr1_1
@@ -246,7 +270,7 @@ Dim ToDate As String
    mblnNewPage = True
    mblnEndPage = True
    Vsp.PaperSize = pprA4 '
-   Vsp.ORIENTATION = orPortrait
+   Vsp.ORIENTATION = orLandscape
    Vsp.MarginBottom = 1440
    Vsp.MarginFooter = 1440
    Vsp.MarginHeader = 1440
@@ -496,6 +520,8 @@ Dim AMOUNT As Double
             Else
                Amt = 0
             End If
+            Amt = Amt + FormatNumber(Di.DISCOUNT_EXTRA_AMOUNT_PART, -1)
+            
              TempStr = IIf(Amt > 0, "(" & FormatNumber(Amt, -1) & ")", Amt)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)

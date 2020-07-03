@@ -184,7 +184,7 @@ ElseIf mcolParam("AREA") = 2 Then
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(10, "^", "น้ำหนัก(กก.)", ">")
    Call m_Headers1.AddField(Cf)
-ElseIf mcolParam("AREA") = 3 Then
+ElseIf mcolParam("AREA") = 3 Or mcolParam("AREA") = 5 Then
    Call Cf.SetFieldValue(7, "^", "ลำดับที่", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(10, "^", "รหัสลูกค้า", "<")
@@ -262,17 +262,6 @@ Dim DeclareCountStr As String
    FromDate = "มีผล วันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("FROM_DATE")), "N/A")
    ToDate = "สิ้นสุด วันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("TO_DATE")), "N/A")
 
-'   If Val(mcolParam("DOCUMENT_TYPE")) = 1 Then 'ตรวจสอบ
-'      ReportHeader = "รายงานการตรวจสอบราคาสินค้าหน้าโรงงาน"
-'   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 3 Then 'อนุมัติ
-'      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงาน"
-'   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 5 Then 'เฉพาะที่ประกาศใหม่ผ่านการอนุมัติแล้วทั้งหมด
-'      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงานที่ประกาศใหม่"
-'   ElseIf Val(mcolParam("DOCUMENT_TYPE")) = 7 Then 'ผ่านการอนุมัติแล้วทั้งหมด
-'      ReportHeader = "รายงานการอนุมัติราคาสินค้าหน้าโรงงานทั้งหมด"
-'   End If
-'   MODULE_DESC = vbCrLf & glbEnterPrise.ENTERPRISE_NAME & " , " & glbEnterPrise.BRANCH_NAME & vbCrLf & _
-'                                      ReportHeader & vbCrLf & DocNo & vbCrLf & DocDate & "  " & FromDate & "  " & ToDate   DECLARE_COUNT
 If Val(mcolParam("DECLARE_COUNT")) > 0 Then
    DeclareCountStr = " ครั้งที่ " & Val(mcolParam("DECLARE_COUNT"))
    If Val(mcolParam("DECLARE_COUNT")) > 1 Then
@@ -289,6 +278,8 @@ ElseIf mcolParam("AREA") = 3 Then
    ReportHeader = "ใบประกาศส่วนลดราคาอาหารสัตว์ในเครือมิตรภาพ"
 ElseIf mcolParam("AREA") = 4 Then
    ReportHeader = "ใบประกาศส่วนลดราคาค่าขนส่งในเครือมิตรภาพ"
+ElseIf mcolParam("AREA") = 5 Then
+   ReportHeader = "ใบประกาศส่วนลดพิเศษราคาอาหารสัตว์ในเครือมิตรภาพ"
 End If
 
    MODULE_DESC = vbCrLf & ReportHeader
@@ -525,7 +516,7 @@ Dim PrevKey As String
             Call getUser("2", EDCI.VERIFY_NAME)
             Call getUser("3", EDCI.APPROVED_NAME)
          Next EDCI
-   ElseIf mcolParam("AREA") = 3 Then
+   ElseIf mcolParam("AREA") = 3 Or mcolParam("AREA") = 5 Then
       For Each EPPI In m_TempCol
          I = I + 1
           J = 0
@@ -651,11 +642,14 @@ Dim PrevKey As String
       Next EPDI
    End If
       
-      Vsp = ""
+   Vsp = ""
+      
+   If Len(mcolParam("DOCUMENT_NOTE")) > 0 Then
       Vsp.FontBold = True
        Vsp = "หมายเหตุ : "
        Vsp.FontBold = False
-      Vsp = EmptyToString(mcolParam("DOCUMENT_NOTE"), "N/A")
+      Vsp = EmptyToString(mcolParam("DOCUMENT_NOTE"), "")
+   End If
          
    Call PrintFooter(alngX, userVerify, userApproved, CREATE_BY)
 

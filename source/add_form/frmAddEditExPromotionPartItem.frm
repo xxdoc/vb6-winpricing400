@@ -255,8 +255,6 @@ Private Const ROOT_TREE = "Root"
 Private m_HasActivate As Boolean
 Private m_HasModify As Boolean
 Private m_Rs As ADODB.Recordset
-'Private m_Features As Collection
-'Private m_FeatureTypes As Collection
 Private m_TempCol As Collection
 Private EX_WORKS_PRICE_ITEM_ID As Long
 Private EX_WORKS_PRICE_ID As Long
@@ -338,7 +336,7 @@ Dim tempEPPI As CExPromotionPartItem
       Exit Function
    End If
    
-    If Not m_HasModify Then
+   If Not m_HasModify Then
       SaveData = True
       Exit Function
    End If
@@ -418,7 +416,7 @@ Dim Cm As CCustomer
 Dim Pt As CPartItem
  If Not SaveData Then
       Exit Sub
-   End If
+End If
 If ShowMode = SHOW_EDIT Then
    id = GetNextID(id, TempCollection)
    Set D = TempCollection(id)
@@ -441,6 +439,7 @@ Else
    txtDiscountRate.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 Private Sub cmdOK_Click()
@@ -479,6 +478,7 @@ Else
    txtDiscountRate.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 '

@@ -206,7 +206,7 @@ ElseIf mcolParam("AREA") = 2 Then
       Call Cf.SetFieldValue(20, "^", "ผู้อนุมัติ", "^")
       Call m_Headers1.AddField(Cf)
    End If
-ElseIf mcolParam("AREA") = 3 Then
+ElseIf mcolParam("AREA") = 3 Or mcolParam("AREA") = 5 Then
    Call Cf.SetFieldValue(7, "^", "NO.", "^")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(10, "^", "รหัสลูกค้า", "<")
@@ -558,7 +558,7 @@ Dim DOCUMENT_TYPE As Long
             Call Vsp.AddTable(strFormat, "", TempStr2)
             '=====
          Next EDCI
-      ElseIf mcolParam("AREA") = 3 Then
+      ElseIf mcolParam("AREA") = 3 Or mcolParam("AREA") = 5 Then
          For Each EPPI In m_TempCol
          I = I + 1
           J = 0

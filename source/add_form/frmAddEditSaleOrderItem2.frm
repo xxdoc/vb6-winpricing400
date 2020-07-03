@@ -18,6 +18,7 @@ Begin VB.Form frmAddEditSaleOrderItem2
    EndProperty
    Icon            =   "frmAddEditSaleOrderItem2.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   8325
@@ -301,7 +302,7 @@ Begin VB.Form frmAddEditSaleOrderItem2
          Height          =   405
          Left            =   7320
          TabIndex        =   57
-         Top             =   3120
+         Top             =   2760
          Width           =   1455
          _ExtentX        =   2566
          _ExtentY        =   714
@@ -355,7 +356,7 @@ Begin VB.Form frmAddEditSaleOrderItem2
          Left            =   240
          TabIndex        =   50
          Top             =   3240
-         Width           =   6915
+         Width           =   9075
       End
       Begin Threed.SSCheck chkManualName 
          Height          =   435
@@ -618,6 +619,7 @@ Private m_ManualFlag As Boolean
 Public m_ExWorkPricesItem As Collection
 Public m_ExDeliveryCostItem As Collection
 Public m_ExPromotionPartItem As Collection
+Public m_ExPromotionExtraPartItem As Collection
 Public m_ExPromotionDlcItem As Collection
 Public m_Customers As Collection
 Public m_DeliveryCus As Collection
@@ -661,6 +663,7 @@ Private TempD3 As CDoItem
 Private EditPriceFlag As Boolean
 Private TempUserName As String
 Private TempUserName2 As String
+Private CustomerCanFree As Boolean
 
 Private Sub cboTextType_Click()
    m_HasModify = True
@@ -1071,6 +1074,7 @@ Dim Ei As CLotItem
             Tdi.PACKAGE_RATE = Di.PACKAGE_RATE
             Tdi.RATE_CUSTOMER = Di.RATE_CUSTOMER
             Tdi.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_AMOUNT_PART
+            Tdi.DISCOUNT_EXTRA_AMOUNT_PART = Di.DISCOUNT_EXTRA_AMOUNT_PART
             Tdi.DISCOUNT_AMOUNT_DLC = Di.DISCOUNT_AMOUNT_DLC
          
             Tdi.PRO_COMMISSION_BAG = Di.PRO_COMMISSION_BAG
@@ -1091,9 +1095,21 @@ Dim Ei As CLotItem
             Set TempData = New Collection
             Call TempData.add(Tdi, Trim(str(CUSTOMER_ID)))
             Call showDetail(TempData)
+            
+            
+         
+      
+      
          End If
       End If
    End If
+   
+Set TempD2 = GetObject("CCustomer", m_Customers, Trim(str(CUSTOMER_ID)), False) 'ตรวจสอบก่อนว่า ลูกค้าคนนี้สามารถขายสินค้าที่ตั้งราคาเป็น 0 ได้หรือไม่
+If Not TempD2 Is Nothing Then
+   If TempD2.FREE_PRICE_FLAG = "Y" Then
+     CustomerCanFree = True
+   End If
+End If
    
    Call EnableForm(Me, True)
 End Sub
@@ -1214,16 +1230,23 @@ Dim OldPackAmount As Double
       Exit Function
    End If
    
-      Set TempD2 = GetObject("CCustomer", m_Customers, Trim(str(CUSTOMER_ID)), False) 'ตรวจสอบก่อนว่า ลูกค้าคนนี้สามารถขายสินค้าที่ตั้งราคาเป็น 0 ได้หรือไม่
-      If Not TempD2 Is Nothing Then
-         If TempD2.FREE_PRICE_FLAG = "N" Then
-            If Val(txtPricePerPack.Text) <= 0 Then
+'      Set TempD2 = GetObject("CCustomer", m_Customers, Trim(str(CUSTOMER_ID)), False) 'ตรวจสอบก่อนว่า ลูกค้าคนนี้สามารถขายสินค้าที่ตั้งราคาเป็น 0 ได้หรือไม่
+'      If Not TempD2 Is Nothing Then
+        If Not CustomerCanFree Then
+           If Val(txtPricePerPack.Text) <= 0 Then
                glbErrorLog.LocalErrorMsg = "ราคาสินค้าต้องไม่มีค่าเป็น 0"
                glbErrorLog.ShowUserError
                Exit Function
             End If
-         End If
-      End If
+        End If
+'         If TempD2.FREE_PRICE_FLAG = "N" Then
+'            If Val(txtPricePerPack.Text) <= 0 Then
+'               glbErrorLog.LocalErrorMsg = "ราคาสินค้าต้องไม่มีค่าเป็น 0"
+'               glbErrorLog.ShowUserError
+'               Exit Function
+'            End If
+'         End If
+'      End If
 
 
    
@@ -1232,64 +1255,12 @@ Dim OldPackAmount As Double
       Exit Function
    End If
    
-   If DocumentType = 18 Then
-'      Dim Ri As CReceiptItem
-'      If ShowMode = SHOW_ADD Then
-'         Set Ri = New CReceiptItem
+'   If DocumentType = 18 Then
 '
-'         Ri.Flag = "A"
-'         Call TempCollection.add(Ri)
-'      Else
-'         Set Ri = TempCollection.Item(ID)
-'         If Ri.Flag <> "A" Then
-'            Ri.Flag = "E"
-'         End If
-'      End If
-'
-'      If radStock.Value Then
-'         Ri.PART_ITEM_ID = uctlPartLookup.MyCombo.ItemData(Minus2Zero(uctlPartLookup.MyCombo.ListIndex))
-'      Else
-'         Ri.PART_ITEM_ID = -1
-'      End If
-'      Ri.PART_NO = uctlPartLookup.MyTextBox.Text
-'      Ri.PART_DESC = uctlPartLookup.MyCombo.Text
-'      Ri.RETURN_AMOUNT = txtQuantity.Text
-'      Ri.LOCATION_ID = uctlToLocationLookup.MyCombo.ItemData(Minus2Zero(uctlToLocationLookup.MyCombo.ListIndex))
-'      Ri.LOCATION_NAME = uctlToLocationLookup.MyCombo.Text
-'      If m_Sp.PARAM_VALUE = "Y" Then
-'         Ri.PART_TYPE = -1
-'      Else
-'         Ri.PART_TYPE = uctlPigTypeLookup.MyCombo.ItemData(Minus2Zero(uctlPigTypeLookup.MyCombo.ListIndex))
-'      End If
-'      Ri.RETURN_TOTAL_PRICE = Val(Format(Val(txtTotalPrice.Text), "0.00")) 'แปลงให้เป็น 2 ตำแหน่งด้วย
-'      Ri.AVG_PRICE = Val(txtAvgPrice.Text)
-'      Ri.RETURN_AVG_PRICE = Val(txtReturnAvg.Text)
-'      Ri.AVG_WEIGHT = 0
-'      Ri.FEATURE_ID = uctlFeatureLookup.MyCombo.ItemData(Minus2Zero(uctlFeatureLookup.MyCombo.ListIndex))
-'      Ri.FEATURE_CODE = uctlFeatureLookup.MyTextBox.Text
-'      Ri.FEATURE_DESC = uctlFeatureLookup.MyCombo.Text
-'      Ri.RETURN_DISCOUNT_AMOUNT = Val(Format(Val(txtDiscount.Text), "0.00"))  'แปลงให้เป็น 2 ตำแหน่งด้วย
-'      Ri.CONFIG_CODE = CreateConfigFlag()
-'      Ri.ITEM_DESC = txtManual.Text
-'      Ri.DISPLAY_ID = GetDisplayID
-'      Ri.COUNTRY_CURRENCY1 = COUNTRY_CURRENCY1
-'      Ri.COUNTRY_CURRENCY2 = COUNTRY_CURRENCY2
-'      Ri.WEIGHT_PER_PACK = Val(txtWeightPerPack.Text)
-'      Ri.PACK_AMOUNT = Val(txtPackAmount.Text)
-'      Ri.PRICE_PER_PACK = Val(txtPricePerPack.Text)
-'      Ri.DISCOUNT_PER_PACK = Val(txtDiscountPerPack.Text)
-'      Ri.MANUAL_FLAG = Check2Flag(chkManualName.Value)
-'      Ri.MANUAL_CODE = txtManualCode.Text
-'      Ri.MANUAL_NAME = txtManualName.Text
-'      Ri.TRANSFER_WAGE = Val(txtTransferWage.Text)
-'      Ri.STD_TRANSFER_CHARGE = Val(Format(Val(txtStdTrfCharge.Text), "0.00")) 'แปลงให้เป็น 2 ตำแหน่งด้วย
-
-   
-   Else
+'   Else
       Dim Di As CSaleOrder
       If ShowMode = SHOW_ADD Then
          Set Di = New CSaleOrder
-   
          Di.Flag = "A"
          Call TempCollection.add(Di)
       Else
@@ -1359,6 +1330,7 @@ Dim OldPackAmount As Double
          Di.PRO_OTHER3_KG = TempD3.PRO_OTHER3_KG
          
          Di.EX_PROMOTION_PART_ITEM_ID = TempD3.EX_PROMOTION_PART_ITEM_ID
+         Di.EX_PROMOTION_EXTRA_PART_ITEM_ID = TempD3.EX_PROMOTION_EXTRA_PART_ITEM_ID
          Di.EX_PROMOTION_DLC_ITEM_ID = TempD3.EX_PROMOTION_DLC_ITEM_ID
          
          TempD3.SUM_RATE_OTHER_BAG = TempD3.PRO_COMMISSION_BAG + TempD3.PRO_CHEER_BAG + TempD3.PRO_DST_BAG + TempD3.PRO_OTHER1_BAG + TempD3.PRO_OTHER2_BAG + TempD3.PRO_OTHER3_BAG
@@ -1371,20 +1343,24 @@ Dim OldPackAmount As Double
          SumOther = TempD3.SUM_RATE_OTHER_KG
       End If
       If PRICE_THINK_TYPE = 1 Then 'มารับเอง
-         tRate = TempD3.PACKAGE_RATE + SumOther
-            If Val(txtPricePerPack.Text) >= tRate Then
+         tRate = TempD3.PACKAGE_RATE + SumOther - TempD3.DISCOUNT_EXTRA_AMOUNT_PART
+            If Val(txtPricePerPack.Text) >= tRate Then 'ถ้าไม่มีการลดราคาจากที่โปรแกรมคำนวณ
                 Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK
+                Di.DISCOUNT_EXTRA_AMOUNT_PART = TempD3.DISCOUNT_EXTRA_AMOUNT_PART
             Else
-                  Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (tRate - Val(txtPricePerPack.Text))
+                  'Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (tRate - Val(txtPricePerPack.Text))
+                  Di.DISCOUNT_EXTRA_AMOUNT_PART = TempD3.DISCOUNT_EXTRA_AMOUNT_PART + (tRate - Val(txtPricePerPack.Text))
             End If
       ElseIf PRICE_THINK_TYPE = 2 Then 'รวมค่าขนส่ง
-          tRate = TempD3.PACKAGE_RATE + TempD3.RATE_CUSTOMER + SumOther - TempD3.DISCOUNT_AMOUNT_DLC
+          tRate = TempD3.PACKAGE_RATE + TempD3.RATE_CUSTOMER - TempD3.DISCOUNT_EXTRA_AMOUNT_PART + SumOther - TempD3.DISCOUNT_AMOUNT_DLC
             If radStock.Value Then
                If Val(txtPricePerPack.Text) >= tRate Then
                    Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK
+                   Di.DISCOUNT_EXTRA_AMOUNT_PART = TempD3.DISCOUNT_EXTRA_AMOUNT_PART
                    Di.DISCOUNT_AMOUNT_DLC = TempD3.DISCOUNT_AMOUNT_DLC
                Else
-                  Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (tRate - Val(txtPricePerPack.Text))
+'                  Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (tRate - Val(txtPricePerPack.Text))
+                  Di.DISCOUNT_EXTRA_AMOUNT_PART = TempD3.DISCOUNT_EXTRA_AMOUNT_PART + (tRate - Val(txtPricePerPack.Text))
                   Di.DISCOUNT_AMOUNT_DLC = TempD3.DISCOUNT_AMOUNT_DLC
                End If
             End If
@@ -1406,42 +1382,16 @@ Dim OldPackAmount As Double
                  End If
                Next Tdi
             ElseIf radStock.Value Then
-             tRate = TempD3.PACKAGE_RATE + SumOther
+             tRate = TempD3.PACKAGE_RATE - TempD3.DISCOUNT_EXTRA_AMOUNT_PART + SumOther
                If Val(txtPricePerPack.Text) >= tRate Then
                    Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK
+                   Di.DISCOUNT_EXTRA_AMOUNT_PART = TempD3.DISCOUNT_EXTRA_AMOUNT_PART
                Else
-                     Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (tRate - Val(txtPricePerPack.Text))
+'                     Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (tRate - Val(txtPricePerPack.Text))
+                     Di.DISCOUNT_EXTRA_AMOUNT_PART = TempD3.DISCOUNT_EXTRA_AMOUNT_PART + (tRate - Val(txtPricePerPack.Text))
                End If
             End If
          End If
-         
-'          If CurrentPricePerPack > NewPricePerPack And EditPriceFlag Then
-'            If radFeature.Value Then
-'               Di.DISCOUNT_AMOUNT_DLC = TempD3.DISCOUNT_AMOUNT_DLC + (Di.RATE_CUSTOMER - NewPricePerPack)
-'               Dim Tdi As CSaleOrder
-'               For Each Tdi In TempCollection
-'                 If Tdi.PART_ITEM_ID > 0 And (Tdi.WEIGHT_PER_PACK = Di.WEIGHT_PER_PACK) Then
-'                     If Tdi.Flag <> "A" Then
-'                        Tdi.Flag = "E"
-'                     End If
-'                     Tdi.DISCOUNT_AMOUNT_DLC = Di.DISCOUNT_AMOUNT_DLC
-'                 End If
-'               Next Tdi
-'            ElseIf radStock.Value Then
-'               Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (Di.PACKAGE_RATE - NewPricePerPack) 'TempD3.DISCOUNT_AMOUNT_PART +
-'               Di.DISCOUNT_AMOUNT_DLC = TempD3.DISCOUNT_AMOUNT_DLC
-'            End If
-'         Else
-'            If NewPricePerPack >= Di.PACKAGE_RATE Then
-'               Di.DISCOUNT_AMOUNT_PART = 0
-'               Di.DISCOUNT_AMOUNT_DLC = 0
-'            Else
-'               'Di.DISCOUNT_AMOUNT_PART = TempD3.DISCOUNT_AMOUNT_PART
-'                Di.DISCOUNT_AMOUNT_PART = Di.DISCOUNT_PER_PACK + (Di.PACKAGE_RATE - Val(txtPricePerPack.Text))
-'               Di.DISCOUNT_AMOUNT_DLC = TempD3.DISCOUNT_AMOUNT_DLC
-'            End If
-'
-'         End If
 
          If (PRICE_THINK_TYPE = 1) Then
             Di.EX_DELIVERY_COST_ITEM_ID = -1
@@ -1458,7 +1408,6 @@ Dim OldPackAmount As Double
       Dim Di2 As CSaleOrder
       Dim TempDI As CSaleOrder
       
-'      If TypeSale = 1 Or TypeSale = 3 Then 'ถ้าเป็นการแก้ไข ให้เข้าไปสร้าง key ของ ค่าขนส่งก่อน
       If TypeSale = 1 Then  'เข้าไปสร้าง key ของ ค่าขนส่งก่อน
          Dim TempCollection2 As Collection
             Set TempCollection2 = New Collection
@@ -1479,7 +1428,6 @@ Dim OldPackAmount As Double
             Next TempDI
       End If
       
-'      If (PRICE_THINK_TYPE = 3 And TypeSale = 1) Or (PRICE_THINK_TYPE = 3 And TypeSale = 3) Then 'สร้างค่าขนส่งอัตโนมัติ เมื่อเป็นการคิดแบบแยกค่าขนส่ง
       If (PRICE_THINK_TYPE = 3 And TypeSale = 1) Then  'สร้างค่าขนส่งอัตโนมัติ เมื่อเป็นการคิดแบบแยกค่าขนส่ง
           If Di.PART_ITEM_ID > 0 Then '
                Set Di2 = GetObject("CSaleOrder", TempCollection, Trim("-1") & "-" & Trim(str(Di.WEIGHT_PER_PACK)), False)
@@ -1531,8 +1479,8 @@ Dim OldPackAmount As Double
          Call calExDeliveryCost(DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, Val(txtWeightPerPack.Text), PartType, PRICE_THINK_TYPE, m_ExDeliveryCostItem, m_Customers, RateDeliveryCost, RateDeliveryCostFlag, EX_DELIVERY_COST_ITEM_ID)
          Call calExPromotionDls(DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, Val(txtWeightPerPack.Text), PartType, PRICE_THINK_TYPE, m_ExPromotionDlcItem, m_Customers, RatePromotionDlc, RatePromotionDlcFlag, EX_PROMOTION_DLC_ITEM_ID)
                
-               Di2.DISCOUNT_PER_PACK = RatePromotionDlc 'Val(txtDiscountPerPack.Text)
-               Di2.PRICE_PER_PACK = RateDeliveryCost '- RatePromotionDlc '- Di2.DISCOUNT_PER_PACK
+               Di2.DISCOUNT_PER_PACK = RatePromotionDlc
+               Di2.PRICE_PER_PACK = RateDeliveryCost
               Di2.DISCOUNT_AMOUNT = RatePromotionDlc * Di2.PACK_AMOUNT
                 
                Di2.ITEM_AMOUNT = Di2.WEIGHT_PER_PACK * Di2.PACK_AMOUNT
@@ -1580,14 +1528,16 @@ Dim OldPackAmount As Double
                       End If
                   End If
       End If
-   End If
+'   End If
    
    SaveData = True
 End Function
 
 Private Sub cmdUpdatePrice_Click()
 Dim ExPromotionPart As Double
+Dim ExPromotionExtraPart As Double
 Dim ExPromotionDlc As Double
+Dim nPrice As Double
 If TypeSale = 1 Then
   If radStock.Value Then
    If Not VerifyCombo(lblPart, uctlPartLookup.MyCombo, False) Then
@@ -1597,8 +1547,15 @@ End If
 If radFeature.Value Then
    Exit Sub
 End If
- txtPricePerPack.Text = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionDlc)
-If txtPricePerPack.Text > 0 Then
+ nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionExtraPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionExtraPart, ExPromotionDlc)
+
+CurrentPricePerPack = Val(txtPricePerPack.Text)
+'If nPrice = -99 Then
+'   nPrice = 0
+'End If
+txtPricePerPack.Text = nPrice
+               
+If nPrice > 0 Then
    txtPricePerPack.Enabled = True
 Else
   txtPricePerPack.Enabled = False
@@ -2089,6 +2046,10 @@ Private Sub CheckPricePerPack()
       Exit Sub
    End If
    
+   If CustomerCanFree = True Then 'ถ้าลูกค้าคนนี้ สามารถขายอาหารทดลองได้ก็ให้ออกไปเลย
+      Exit Sub
+   End If
+   
    If Val(txtPricePerPack.Text) < CurrentPricePerPack Then
       txtPricePerPack.Text = CurrentPricePerPack
       glbErrorLog.LocalErrorMsg = "ราคาใหม่ที่ระบุต้องมากกว่าราคาเดิม"
@@ -2100,7 +2061,7 @@ Private Sub CheckPricePerPack()
       glbErrorLog.ShowUserError
        Exit Sub
     Else
-     CurrentPricePerPack = NewPricePerPack 'Val(txtPricePerPack.Text)
+     CurrentPricePerPack = NewPricePerPack
     End If
 End Sub
 Private Sub txtPricePerPack_LostFocus()
@@ -2113,15 +2074,16 @@ Dim Temp As Double
     Call CheckPricePerPack
   ElseIf EditPriceFlag Then
    Dim nPrice As Double
-   nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, 0, 0)
+   nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionExtraPartItem, m_ExPromotionDlcItem, 0, 0, 0)
    'การลดห้ามลดเกิน 5 บาท
-             If nPrice - Val(txtPricePerPack.Text) > 5 Then
-               txtPricePerPack.Text = CurrentPricePerPack
-               glbErrorLog.LocalErrorMsg = "ราคาใหม่ที่ระบุต้องลดไม่มากกว่า 5 บาท"
-               glbErrorLog.ShowUserError
-               Exit Sub
-             End If
+      If nPrice - Val(txtPricePerPack.Text) > 5 And CustomerCanFree = False Then
+        txtPricePerPack.Text = CurrentPricePerPack
+        glbErrorLog.LocalErrorMsg = "ราคาใหม่ที่ระบุต้องลดไม่มากกว่า 5 บาท"
+        glbErrorLog.ShowUserError
+        Exit Sub
+      End If
   End If
+        
   If SuccessFlag = "C" Then
     chkUpdatePrice.Value = ssCBChecked
   End If
@@ -2345,14 +2307,18 @@ Private Sub uctlPartLookup_LostFocus()
          If Len(TempUserName2) = 0 Or (PartItemID <> OldPartItemId And OldPartItemId <> 0) Then
                'ส่วนของคิดราคาแบบใหม่
                Dim ExPromotionPart As Double
+               Dim ExPromotionExtraPart As Double
                Dim ExPromotionDlc As Double
                Dim nPrice As Double
-               nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionDlc)
-               If nPrice = -1 Then
-                  txtPricePerPack.Enabled = False
-               End If
+               nPrice = calExWorksPrice(Pi, DELIVERY_CUS_ITEM_ID, CUSTOMER_ID, PRICE_THINK_TYPE, m_ExWorkPricesItem, m_ExDeliveryCostItem, m_Customers, TempData, m_ExPromotionPartItem, m_ExPromotionExtraPartItem, m_ExPromotionDlcItem, ExPromotionPart, ExPromotionExtraPart, ExPromotionDlc)
+               
+'               If nPrice = -99 Then
+'                  txtPricePerPack.Enabled = False
+'                  nPrice = 0
+'               End If
                
                txtPricePerPack.Text = nPrice
+               
               CurrentPricePerPack = Val(txtPricePerPack.Text)
               NewPricePerPack = Val(txtPricePerPack.Text)
               If radFeature.Value Then
@@ -2485,6 +2451,8 @@ Private Sub uctlPartLookup_Change()
          WeigthPerPack = Pi.WEIGHT_PER_PACK
       End If
       
+'      Call uctlPartLookup_LostFocus
+      
    m_HasModify = True
 End Sub
 Function showDetail(cTempData As Collection)
@@ -2500,14 +2468,14 @@ Function showDetail(cTempData As Collection)
       End If
          
          If PRICE_THINK_TYPE = 1 Then
-            lblShowDetail.Caption = "ราคาสินค้า=" & TempD3.PACKAGE_RATE & ",ส่วนลดสินค้า=" & TempD3.DISCOUNT_AMOUNT_PART & ",อื่นๆ=" & SumOther
+            lblShowDetail.Caption = "สินค้า=" & TempD3.PACKAGE_RATE & ",ส่วนลดสินค้า=" & TempD3.DISCOUNT_AMOUNT_PART & ",-ส่วนลดสินค้าพิเศษ=" & TempD3.DISCOUNT_EXTRA_AMOUNT_PART & ",+อื่นๆ=" & SumOther
          ElseIf PRICE_THINK_TYPE = 2 Then
-            lblShowDetail.Caption = "ราคาสินค้า=" & TempD3.PACKAGE_RATE & ",ส่วนลดสินค้า=" & TempD3.DISCOUNT_AMOUNT_PART & ",ค่าขนส่ง=" & TempD3.RATE_CUSTOMER & ",ส่วนลดขนส่ง=" & TempD3.DISCOUNT_AMOUNT_DLC & ",อื่นๆ=" & SumOther
+            lblShowDetail.Caption = "สินค้า=" & TempD3.PACKAGE_RATE & ",ส่วนลดสินค้า=" & TempD3.DISCOUNT_AMOUNT_PART & ",-ส่วนลดสินค้าพิเศษ=" & TempD3.DISCOUNT_EXTRA_AMOUNT_PART & ",+ค่าขนส่ง=" & TempD3.RATE_CUSTOMER & ",-ส่วนลดขนส่ง=" & TempD3.DISCOUNT_AMOUNT_DLC & ",+อื่นๆ=" & SumOther
          ElseIf PRICE_THINK_TYPE = 3 Then
             If radFeature.Value Then
-                 lblShowDetail.Caption = "ค่าขนส่ง=" & TempD3.RATE_CUSTOMER & ",ส่วนลดขนส่ง=" & TempD3.DISCOUNT_AMOUNT_DLC & ""
+                 lblShowDetail.Caption = "ค่าขนส่ง=" & TempD3.RATE_CUSTOMER & ",-ส่วนลดขนส่ง=" & TempD3.DISCOUNT_AMOUNT_DLC & ""
             ElseIf radStock.Value Then
-                lblShowDetail.Caption = "ราคาสินค้า=" & TempD3.PACKAGE_RATE & ",ส่วนลดสินค้า=" & TempD3.DISCOUNT_AMOUNT_PART & ",อื่นๆ=" & SumOther
+                lblShowDetail.Caption = "สินค้า=" & TempD3.PACKAGE_RATE & ",ส่วนลดสินค้า=" & TempD3.DISCOUNT_AMOUNT_PART & ",-ส่วนลดสินค้าพิเศษ=" & TempD3.DISCOUNT_EXTRA_AMOUNT_PART & ",+อื่นๆ=" & SumOther
             End If
         End If
       End If

@@ -1285,7 +1285,7 @@ End Function
 Public Function AddEditData(Optional AutoGenerateFlag As Boolean = True)
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 Dim TempID2 As String
 Dim TempID3 As String
@@ -1328,9 +1328,9 @@ Dim TempID6 As String
    
    If AddEditMode = SHOW_ADD Then
       If AutoGenerateFlag Then
-         Call glbDatabaseMngr.GetSeqID("CUSTOMER_SEQ", ID, glbErrorLog)
+         Call glbDatabaseMngr.GetSeqID("CUSTOMER_SEQ", id, glbErrorLog)
       Else
-         ID = CUSTOMER_ID
+         id = CUSTOMER_ID
       End If
       
       SQL1 = "INSERT INTO CUSTOMER " & _
@@ -1384,7 +1384,7 @@ Dim TempID6 As String
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(CUSTOMER_CODE)) & " '," & _
                          TempID3 & "," & _
                          "'" & ChangeQuote(Trim(Credit)) & "'," & _
@@ -1431,7 +1431,7 @@ Dim TempID6 As String
                         "'" & CAL_PRICE_DLC_CENTER_FLAG & "'," & _
                         "'" & TempID6 & "'" & _
                      ") "
-         CUSTOMER_ID = ID '
+         CUSTOMER_ID = id '
    Else 'Show edit
       SQL1 = "UPDATE CUSTOMER SET " & _
                      "   CUSTOMER_CODE = '" & ChangeQuote(Trim(CUSTOMER_CODE)) & "', " & _
@@ -1539,3 +1539,26 @@ Private Sub Class_Terminate()
 '  Set CstdPromotion = Nothing
   
 End Sub
+Public Sub UpdatePromotion()
+   Dim SQL1 As String
+                  SQL1 = "UPDATE CUSTOMER SET " & _
+                " PRO_COMMISSION_BAG = " & PRO_COMMISSION_BAG & ", " & _
+                "   PRO_CHEER_BAG = " & PRO_CHEER_BAG & ", " & _
+                "   PRO_DST_BAG = " & PRO_DST_BAG & ", " & _
+                "   PRO_OTHER1_BAG = " & PRO_OTHER1_BAG & ", " & _
+                "   PRO_OTHER2_BAG = " & PRO_OTHER2_BAG & ", " & _
+                "   PRO_OTHER3_BAG = " & PRO_OTHER3_BAG & ", " & _
+                "   PRO_COMMISSION_KG = " & PRO_COMMISSION_KG & ", " & _
+                "   PRO_CHEER_KG = " & PRO_CHEER_KG & ", " & _
+                "   PRO_DST_KG = " & PRO_DST_KG & ", " & _
+                "   PRO_OTHER1_KG = " & PRO_OTHER1_KG & ", " & _
+                "   PRO_OTHER2_KG = " & PRO_OTHER2_KG & ", " & _
+                "   PRO_OTHER3_KG = " & PRO_OTHER3_KG & ", " & _
+                "   PRO_OTHER1_NAME  = '" & PRO_OTHER1_NAME & "', " & _
+                "   PRO_OTHER2_NAME   = '" & PRO_OTHER2_NAME & "', " & _
+                "   PRO_OTHER3_NAME   = '" & PRO_OTHER3_NAME & "'" & _
+                " WHERE CUSTOMER_ID = " & CUSTOMER_ID
+                     
+                  m_Conn.Execute (SQL1)
+End Sub
+

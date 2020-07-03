@@ -224,7 +224,7 @@ Dim LoginID As Long
       Exit Function
    End If
 
-   If NVLS(m_Rs("USER_STATUS2"), "Y") <> "Y" Then
+   If NVLS(m_Rs("USER_STATUS3"), "Y") <> "Y" Then
       ErrorObj.LocalErrorMsg = "รายชื่อของท่านขณะนี้ไม่สามารถเข้าใช้งานระบบได้ โปรดติดต่อผู้บริหารระบบ "
 
       DBLogin = True

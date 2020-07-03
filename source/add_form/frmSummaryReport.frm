@@ -2592,23 +2592,23 @@ Dim C As CReportControl
             End If
          End If
 
-         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-11" Then
-            If C.ComboLoadID = 1 Then
-               Call LoadPartGroup(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 2 Then
-               Call LoadPartType(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 3 Then
-               Call LoadLocation(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 4 Then
-               Call InitExportDocTypeSet(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 5 Then
-               Call LoadLayout(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 6 Then
-               Call InitReport4_11Orderby(m_Combos(C.ControlIndex))
-            ElseIf C.ComboLoadID = 7 Then
-               Call InitOrderType(m_Combos(C.ControlIndex))
-            End If
-         End If
+'         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-11" Then
+'            If C.ComboLoadID = 1 Then
+'               Call LoadPartGroup(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 2 Then
+'               Call LoadPartType(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 3 Then
+'               Call LoadLocation(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 4 Then
+'               Call InitExportDocTypeSet(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 5 Then
+'               Call LoadLayout(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 6 Then
+'               Call InitReport4_11Orderby(m_Combos(C.ControlIndex))
+'            ElseIf C.ComboLoadID = 7 Then
+'               Call InitOrderType(m_Combos(C.ControlIndex))
+'            End If
+'         End If
             
          If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12" Then
             If C.ComboLoadID = 1 Then
@@ -4346,7 +4346,7 @@ Dim C As CReportControl
             End If
          End If
          
-         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-5" Then
+         If trvMaster.SelectedItem.Key = ROOT_TREE & " 4-11" Or trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12" Or trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-2" Or trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-3" Or trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-5" Or trvMaster.SelectedItem.Key = ROOT_TREE & " 4-12-7" Then
             If C.ComboLoadID = 1 Then
                Call LoadPartGroup(m_Combos(C.ControlIndex))
             ElseIf C.ComboLoadID = 2 Then
@@ -5841,13 +5841,15 @@ Dim Offset As Long
    Call LoadControl("C", cboGeneric(0).Width, True, "", 4, "EXPORT_DOC_TYPE", "EXPORT_DOC_TYPE_NAME")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("ประเภทเอกสาร"))
 
+
    '3 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 5, "DEPARTMENT_ID", "DEPARTMENT_NAME")
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("แผนก"))
-   
+'
    '3 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 6, "EXPENSE_TYPE", "EXPENSE_NAME") '
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("ค่าใช้จ่ายการเบิก"))
+
 
    '3 =============================
    Call LoadControl("C", cboGeneric(0).Width, True, "", 7, "ORDER_BY")
@@ -5858,70 +5860,7 @@ Dim Offset As Long
    Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงจาก"))
    
    Call ShowControl
-   If TempKey = ROOT_TREE & " 4-12-5" Then
-      Call LoadComboData2
-   Else
-      Call LoadComboData
-   End If
-End Sub
-'InitReport4_11_1
-Private Sub InitReport4_11_1()
-Dim C As CReportControl
-Dim Top As Long
-Dim Left As Long
-Dim LabelWidth As Long
-Dim Offset As Long
-
-   Top = lblGeneric(0).Top
-   Left = lblGeneric(0).Left
-   LabelWidth = lblGeneric(0).Width
-   Offset = 100
    
-   '1 =============================
-   Call LoadControl("D", uctlGenericDate(0).Width, True, "", , "FROM_DATE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("จากวันที่"))
-
-   '2 =============================
-   Call LoadControl("D", uctlGenericDate(0).Width, True, "", , "TO_DATE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ถึงวันที่"))
-
-   '1 =============================
-   Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "PART_NO", , "PART_NO")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสวัตถุดิบ"))
-
-   '1 =============================
-   Call LoadControl("T", txtGeneric(0).Width / 1.5, True, "", , "SUPPLIER_CODE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("รหัสผู้ขาย"))
-
-   '3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 1, "PART_GROUP", "PART_GROUP_NAME")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("กลุ่มวัสดุ/อุปกรณ์"))
-
-   '3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 2, "PART_TYPE", "PART_TYPE_NAME")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ประเภทวัสดุ/อุปกรณ์"))
-
-   '3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 3, "LOCATION_ID", "LOCATION_NAME")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("สถานที่จัดเก็บ"))
-
-   '3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 4, "EXPORT_DOC_TYPE", "EXPORT_DOC_TYPE_NAME")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("ประเภทเอกสาร"))
-
-  ' 3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 5, "DEPARTMENT_ID", "DEPARTMENT_NAME")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("แผนก"))
-
-   '3 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 6, "ORDER_BY")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงตาม"))
-
-   '4 =============================
-   Call LoadControl("C", cboGeneric(0).Width, True, "", 7, "ORDER_TYPE")
-   Call LoadControl("L", lblGeneric(0).Width, True, MapText("เรียงจาก"))
-   
-   Call ShowControl
    Call LoadComboData2
 End Sub
 Private Sub InitReport4_12()
@@ -8001,12 +7940,14 @@ Dim QueryFlag As Boolean
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub
       End If
+      TempKey = Node.Key
       Call InitReport4_11
    ElseIf Node.Key = ROOT_TREE & " 4-12-3" Then
       If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub
       End If
+      TempKey = Node.Key
       Call InitReport4_11
    ElseIf Node.Key = ROOT_TREE & " 4-12-4" Then
       If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
@@ -8023,12 +7964,13 @@ Dim QueryFlag As Boolean
       TempKey = Node.Key
       Call InitReport4_11
       
-       ElseIf Node.Key = ROOT_TREE & " 4-12-7" Then
+      ElseIf Node.Key = ROOT_TREE & " 4-12-7" Then
       If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub
       End If
-      Call InitReport4_11_1
+      TempKey = Node.Key
+      Call InitReport4_11
    ElseIf Node.Key = ROOT_TREE & " 4-12-6" Then
       If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
@@ -8107,12 +8049,14 @@ Dim QueryFlag As Boolean
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub
       End If
+      TempKey = Node.Key
       Call InitReport4_11
    ElseIf Node.Key = ROOT_TREE & " 4-12" Then
       If Not VerifyAccessRight("INVENTORY_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then
          cmdOK.Enabled = False                                                                                                                                                               '''''''''
          Exit Sub
       End If
+      TempKey = Node.Key
       Call InitReport4_11
    ElseIf Node.Key = ROOT_TREE & " 5-1" Then
       If Not VerifyAccessRight("LEDGER_REPORT_" & trvMaster.SelectedItem.Text, trvMaster.SelectedItem.Text) Then

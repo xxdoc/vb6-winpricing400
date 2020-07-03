@@ -18,7 +18,7 @@ Public USER_ID  As Long
 Public USER_NAME As String
 Public USER_PASSWORD As String
 Public USER_DESC As String
-Public USER_STATUS2 As String
+Public USER_STATUS3 As String
 Public GROUP_ID As Long
 Public GROUP_NAME As String
 Public GROUP_RIGHT As String

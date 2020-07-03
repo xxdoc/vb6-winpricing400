@@ -26,7 +26,7 @@ Public USER_ID As Long
 Public USER_NAME As String
 Public USER_PASSWORD As String
 Public USER_DESC As String
-Public USER_STATUS2 As String
+Public USER_STATUS3 As String
 Public GROUP_ID As Long
 Public CHECK_EXPIRE As String
 Public EXPIRE_DATE As Date
@@ -88,11 +88,11 @@ Dim NewStr As String
       End If
    End If
    
-   If Len(USER_STATUS2) > 0 Then
+   If Len(USER_STATUS3) > 0 Then
       If Len(WhereStr) <= 0 Then
-         WhereStr = "WHERE (USER_STATUS2 = '" & USER_STATUS2 & "') "
+         WhereStr = "WHERE (USER_STATUS3 = '" & USER_STATUS3 & "') "
       Else
-         WhereStr = WhereStr & "AND (USER_STATUS2 = '" & USER_STATUS2 & "') "
+         WhereStr = WhereStr & "AND (USER_STATUS3 = '" & USER_STATUS3 & "') "
       End If
    End If
    
@@ -143,7 +143,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       USER_NAME = NVLS(Rs("USER_NAME"), "")
       USER_PASSWORD = NVLS(Rs("USER_PASSWORD"), "")
       USER_DESC = NVLS(Rs("USER_DESC"), "")
-      USER_STATUS2 = NVLS(Rs("USER_STATUS2"), "")
+      USER_STATUS3 = NVLS(Rs("USER_STATUS3"), "")
       GROUP_ID = NVLI(Rs("GROUP_ID"), -1)
       CHECK_EXPIRE = NVLS(Rs("CHECK_EXPIRE"), "")
       EXPIRE_DATE = InternalDateToDate(NVLS(Rs("EXPIRE_DATE"), ""))
@@ -167,12 +167,12 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("USER_ACCOUNT_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("USER_ACCOUNT_SEQ", id, glbErrorLog)
    
       SQL1 = "INSERT INTO USER_ACCOUNT " & _
                      "( " & _
@@ -180,7 +180,7 @@ Dim ID As Long
                      "   USER_NAME, " & _
                      "   USER_PASSWORD, " & _
                      "   USER_DESC, " & _
-                     "   USER_STATUS2, " & _
+                     "   USER_STATUS3, " & _
                      "   GROUP_ID, " & _
                      "   CHECK_EXPIRE, " & _
                      "   EXPIRE_DATE, " & _
@@ -197,11 +197,11 @@ Dim ID As Long
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(USER_NAME)) & "'," & _
                          "'" & ChangeQuote(Trim(EncryptText(USER_PASSWORD))) & "'," & _
                          "'" & ChangeQuote(Trim(USER_DESC)) & "'," & _
-                         "'" & ChangeQuote(Trim(USER_STATUS2)) & "'," & _
+                         "'" & ChangeQuote(Trim(USER_STATUS3)) & "'," & _
                          "" & GROUP_ID & "," & _
                          "'" & ChangeQuote(Trim(CHECK_EXPIRE)) & "'," & _
                          "'" & ChangeQuote(Trim(DateToStringInt(EXPIRE_DATE))) & "'," & _
@@ -216,13 +216,13 @@ Dim ID As Long
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         USER_ID = ID
+         USER_ID = id
    Else 'Show edit
       SQL1 = "UPDATE USER_ACCOUNT SET " & _
                      "   USER_NAME = '" & ChangeQuote(Trim(USER_NAME)) & "', " & _
                      "   USER_PASSWORD = '" & ChangeQuote(Trim(EncryptText(USER_PASSWORD))) & "', " & _
                      "   USER_DESC = '" & ChangeQuote(Trim(USER_DESC)) & "', " & _
-                     "   USER_STATUS2 = '" & ChangeQuote(Trim(USER_STATUS2)) & "', " & _
+                     "   USER_STATUS3 = '" & ChangeQuote(Trim(USER_STATUS3)) & "', " & _
                      "   GROUP_ID = " & GROUP_ID & ", " & _
                      "   CHECK_EXPIRE = '" & ChangeQuote(Trim(CHECK_EXPIRE)) & "', " & _
                      "   EXPIRE_DATE = '" & ChangeQuote(Trim(DateToStringInt(EXPIRE_DATE))) & "', " & _

@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmAddEditCustomer 
    ClientHeight    =   8610
    ClientLeft      =   60
@@ -11,10 +11,11 @@ Begin VB.Form frmAddEditCustomer
    Icon            =   "frmAddEditCustomer.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    Moveable        =   0   'False
    NegotiateMenus  =   0   'False
-   ScaleHeight     =   8610
-   ScaleWidth      =   15765
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    StartUpPosition =   1  'CenterOwner
    WindowState     =   2  'Maximized
    Begin Threed.SSFrame SSFrame1 
@@ -30,7 +31,7 @@ Begin VB.Form frmAddEditCustomer
       Begin Threed.SSFrame SSFrame3 
          Height          =   1455
          Left            =   12000
-         TabIndex        =   71
+         TabIndex        =   70
          Top             =   2280
          Width           =   2295
          _ExtentX        =   4048
@@ -40,7 +41,7 @@ Begin VB.Form frmAddEditCustomer
          Begin Threed.SSOption ssoRound 
             Height          =   375
             Left            =   240
-            TabIndex        =   73
+            TabIndex        =   72
             Top             =   840
             Width           =   1935
             _ExtentX        =   3413
@@ -51,7 +52,7 @@ Begin VB.Form frmAddEditCustomer
          Begin Threed.SSOption ssoVolume 
             Height          =   375
             Left            =   240
-            TabIndex        =   72
+            TabIndex        =   71
             Top             =   360
             Width           =   1935
             _ExtentX        =   3413
@@ -64,7 +65,7 @@ Begin VB.Form frmAddEditCustomer
          Height          =   315
          Left            =   8940
          Style           =   2  'Dropdown List
-         TabIndex        =   69
+         TabIndex        =   68
          Top             =   3840
          Width           =   4485
       End
@@ -77,6 +78,7 @@ Begin VB.Form frmAddEditCustomer
          _ExtentX        =   7435
          _ExtentY        =   6588
          _Version        =   131073
+         Enabled         =   0   'False
          Caption         =   "SSFrame2"
          Begin prjFarmManagement.uctlTextBox txtConBag1 
             Height          =   435
@@ -84,8 +86,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   12
             Top             =   600
             Width           =   795
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConBag2 
             Height          =   435
@@ -93,8 +95,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   13
             Top             =   1080
             Width           =   795
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConBag3 
             Height          =   435
@@ -102,8 +104,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   14
             Top             =   1560
             Width           =   795
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConKg1 
             Height          =   435
@@ -111,8 +113,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   18
             Top             =   600
             Width           =   795
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConKg2 
             Height          =   435
@@ -120,8 +122,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   19
             Top             =   1080
             Width           =   795
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConKg3 
             Height          =   435
@@ -129,8 +131,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   20
             Top             =   1560
             Width           =   795
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConBag4 
             Height          =   435
@@ -138,8 +140,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   15
             Top             =   2040
             Width           =   555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConKg4 
             Height          =   435
@@ -147,8 +149,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   21
             Top             =   2040
             Width           =   555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConBag5 
             Height          =   435
@@ -156,8 +158,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   16
             Top             =   2520
             Width           =   555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConKg5 
             Height          =   435
@@ -165,8 +167,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   22
             Top             =   2520
             Width           =   555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConBag6 
             Height          =   435
@@ -174,8 +176,8 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   17
             Top             =   3000
             Width           =   555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtConKg6 
             Height          =   435
@@ -183,41 +185,41 @@ Begin VB.Form frmAddEditCustomer
             TabIndex        =   23
             Top             =   3000
             Width           =   555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtPRO_OTHER1_NAME 
             Height          =   435
             Left            =   600
-            TabIndex        =   75
+            TabIndex        =   74
             Top             =   2040
             Width           =   1555
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtPRO_OTHER2_NAME 
             Height          =   435
             Left            =   600
-            TabIndex        =   79
+            TabIndex        =   78
             Top             =   2520
             Width           =   1560
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtPRO_OTHER3_NAME 
             Height          =   435
             Left            =   600
-            TabIndex        =   80
+            TabIndex        =   79
             Top             =   3000
             Width           =   1560
-            _ExtentX        =   4471
-            _ExtentY        =   767
+            _extentx        =   4471
+            _extenty        =   767
          End
          Begin VB.Label lblCon4 
             Caption         =   "Label1"
             Height          =   255
             Left            =   120
-            TabIndex        =   78
+            TabIndex        =   77
             Top             =   2160
             Width           =   615
          End
@@ -225,7 +227,7 @@ Begin VB.Form frmAddEditCustomer
             Caption         =   "Label1"
             Height          =   255
             Left            =   120
-            TabIndex        =   76
+            TabIndex        =   75
             Top             =   2640
             Width           =   615
          End
@@ -233,7 +235,7 @@ Begin VB.Form frmAddEditCustomer
             Caption         =   "Label1"
             Height          =   255
             Left            =   120
-            TabIndex        =   74
+            TabIndex        =   73
             Top             =   3120
             Width           =   615
          End
@@ -334,8 +336,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   46
          Top             =   1920
          Width           =   975
-         _ExtentX        =   1720
-         _ExtentY        =   767
+         _extentx        =   1720
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlSaleByLookup 
          Height          =   465
@@ -343,8 +345,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   11
          Top             =   3720
          Width           =   5355
-         _ExtentX        =   9446
-         _ExtentY        =   820
+         _extentx        =   9446
+         _extenty        =   820
       End
       Begin VB.ComboBox cboEnterpriseType 
          BeginProperty Font 
@@ -411,8 +413,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   4
          Top             =   1470
          Width           =   4635
-         _ExtentX        =   12356
-         _ExtentY        =   767
+         _extentx        =   12356
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtShortName 
          Height          =   435
@@ -420,8 +422,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   0
          Top             =   1020
          Width           =   1575
-         _ExtentX        =   4471
-         _ExtentY        =   767
+         _extentx        =   4471
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtEmail 
          Height          =   435
@@ -429,8 +431,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   6
          Top             =   1920
          Width           =   6885
-         _ExtentX        =   12356
-         _ExtentY        =   767
+         _extentx        =   12356
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtWebSite 
          Height          =   435
@@ -438,8 +440,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   7
          Top             =   2370
          Width           =   6945
-         _ExtentX        =   16960
-         _ExtentY        =   767
+         _extentx        =   16960
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtBusinessDesc 
          Height          =   450
@@ -447,8 +449,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   10
          Top             =   3270
          Width           =   9225
-         _ExtentX        =   16907
-         _ExtentY        =   794
+         _extentx        =   16907
+         _extenty        =   794
       End
       Begin prjFarmManagement.uctlTextBox txtCredit 
          Height          =   435
@@ -456,8 +458,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   2
          Top             =   1020
          Width           =   555
-         _ExtentX        =   1402
-         _ExtentY        =   767
+         _extentx        =   1402
+         _extenty        =   767
       End
       Begin MSComDlg.CommonDialog dlgAdd 
          Left            =   120
@@ -472,8 +474,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   3
          Top             =   1020
          Width           =   675
-         _ExtentX        =   1402
-         _ExtentY        =   767
+         _extentx        =   1402
+         _extenty        =   767
       End
       Begin GridEX20.GridEX GridEX1 
          Height          =   2115
@@ -532,8 +534,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   5
          Top             =   1470
          Width           =   1515
-         _ExtentX        =   4471
-         _ExtentY        =   767
+         _extentx        =   4471
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtCreditLimit 
          Height          =   435
@@ -541,8 +543,8 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   44
          Top             =   1020
          Width           =   1035
-         _ExtentX        =   1826
-         _ExtentY        =   767
+         _extentx        =   1826
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtWeekCreditLimit 
          Height          =   435
@@ -550,22 +552,49 @@ Begin VB.Form frmAddEditCustomer
          TabIndex        =   52
          Top             =   2370
          Width           =   1515
-         _ExtentX        =   4471
-         _ExtentY        =   767
+         _extentx        =   4471
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlLocationLookup 
          Height          =   465
          Left            =   1860
-         TabIndex        =   82
+         TabIndex        =   81
          Top             =   4200
          Width           =   5355
-         _ExtentX        =   9446
-         _ExtentY        =   820
+         _extentx        =   9446
+         _extenty        =   820
+      End
+      Begin Threed.SSCommand cmdSaveCondition 
+         Height          =   525
+         Left            =   19320
+         TabIndex        =   86
+         Top             =   1320
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         MousePointer    =   99
+         Enabled         =   0   'False
+         MouseIcon       =   "frmAddEditCustomer.frx":2F36
+         ButtonStyle     =   3
+      End
+      Begin Threed.SSCommand cmdEditCondition 
+         Height          =   525
+         Left            =   19320
+         TabIndex        =   85
+         Top             =   720
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         MousePointer    =   99
+         MouseIcon       =   "frmAddEditCustomer.frx":3250
+         ButtonStyle     =   3
       End
       Begin Threed.SSCheck chkFreePriceFlag 
          Height          =   435
          Left            =   10200
-         TabIndex        =   85
+         TabIndex        =   84
          Top             =   1440
          Width           =   1785
          _ExtentX        =   3149
@@ -576,7 +605,7 @@ Begin VB.Form frmAddEditCustomer
       Begin Threed.SSCheck chkCalPriceDlcCenterFlag 
          Height          =   435
          Left            =   12000
-         TabIndex        =   84
+         TabIndex        =   83
          Top             =   1800
          Width           =   2985
          _ExtentX        =   5265
@@ -587,7 +616,7 @@ Begin VB.Form frmAddEditCustomer
       Begin Threed.SSCheck chkCalPricePartCenterFlag 
          Height          =   435
          Left            =   12000
-         TabIndex        =   83
+         TabIndex        =   82
          Top             =   1440
          Width           =   2985
          _ExtentX        =   5265
@@ -599,7 +628,7 @@ Begin VB.Form frmAddEditCustomer
          Alignment       =   1  'Right Justify
          Height          =   315
          Left            =   120
-         TabIndex        =   81
+         TabIndex        =   80
          Top             =   4200
          Width           =   1605
       End
@@ -607,23 +636,9 @@ Begin VB.Form frmAddEditCustomer
          Alignment       =   1  'Right Justify
          Height          =   315
          Left            =   7440
-         TabIndex        =   70
+         TabIndex        =   69
          Top             =   3840
          Width           =   1365
-      End
-      Begin Threed.SSCommand cmdEditCon 
-         Height          =   525
-         Left            =   13560
-         TabIndex        =   68
-         Top             =   3960
-         Visible         =   0   'False
-         Width           =   1335
-         _ExtentX        =   2355
-         _ExtentY        =   926
-         _Version        =   131073
-         MousePointer    =   99
-         MouseIcon       =   "frmAddEditCustomer.frx":2F36
-         ButtonStyle     =   3
       End
       Begin Threed.SSCheck chkCheckCashFlag 
          Height          =   435
@@ -665,7 +680,7 @@ Begin VB.Form frmAddEditCustomer
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditCustomer.frx":3250
+         MouseIcon       =   "frmAddEditCustomer.frx":356A
          ButtonStyle     =   3
       End
       Begin Threed.SSCheck chkSuspendSales 
@@ -722,7 +737,7 @@ Begin VB.Form frmAddEditCustomer
          _ExtentY        =   714
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditCustomer.frx":356A
+         MouseIcon       =   "frmAddEditCustomer.frx":3884
          ButtonStyle     =   3
       End
       Begin VB.Label lblResponseBy 
@@ -743,7 +758,7 @@ Begin VB.Form frmAddEditCustomer
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditCustomer.frx":3884
+         MouseIcon       =   "frmAddEditCustomer.frx":3B9E
          ButtonStyle     =   3
       End
       Begin Threed.SSCommand cmdExit 
@@ -779,7 +794,7 @@ Begin VB.Form frmAddEditCustomer
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditCustomer.frx":3B9E
+         MouseIcon       =   "frmAddEditCustomer.frx":3EB8
          ButtonStyle     =   3
       End
       Begin Threed.SSCommand cmdDelete 
@@ -792,7 +807,7 @@ Begin VB.Form frmAddEditCustomer
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditCustomer.frx":3EB8
+         MouseIcon       =   "frmAddEditCustomer.frx":41D2
          ButtonStyle     =   3
       End
       Begin VB.Label lblDiscountPercent 
@@ -874,14 +889,14 @@ Begin VB.Form frmAddEditCustomer
       TabIndex        =   59
       Top             =   0
       Width           =   795
-      _ExtentX        =   4471
-      _ExtentY        =   767
+      _extentx        =   4471
+      _extenty        =   767
    End
    Begin VB.Label Label2 
       Caption         =   "Label1"
       Height          =   255
       Left            =   0
-      TabIndex        =   77
+      TabIndex        =   76
       Top             =   0
       Width           =   1215
    End
@@ -905,7 +920,7 @@ Private m_Locations As Collection
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Private FileName As String
 Private Sub QueryData(Flag As Boolean)
 Dim IsOK As Boolean
@@ -915,7 +930,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
             
-      m_Customer.CUSTOMER_ID = ID
+      m_Customer.CUSTOMER_ID = id
       If Not glbDaily.QueryCustomer(m_Customer, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
          Call EnableForm(Me, True)
@@ -1046,10 +1061,10 @@ Private Function SetValue() As Long
       SetValue = 1
    End If
 End Function
-Public Sub GetValue(ID As Long)
-   If ID = 1 Then
+Public Sub GetValue(id As Long)
+   If id = 1 Then
       ssoVolume.Value = True
-   ElseIf ID = 2 Then
+   ElseIf id = 2 Then
       ssoRound.Value = True
    Else
       ssoVolume.Value = True
@@ -1079,7 +1094,7 @@ Dim IsOK As Boolean
    End If
 
 
-   If Not CheckUniqueNs(CUSTCODE_UNIQUE, txtShortName.Text, ID) Then
+   If Not CheckUniqueNs(CUSTCODE_UNIQUE, txtShortName.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtShortName.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Exit Function
@@ -1627,7 +1642,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim OKClick As Boolean
       
@@ -1635,12 +1650,12 @@ Dim OKClick As Boolean
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    ID2 = Val(GridEX1.Value(1))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 1 Then
-      frmAddEditCustomerAddress.ID = ID
+      frmAddEditCustomerAddress.id = id
       Set frmAddEditCustomerAddress.TempCollection = m_Customer.CstAddr
       frmAddEditCustomerAddress.HeaderText = MapText("แก้ไขที่อยู่")
       frmAddEditCustomerAddress.ShowMode = SHOW_EDIT
@@ -1657,7 +1672,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 2 Then
-      frmAddEditCustomerAccount.ID = ID
+      frmAddEditCustomerAccount.id = id
       Set frmAddEditCustomerAccount.TempCollection = m_Customer.CstAccounts
       frmAddEditCustomerAccount.HeaderText = MapText("แก้ไขบัญชีลูกค้า")
       frmAddEditCustomerAccount.ShowMode = SHOW_EDIT
@@ -1675,7 +1690,7 @@ Dim OKClick As Boolean
       End If
    ElseIf TabStrip1.SelectedItem.Index = 3 Then
       Set frmAddEditCustomerPicture.ParentForm = Me
-      frmAddEditCustomerPicture.ID = ID
+      frmAddEditCustomerPicture.id = id
       Set frmAddEditCustomerPicture.TempCollection = m_Customer.CstPicture
       frmAddEditCustomerPicture.ShowMode = SHOW_EDIT
       frmAddEditCustomerPicture.PictureType = HEAD_ACCOUNT
@@ -1693,7 +1708,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 4 Then
-      frmAddEditCustomerAccList.ID = ID
+      frmAddEditCustomerAccList.id = id
       Set frmAddEditCustomerAccList.ParentForm = Me
       Set frmAddEditCustomerAccList.TempCollection = m_Customer.CstAccountList1s
       frmAddEditCustomerAccList.ShowMode = SHOW_EDIT
@@ -1713,7 +1728,7 @@ Dim OKClick As Boolean
       End If
             
    ElseIf TabStrip1.SelectedItem.Index = 5 Then
-      frmAddEditCustomerAccList.ID = ID
+      frmAddEditCustomerAccList.id = id
       Set frmAddEditCustomerAccList.ParentForm = Me
       Set frmAddEditCustomerAccList.TempCollection = m_Customer.CstAccountList2s
       frmAddEditCustomerAccList.ShowMode = SHOW_EDIT
@@ -1732,7 +1747,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 6 Then
-      frmAddEditCustomerAccList.ID = ID
+      frmAddEditCustomerAccList.id = id
       Set frmAddEditCustomerAccList.ParentForm = Me
       Set frmAddEditCustomerAccList.TempCollection = m_Customer.CstAccountList3s
       frmAddEditCustomerAccList.ShowMode = SHOW_EDIT
@@ -1753,7 +1768,7 @@ Dim OKClick As Boolean
 
 
     ElseIf TabStrip1.SelectedItem.Index = 7 Then
-      frmAddEditCustomerAccFol.ID = ID
+      frmAddEditCustomerAccFol.id = id
       Set frmAddEditCustomerAccFol.ParentForm = Me
       Set frmAddEditCustomerAccFol.TempCollection = m_Customer.CstAccFol
       frmAddEditCustomerAccFol.ShowMode = SHOW_EDIT
@@ -1773,7 +1788,7 @@ Dim OKClick As Boolean
       End If
       
       ElseIf TabStrip1.SelectedItem.Index = 8 Then
-      frmAddEditCustomerMKTFol.ID = ID
+      frmAddEditCustomerMKTFol.id = id
       Set frmAddEditCustomerMKTFol.ParentForm = Me
       Set frmAddEditCustomerMKTFol.TempCollection = m_Customer.CstMKTFol
       frmAddEditCustomerMKTFol.ShowMode = SHOW_EDIT
@@ -1792,7 +1807,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 9 Then
-      frmAddEditCustomerFreelance.ID = ID
+      frmAddEditCustomerFreelance.id = id
       Set frmAddEditCustomerFreelance.ParentForm = Me
       Set frmAddEditCustomerFreelance.TempCollection = m_Customer.CstFreelance
       frmAddEditCustomerFreelance.ShowMode = SHOW_EDIT
@@ -1810,7 +1825,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 10 Then
-      frmAddEditDeliveryCus.ID = ID
+      frmAddEditDeliveryCus.id = id
       frmAddEditDeliveryCus.ID2 = ID2
       Set frmAddEditDeliveryCus.ParentForm = Me
       Set frmAddEditDeliveryCus.TempCollection = m_Customer.CstdDeliveryCus
@@ -1852,25 +1867,25 @@ Dim OKClick As Boolean
    End If
 End Sub
 
-Private Sub cmdEditCon_Click()
-'   frmVerifyAccRight.AccName = "CREDIT_PROMOTIONAL"
-'   frmVerifyAccRight.AccDesc = "สามารถเปลี่ยนแปลงเงื่อนไขส่งเสริมการขาย"
-'   Load frmVerifyAccRight
-'   frmVerifyAccRight.Show 1
-'
-'   If frmVerifyAccRight.GrantRight Then
-'      Unload frmVerifyAccRight
-'      Set frmVerifyAccRight = Nothing
-'   Else
-'      Unload frmVerifyAccRight
-'      Set frmVerifyAccRight = Nothing
-'      Exit Sub
-'   End If
-'
-'   SSFrame2.Enabled = True
-'   SSFrame3.Enabled = True
-'   lblRateType.Enabled = True
-'   cboRateType.Enabled = True
+
+
+Private Sub cmdEditCondition_Click()
+  frmVerifyAccRight.AccName = "CREDIT_CONDITION"
+   frmVerifyAccRight.AccDesc = "สามารถเปลี่ยนแปลงเงื่อนไขการขายของลูกค้าได้"
+   Load frmVerifyAccRight
+   frmVerifyAccRight.Show 1
+   
+   If frmVerifyAccRight.GrantRight Then
+      Unload frmVerifyAccRight
+      Set frmVerifyAccRight = Nothing
+   Else
+      Unload frmVerifyAccRight
+      Set frmVerifyAccRight = Nothing
+      Exit Sub
+   End If
+   
+   SSFrame2.Enabled = True
+   cmdSaveCondition.Enabled = True
 End Sub
 
 Private Sub cmdEditCredit_Click()
@@ -1925,6 +1940,47 @@ Dim strDescription As String
    End If
     
    m_HasModify = True
+End Sub
+
+
+Private Sub cmdSaveCondition_Click()
+Dim IsOK As Boolean
+   If Not m_HasModify Then
+         Exit Sub
+   End If
+   
+   m_Customer.PRO_COMMISSION_BAG = Val(txtConBag1.Text)
+   m_Customer.PRO_CHEER_BAG = Val(txtConBag2.Text)
+   m_Customer.PRO_DST_BAG = Val(txtConBag3.Text)
+   m_Customer.PRO_OTHER1_BAG = Val(txtConBag4.Text)
+   m_Customer.PRO_OTHER2_BAG = Val(txtConBag5.Text)
+   m_Customer.PRO_OTHER3_BAG = Val(txtConBag6.Text)
+   
+   m_Customer.PRO_COMMISSION_KG = Val(txtConKg1.Text)
+   m_Customer.PRO_CHEER_KG = Val(txtConKg2.Text)
+   m_Customer.PRO_DST_KG = Val(txtConKg3.Text)
+   m_Customer.PRO_OTHER1_KG = Val(txtConKg4.Text)
+   m_Customer.PRO_OTHER2_KG = Val(txtConKg5.Text)
+   m_Customer.PRO_OTHER3_KG = Val(txtConKg6.Text)
+   
+   m_Customer.PRO_OTHER1_NAME = txtPRO_OTHER1_NAME.Text
+   m_Customer.PRO_OTHER2_NAME = txtPRO_OTHER2_NAME.Text
+   m_Customer.PRO_OTHER3_NAME = txtPRO_OTHER3_NAME.Text
+   
+   Call EnableForm(Me, False)
+   If Not glbDaily.AddEditCustomerPro(m_Customer, IsOK, True, glbErrorLog) Then
+      glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
+'      SaveData = False
+      Call EnableForm(Me, True)
+      Exit Sub
+   End If
+   If Not IsOK Then
+      Call EnableForm(Me, True)
+      glbErrorLog.ShowUserError
+      Exit Sub
+   End If
+   
+   Call EnableForm(Me, True)
 End Sub
 
 Private Sub Form_Activate()
@@ -2215,9 +2271,8 @@ Private Sub InitFormLayout()
    cmdDelete.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdAuto.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdEditCredit.Picture = LoadPicture(glbParameterObj.NormalButton1)
-   cmdEditCon.Picture = LoadPicture(glbParameterObj.NormalButton1)
-   
-'   SSFrame2.BackColor = LoadPicture(glbParameterObj.NormalForm1)
+   cmdEditCondition.Picture = LoadPicture(glbParameterObj.NormalButton1)
+   cmdSaveCondition.Picture = LoadPicture(glbParameterObj.NormalButton1)
    
    Call InitMainButton(cmdExit, MapText("ยกเลิก (ESC)"))
    Call InitMainButton(cmdOK, MapText("ตกลง (F2)"))
@@ -2226,8 +2281,8 @@ Private Sub InitFormLayout()
    Call InitMainButton(cmdDelete, MapText("ลบ (F6)"))
    Call InitMainButton(cmdAuto, MapText("A"))
    Call InitMainButton(cmdEditCredit, MapText("แก้ไข CREDIT"))
-   Call InitMainButton(cmdEditCon, MapText("แก้ไข"))
-   'cmdEditCon
+   Call InitMainButton(cmdEditCondition, MapText("แก้ไข เงื่อนไข"))
+   Call InitMainButton(cmdSaveCondition, MapText("บันทึก เงื่อนไข"))
    
    Call InitGrid1
    
@@ -2402,7 +2457,7 @@ Dim ReportMode As Long
    Else
       frmReportConfig.ReportMode = ReportMode
       frmReportConfig.ShowMode = EditMode
-      frmReportConfig.ID = Rc.REPORT_CONFIG_ID
+      frmReportConfig.id = Rc.REPORT_CONFIG_ID
       frmReportConfig.ReportKey = ReportKey
       frmReportConfig.HeaderText = HeaderText
       Load frmReportConfig

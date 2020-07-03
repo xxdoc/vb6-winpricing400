@@ -528,8 +528,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
    MODIFY_DATE = InternalDateToDate(NVLS(Rs("MD"), ""))
    CREATE_BY = NVLI(Rs("CREATE_BY"), -1)
    MODIFY_BY = NVLI(Rs("MODIFY_BY"), -1)
- ' SUCCESS_FLAG = NVLS(Rs("SUCCESS_FLAG"), "")
- ' PART_TYPE_NO = NVLI(Rs("PART_TYPE_NO"), -1)
+
    If Ind = 1 Then
    ElseIf Ind = 2 Then
       JOB_DATE = NVLS(Rs("JOB_DATE"), "")
@@ -566,13 +565,14 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 Dim TempID2 As String
 Dim TempID3 As String
 Dim TempID4 As String
 Dim TempID5 As String
 Dim TempID6 As String
+Dim TempID7 As String
 
    TempID1 = PART_TYPE
    If PART_TYPE <= 0 Then
@@ -608,10 +608,12 @@ Dim TempID6 As String
       TempID6 = "NULL"
    End If
    
+
+   
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("PART_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("PART_ITEM_SEQ", id, glbErrorLog)
 
       SQL1 = "INSERT INTO PART_ITEM " & _
                      "( " & _
@@ -639,7 +641,7 @@ Dim TempID6 As String
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(PART_NO)) & "'," & _
                          "" & TempID2 & "," & _
                          "'" & ChangeQuote(Trim(MINIMUM_ALLOW)) & "'," & _
@@ -661,7 +663,7 @@ Dim TempID6 As String
                          glbUser.USER_ID & "," & _
                          "" & TempID3 & "," & TempID5 & "," & TempID5 & "," & PRODUCT_TYPE_ID & _
                      ") "
-         PART_ITEM_ID = ID
+         PART_ITEM_ID = id
    Else 'Show edit
       SQL1 = "UPDATE PART_ITEM SET " & _
                      "   PART_NO = '" & ChangeQuote(Trim(PART_NO)) & "', " & _
@@ -685,7 +687,7 @@ Dim TempID6 As String
                     "   NUMBER_PLC_ID = " & TempID3 & "," & _
                     "   NUMBER_LAB_ID = " & TempID5 & "," & _
                     "   PART_MASTER_ID = " & TempID6 & "," & _
-                    "   PRODUCT_TYPE_ID = " & PRODUCT_TYPE_ID & _
+                    "   PRODUCT_TYPE_ID = " & PRODUCT_TYPE_ID & "" & _
                      " WHERE PART_ITEM_ID = " & PART_ITEM_ID
    End If
    

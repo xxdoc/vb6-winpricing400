@@ -681,6 +681,7 @@ Private m_DeliveryCus As Collection
 Private m_ExWorkPricesItem As Collection
 Private m_ExDeliveryCostItem As Collection
 Private m_ExPromotionPartItem As Collection
+Private m_ExPromotionExtraPartItem As Collection
 Private m_ExPromotionDlcItem As Collection
 
 Public HeaderText As String
@@ -1100,7 +1101,8 @@ Dim oMenu As cPopupMenu
          
          Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate, , "Y")
-         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y")
+         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 3)
+         Call LoadExPromotionPartItem(Nothing, m_ExPromotionExtraPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 5)
          Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          
          frmAddEditSaleOrderItem2.DocumentType = DocumentType
@@ -1113,6 +1115,7 @@ Dim oMenu As cPopupMenu
          Set frmAddEditSaleOrderItem2.m_ExWorkPricesItem = m_ExWorkPricesItem
          Set frmAddEditSaleOrderItem2.m_ExDeliveryCostItem = m_ExDeliveryCostItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionPartItem = m_ExPromotionPartItem
+         Set frmAddEditSaleOrderItem2.m_ExPromotionExtraPartItem = m_ExPromotionExtraPartItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionDlcItem = m_ExPromotionDlcItem
          Set frmAddEditSaleOrderItem2.m_DeliveryCus = m_DeliveryCus
          frmAddEditSaleOrderItem2.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
@@ -1456,7 +1459,8 @@ Dim oMenu As cPopupMenu
          If lMenuChosen = 1 Then
             Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate, , "Y")
-            Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y")
+            Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 3)
+            Call LoadExPromotionPartItem(Nothing, m_ExPromotionExtraPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 5)
             Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             
              frmAddEditSaleOrderItem2.TypeSale = 1 'แก้ไขขายสินค้าและค่าขนส่ง
@@ -1477,6 +1481,7 @@ Dim oMenu As cPopupMenu
          Set frmAddEditSaleOrderItem2.m_ExWorkPricesItem = m_ExWorkPricesItem
          Set frmAddEditSaleOrderItem2.m_ExDeliveryCostItem = m_ExDeliveryCostItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionPartItem = m_ExPromotionPartItem
+         Set frmAddEditSaleOrderItem2.m_ExPromotionExtraPartItem = m_ExPromotionExtraPartItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionDlcItem = m_ExPromotionDlcItem
          Set frmAddEditSaleOrderItem2.m_DeliveryCus = m_DeliveryCus
          frmAddEditSaleOrderItem2.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
@@ -1872,6 +1877,7 @@ Private Sub Form_Unload(Cancel As Integer)
    Set m_ExWorkPricesItem = Nothing
    Set m_ExDeliveryCostItem = Nothing
    Set m_ExPromotionPartItem = Nothing
+   Set m_ExPromotionExtraPartItem = Nothing
    Set m_ExPromotionDlcItem = Nothing
 End Sub
 
@@ -2105,6 +2111,7 @@ Private Sub Form_Load()
    Set m_ExWorkPricesItem = New Collection
    Set m_ExDeliveryCostItem = New Collection
    Set m_ExPromotionPartItem = New Collection
+   Set m_ExPromotionExtraPartItem = New Collection
    Set m_ExPromotionDlcItem = New Collection
 End Sub
 
@@ -2346,7 +2353,7 @@ Dim TempD2 As CCustomer
     If ShowMode = SHOW_ADD Then
        Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง เฉพาะที่ ที่เปิดใช้งาน
    Else
-      Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID) 'LOAD สถานที่จัดส่ง ทุกที่
+      Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง ทุกที่
    End If
       Set uctlDeliveryCusLookup.MyCollection = m_DeliveryCus
      

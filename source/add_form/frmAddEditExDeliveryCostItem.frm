@@ -612,6 +612,7 @@ Else
    txtRateDelivery.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 Private Sub cmdOK_Click()
@@ -657,6 +658,7 @@ Else
    txtRateDelivery.SetFocus
    Call ParentForm.ShowGridItem
 End If
+m_HasModify = False
 End Sub
 
 '

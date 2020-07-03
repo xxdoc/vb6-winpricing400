@@ -162,32 +162,51 @@ Dim iCount As Long
    
    Set Cf = New CReportField
    
+   Call Cf.SetFieldValue(8, "^", "ข้อมูลเอกสาร", "^")
+   Call m_Headers0.AddField(Cf)
+   If mcolParam("SHOW_PART_NO_FLAG") = 1 Then
+      Call Cf.SetFieldValue(18, "^", "ข้อมูลราคาสินค้า/หน่วย", "^")
+   Else
+        Call Cf.SetFieldValue(13, "^", "ข้อมูลราคาสินค้า/หน่วย", "^")
+   End If
+   Call m_Headers0.AddField(Cf)
+   Call Cf.SetFieldValue(6, "^", "ข้อมูลราคาค่าขนส่ง/หน่วย", "^")
+   Call m_Headers0.AddField(Cf)
+   Call Cf.SetFieldValue(12, "^", "ข้อมูลอื่นๆที่คิดเพิ่มจากราคาประกาศ/หน่วย", "^")
+   Call m_Headers0.AddField(Cf)
+   If mcolParam("SHOW_EDIT_PRICE_FLAG") = 1 Then
+      Call Cf.SetFieldValue(11, "^", "ข้อมูลราคาขายจริง", "^")
+   Else
+      Call Cf.SetFieldValue(9, "^", "ข้อมูลราคาขายจริง", "^")
+   End If
+   Call m_Headers0.AddField(Cf)
+   
    Call Cf.SetFieldValue(2, "^", "NO.", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "เลขที่เอกสาร", "^")
+   Call Cf.SetFieldValue(3, "^", "เลขที่", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "วันที่เอกสาร", "^")
+   Call Cf.SetFieldValue(3, "^", "วันที่", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(5, "^", "รหัสสินค้า", "<")
+   Call Cf.SetFieldValue(5, "^", "รหัส", "<")
    Call m_Headers1.AddField(Cf)
     If mcolParam("SHOW_PART_NO_FLAG") = 1 Then
-      Call Cf.SetFieldValue(5, "^", "ชื่อสินค้า", "<")
+      Call Cf.SetFieldValue(5, "^", "ชื่อ", "<")
       Call m_Headers1.AddField(Cf)
    Else
-      Call Cf.SetFieldValue(0, "^", "ชื่อสินค้า", "<")
+      Call Cf.SetFieldValue(0, "^", "ชื่อ", "<")
       Call m_Headers1.AddField(Cf)
    End If
    Call Cf.SetFieldValue(2, "^", "จำนวน", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ราคา/หน่วย", ">")
+   Call Cf.SetFieldValue(2, "^", "ประกาศ", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ลดปรกติ", ">")
+   Call Cf.SetFieldValue(2, "^", "ลดหน้าบิล", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ลดเพิ่ม", ">")
+   Call Cf.SetFieldValue(2, "^", "ลดหลังบิล", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ค่าขนส่ง", ">")
+   Call Cf.SetFieldValue(2, "^", "ประกาศ", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ลดปรกติ", ">")
+   Call Cf.SetFieldValue(2, "^", "ส่วนลด", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ลดเพิ่ม", ">")
    Call m_Headers1.AddField(Cf)
@@ -207,20 +226,25 @@ Dim iCount As Long
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "คิดแบบ", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "รวมขายเฉลี่ย", ">")
+   Call Cf.SetFieldValue(2, "^", "ขายจริง", ">")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(3, "^", "มูลค่าขาย", ">")
    Call m_Headers1.AddField(Cf)
    If mcolParam("SHOW_EDIT_PRICE_FLAG") = 1 Then
-      Call Cf.SetFieldValue(2, "^", "ผู้อนุมัติราคา", "^")
+      Call Cf.SetFieldValue(2, "^", "อนุมัติ", "^")
       Call m_Headers1.AddField(Cf)
    Else
-      Call Cf.SetFieldValue(0, "^", "ผู้อนุมัติราคา", "^")
+      Call Cf.SetFieldValue(0, "^", "อนุมัติ", "^")
       Call m_Headers1.AddField(Cf)
    End If
    
    Set Cf = Nothing
-            
+
+   Call m_Headers0.GetString(1, TempStr1, TempStr1_1)
+   strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
+   strPrint = TempStr1_1
+   Call Vsp.AddTable(strFormat, "", strPrint)
+   
   Call m_Headers1.GetString(1, TempStr1, TempStr1_1)
    strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
    strPrint = TempStr1_1
@@ -246,7 +270,7 @@ Dim ToDate As String
    mblnNewPage = True
    mblnEndPage = True
    Vsp.PaperSize = pprA4 '
-   Vsp.ORIENTATION = orPortrait
+   Vsp.ORIENTATION = orLandscape
    Vsp.MarginBottom = 1440
    Vsp.MarginFooter = 1440
    Vsp.MarginHeader = 1440
@@ -302,7 +326,7 @@ Dim strPrint As String
 Dim TempProOtherName As String
 Dim CountDoc As Long
 Dim CountDoc2 As Long
-Dim Amount As Double
+Dim AMOUNT As Double
 
    RName = "genDoc"
 '-----------------------------------------------------------------------------------------------------
@@ -473,7 +497,7 @@ Dim Amount As Double
             Total1(J) = Total1(J) + Di.ITEM_AMOUNT
             Total2(J) = Total2(J) + Di.ITEM_AMOUNT
             Total3(J) = -2
-            Amount = Di.ITEM_AMOUNT
+            AMOUNT = Di.ITEM_AMOUNT
          Else
              J = J + 1
             Set HeadCf = m_Headers1.Fields(J)
@@ -483,7 +507,7 @@ Dim Amount As Double
             Total1(J) = Total1(J) + Di.PACK_AMOUNT
             Total2(J) = Total2(J) + Di.PACK_AMOUNT
             Total3(J) = -2
-            Amount = Di.PACK_AMOUNT
+            AMOUNT = Di.PACK_AMOUNT
          End If
 
           J = J + 1
@@ -491,8 +515,8 @@ Dim Amount As Double
          TempStr = FormatNumber(Di.PACKAGE_RATE, -1)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PACKAGE_RATE)
-            Total2(J) = Total2(J) + (Amount * Di.PACKAGE_RATE)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PACKAGE_RATE)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PACKAGE_RATE)
             Total3(J) = -1
 
          
@@ -501,8 +525,8 @@ Dim Amount As Double
             TempStr = IIf(Di.DISCOUNT_PER_PACK_PART > 0, "(" & FormatNumber(Di.DISCOUNT_PER_PACK_PART, -1) & ")", Di.DISCOUNT_PER_PACK_PART)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.DISCOUNT_PER_PACK_PART)
-            Total2(J) = Total2(J) + (Amount * Di.DISCOUNT_PER_PACK_PART)
+            Total1(J) = Total1(J) + (AMOUNT * Di.DISCOUNT_PER_PACK_PART)
+            Total2(J) = Total2(J) + (AMOUNT * Di.DISCOUNT_PER_PACK_PART)
             Total3(J) = -3
 
              
@@ -513,11 +537,12 @@ Dim Amount As Double
             Else
                Amt = 0
             End If
-             TempStr = IIf(Amt > 0, "(" & FormatNumber(Amt, -1) & ")", Amt)
+            Amt = Amt + FormatNumber(Di.DISCOUNT_EXTRA_AMOUNT_PART, -1)
+            TempStr = IIf(Amt > 0, "(" & FormatNumber(Amt, -1) & ")", Amt)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Amt)
-            Total2(J) = Total2(J) + (Amount * Amt)
+            Total1(J) = Total1(J) + (AMOUNT * Amt)
+            Total2(J) = Total2(J) + (AMOUNT * Amt)
             Total3(J) = -3
 
          
@@ -526,8 +551,8 @@ Dim Amount As Double
          TempStr = FormatNumber(Di.RATE_CUSTOMER, -1)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         Total1(J) = Total1(J) + (Amount * Di.RATE_CUSTOMER)
-         Total2(J) = Total2(J) + (Amount * Di.RATE_CUSTOMER)
+         Total1(J) = Total1(J) + (AMOUNT * Di.RATE_CUSTOMER)
+         Total2(J) = Total2(J) + (AMOUNT * Di.RATE_CUSTOMER)
          Total3(J) = -1
 
          
@@ -536,8 +561,8 @@ Dim Amount As Double
             TempStr = IIf(Di.DISCOUNT_PER_PACK_DLC > 0, "(" & FormatNumber(Di.DISCOUNT_PER_PACK_DLC, -1) & ")", Di.DISCOUNT_PER_PACK_DLC)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.DISCOUNT_PER_PACK_DLC)
-            Total2(J) = Total2(J) + (Amount * Di.DISCOUNT_PER_PACK_DLC)
+            Total1(J) = Total1(J) + (AMOUNT * Di.DISCOUNT_PER_PACK_DLC)
+            Total2(J) = Total2(J) + (AMOUNT * Di.DISCOUNT_PER_PACK_DLC)
             Total3(J) = -3
              
              J = J + 1
@@ -550,8 +575,8 @@ Dim Amount As Double
             TempStr = IIf(Amt > 0, "(" & FormatNumber(Amt, -1) & ")", Amt)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Amt)
-            Total2(J) = Total2(J) + (Amount * Amt)
+            Total1(J) = Total1(J) + (AMOUNT * Amt)
+            Total2(J) = Total2(J) + (AMOUNT * Amt)
             Total3(J) = -3
 
 
@@ -561,8 +586,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_COMMISSION_KG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_COMMISSION_KG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_COMMISSION_KG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_COMMISSION_KG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_COMMISSION_KG)
             Total3(J) = -1
 
             
@@ -571,8 +596,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_CHEER_KG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_CHEER_KG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_CHEER_KG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_CHEER_KG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_CHEER_KG)
             Total3(J) = -1
 
             
@@ -581,8 +606,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_DST_KG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_DST_KG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_DST_KG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_DST_KG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_DST_KG)
             Total3(J) = -1
 
             
@@ -591,8 +616,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_OTHER1_KG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_OTHER1_KG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_OTHER1_KG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_OTHER1_KG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_OTHER1_KG)
             Total3(J) = -1
 
             
@@ -601,8 +626,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_OTHER2_KG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_OTHER2_KG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_OTHER2_KG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_OTHER2_KG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_OTHER2_KG)
             Total3(J) = -1
 
             
@@ -611,8 +636,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_OTHER3_KG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_OTHER3_KG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_OTHER3_KG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_OTHER3_KG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_OTHER3_KG)
             Total3(J) = -1
 
             
@@ -623,8 +648,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_COMMISSION_BAG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_COMMISSION_BAG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_COMMISSION_BAG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_COMMISSION_BAG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_COMMISSION_BAG)
             Total3(J) = -1
 
             
@@ -633,8 +658,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_CHEER_BAG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_CHEER_BAG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_CHEER_BAG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_CHEER_BAG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_CHEER_BAG)
             Total3(J) = -1
 
             
@@ -643,8 +668,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_DST_BAG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_DST_BAG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_DST_BAG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_DST_BAG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_DST_BAG)
             Total3(J) = -1
 
             
@@ -653,8 +678,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_OTHER1_BAG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_OTHER1_BAG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_OTHER1_BAG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_OTHER1_BAG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_OTHER1_BAG)
             Total3(J) = -1
    
             
@@ -663,8 +688,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_OTHER2_BAG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_OTHER2_BAG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_OTHER2_BAG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_OTHER2_BAG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_OTHER2_BAG)
             Total3(J) = -1
             
             J = J + 1
@@ -672,8 +697,8 @@ Dim Amount As Double
             TempStr = FormatNumber(Di.PRO_OTHER3_BAG, -1)
             Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
             Call m_Details1.AddField(BodyCf)
-            Total1(J) = Total1(J) + (Amount * Di.PRO_OTHER3_BAG)
-            Total2(J) = Total2(J) + (Amount * Di.PRO_OTHER3_BAG)
+            Total1(J) = Total1(J) + (AMOUNT * Di.PRO_OTHER3_BAG)
+            Total2(J) = Total2(J) + (AMOUNT * Di.PRO_OTHER3_BAG)
             Total3(J) = -1
             
             Amt = Di.PRO_COMMISSION_BAG + Di.PRO_CHEER_BAG + Di.PRO_DST_BAG + Di.PRO_OTHER1_BAG + Di.PRO_OTHER2_BAG + Di.PRO_OTHER3_BAG
@@ -699,8 +724,8 @@ Dim Amount As Double
          TempStr = FormatNumber(Amt, 2)
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         Total1(J) = Total1(J) + (Amount * Amt)
-         Total2(J) = Total2(J) + (Amount * Amt)
+         Total1(J) = Total1(J) + (AMOUNT * Amt)
+         Total2(J) = Total2(J) + (AMOUNT * Amt)
          Total3(J) = -1
 
          

@@ -198,12 +198,14 @@ Public SUM_RATE_OTHER_KG As Double
 Public EX_WORKS_PRICE_ITEM_ID As Long
 Public EX_DELIVERY_COST_ITEM_ID As Long
 Public EX_PROMOTION_PART_ITEM_ID As Long
+Public EX_PROMOTION_EXTRA_PART_ITEM_ID As Long
 Public EX_PROMOTION_DLC_ITEM_ID As Long
 Public PACKAGE_RATE As Double
 Public RATE_CUSTOMER As Double
 Public USER_APPLOVE_PRICE As String
 Public PRICE_THINK_TYPE As Long
 Public DISCOUNT_AMOUNT_PART As Double
+Public DISCOUNT_EXTRA_AMOUNT_PART As Double
 Public DISCOUNT_AMOUNT_DLC As Double
 
 Public DISCOUNT_PER_PACK_PART As Double
@@ -1750,8 +1752,10 @@ Public Function CopyObject(Ind As Long, TempObj As CDoItem)
    USER_APPLOVE_PRICE = TempObj.USER_APPLOVE_PRICE
    
    EX_PROMOTION_PART_ITEM_ID = TempObj.EX_PROMOTION_PART_ITEM_ID
+   EX_PROMOTION_EXTRA_PART_ITEM_ID = TempObj.EX_PROMOTION_EXTRA_PART_ITEM_ID
    EX_PROMOTION_DLC_ITEM_ID = TempObj.EX_PROMOTION_DLC_ITEM_ID
    DISCOUNT_AMOUNT_PART = TempObj.DISCOUNT_AMOUNT_PART
+   DISCOUNT_EXTRA_AMOUNT_PART = TempObj.DISCOUNT_EXTRA_AMOUNT_PART
    DISCOUNT_AMOUNT_DLC = TempObj.DISCOUNT_AMOUNT_DLC
 
 End Function
@@ -1828,9 +1832,11 @@ Public Function CopyObjectFromSo(Ind As Long, TempObj As CSaleOrder)
    PRO_OTHER3_KG = TempObj.PRO_OTHER3_KG
    USER_APPLOVE_PRICE = TempObj.USER_APPLOVE_PRICE
    DISCOUNT_AMOUNT_PART = TempObj.DISCOUNT_AMOUNT_PART
+   DISCOUNT_EXTRA_AMOUNT_PART = TempObj.DISCOUNT_EXTRA_AMOUNT_PART
    DISCOUNT_AMOUNT_DLC = TempObj.DISCOUNT_AMOUNT_DLC
    
    EX_PROMOTION_PART_ITEM_ID = TempObj.EX_PROMOTION_PART_ITEM_ID
+   EX_PROMOTION_EXTRA_PART_ITEM_ID = TempObj.EX_PROMOTION_EXTRA_PART_ITEM_ID
    EX_PROMOTION_DLC_ITEM_ID = TempObj.EX_PROMOTION_DLC_ITEM_ID
    BILLING_DOC_SO_ID = TempObj.BILLING_DOC_SO_ID
    BILLING_DOC_SO_NO = TempObj.BILLING_DOC_SO_NO
@@ -1987,8 +1993,10 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       USER_APPLOVE_PRICE = NVLS(Rs("USER_APPLOVE_PRICE"), "")
       
       EX_PROMOTION_PART_ITEM_ID = NVLI(Rs("EX_PROMOTION_PART_ITEM_ID"), -1)
+      EX_PROMOTION_EXTRA_PART_ITEM_ID = NVLI(Rs("EX_PROMOTION_EXTRA_PART_ITEM_ID"), -1)
       EX_PROMOTION_DLC_ITEM_ID = NVLI(Rs("EX_PROMOTION_DLC_ITEM_ID"), -1)
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
 
    ElseIf Ind = 2 Then
@@ -2612,6 +2620,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PRICE_THINK_TYPE = NVLI(Rs("PRICE_THINK_TYPE"), -1)
       
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
       DISCOUNT_PER_PACK_PART = NVLD(Rs("DISCOUNT_PER_PACK_PART"), 0)
       DISCOUNT_PER_PACK_DLC = NVLD(Rs("DISCOUNT_PER_PACK_DLC"), 0)
@@ -2669,6 +2678,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       RATE_TYPE_CUS = NVLI(Rs("RATE_TYPE_CUS"), -1)
       
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
       
       DISCOUNT_PER_PACK_PART = NVLD(Rs("DISCOUNT_PER_PACK_PART"), 0)
@@ -2729,6 +2739,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       SALE_LNAME = NVLS(Rs("SALE_LNAME"), "")
       
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
       
       DISCOUNT_PER_PACK_PART = NVLD(Rs("DISCOUNT_PER_PACK_PART"), 0)
@@ -2879,7 +2890,7 @@ Dim TempID7 As String
 Dim TempID8 As String
 Dim TempID9 As String
 Dim TempID10  As String
-
+Dim TempID11  As String
 
    TempID1 = PIG_STATUS
    If PIG_STATUS <= 0 Then
@@ -2930,6 +2941,13 @@ Dim TempID10  As String
    If EX_PROMOTION_DLC_ITEM_ID <= 0 Then
       TempID10 = "NULL"
    End If
+   
+   TempID11 = EX_PROMOTION_EXTRA_PART_ITEM_ID
+   If EX_PROMOTION_EXTRA_PART_ITEM_ID <= 0 Then
+      TempID11 = "NULL"
+   End If
+   
+   'EX_PROMOTION_EXTRA_PART_ITEM_ID
    
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
@@ -3002,10 +3020,12 @@ Dim TempID10  As String
                     "    EX_WORKS_PRICE_ITEM_ID, " & _
                     "    EX_DELIVERY_COST_ITEM_ID, " & _
                     "    EX_PROMOTION_PART_ITEM_ID, " & _
+                    "    EX_PROMOTION_EXTRA_PART_ITEM_ID, " & _
                     "    EX_PROMOTION_DLC_ITEM_ID, " & _
                     "    PACKAGE_RATE, " & _
                     "    RATE_CUSTOMER, " & _
                     "    DISCOUNT_AMOUNT_PART, " & _
+                    "    DISCOUNT_EXTRA_AMOUNT_PART, " & _
                     "    DISCOUNT_AMOUNT_DLC, " & _
                     "    USER_APPLOVE_PRICE" & _
                      ") " & _
@@ -3076,10 +3096,12 @@ Dim TempID10  As String
                         TempID7 & "," & _
                         TempID8 & "," & _
                         TempID9 & "," & _
+                        TempID11 & "," & _
                         TempID10 & "," & _
                         PACKAGE_RATE & "," & _
                         RATE_CUSTOMER & "," & _
                         DISCOUNT_AMOUNT_PART & "," & _
+                        DISCOUNT_EXTRA_AMOUNT_PART & "," & _
                         DISCOUNT_AMOUNT_DLC & "," & _
                         "'" & USER_APPLOVE_PRICE & "'" & _
                      ") "
@@ -3147,10 +3169,12 @@ Dim TempID10  As String
                 "   EX_WORKS_PRICE_ITEM_ID = " & TempID7 & ", " & _
                 "   EX_DELIVERY_COST_ITEM_ID = " & TempID8 & ", " & _
                 "   EX_PROMOTION_PART_ITEM_ID = " & TempID9 & ", " & _
+                "   EX_PROMOTION_EXTRA_PART_ITEM_ID = " & TempID11 & ", " & _
                 "   EX_PROMOTION_DLC_ITEM_ID = " & TempID10 & ", " & _
                 "   PACKAGE_RATE = " & PACKAGE_RATE & ", " & _
                 "   RATE_CUSTOMER = " & RATE_CUSTOMER & ", " & _
                 "   DISCOUNT_AMOUNT_PART = " & DISCOUNT_AMOUNT_PART & ", " & _
+                "   DISCOUNT_EXTRA_AMOUNT_PART = " & DISCOUNT_EXTRA_AMOUNT_PART & ", " & _
                 "   DISCOUNT_AMOUNT_DLC = " & DISCOUNT_AMOUNT_DLC & ", " & _
                 "   USER_APPLOVE_PRICE = '" & USER_APPLOVE_PRICE & "'" & _
                  " WHERE DO_ITEM_ID = " & DO_ITEM_ID '

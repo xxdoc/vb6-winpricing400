@@ -302,7 +302,7 @@ Dim PrevKey2 As String
          Call m_Details1.AddField(BodyCf)
 
          Set HeadCf = m_Headers1.Fields(5)
-         TempStr = Ua.USER_STATUS2
+         TempStr = Ua.USER_STATUS3
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 

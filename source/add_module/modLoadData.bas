@@ -4692,7 +4692,7 @@ Dim I As Long
 
    D.DELIVERY_CUS_ITEM_ID = -1
    D.CUSTOMER_ID = CusID
-   D.HIDE_FLAG = CancelFlag
+   D.HIDE_FLAG = "N" 'CancelFlag
    Call D.QueryData(Rs, ItemCount)
 
    If Not (C Is Nothing) Then
@@ -4983,7 +4983,7 @@ glbErrorLog.SystemErrorMsg = Err.DESCRIPTION & " , " & FUNC_NAME & " , KEY= " & 
    glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
 End Sub
 
-Public Sub LoadExPromotionPartItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "Y")
+Public Sub LoadExPromotionPartItem(C As ComboBox, Optional Cl As Collection = Nothing, Optional ExWorksPriceId As Long = -1, Optional KeyType As Byte = 1, Optional FromDate As Date = -1, Optional ToDate As Date = -1, Optional ApprovedFlag As String = "Y", Optional ExType As Long = 3)
 On Error GoTo ErrorHandler
 Dim D As CExWorksPrice
 Dim ItemCount As Long
@@ -4995,7 +4995,7 @@ Dim I As Long
    Set Rs = New ADODB.Recordset
 
    D.EX_WORKS_PRICE_ID = ExWorksPriceId
-   D.EX_WORKS_PRICE_TYPE = 3
+   D.EX_WORKS_PRICE_TYPE = ExType
    D.BETWEEN_DATE = FromDate
    D.APPROVED_FLAG = ApprovedFlag 'ดึงเฉพาะที่ผ่านการอนุมัติแล้วเท่านั้น
    Call D.QueryData(4, Rs, ItemCount)
@@ -18478,7 +18478,7 @@ ElseIf Area = 2 Then
       Set EDCI = Nothing
       Rs.MoveNext
    Wend
-ElseIf Area = 3 Then
+ElseIf Area = 3 Or Area = 5 Then
    Set EPPI = New CExPromotionPartItem
    EPPI.EX_WORKS_PRICE_ID = id
    Call EPPI.QueryData(3, Rs, ItemCount)
@@ -18594,7 +18594,7 @@ ElseIf Area = 2 Then
    Else
       LoadDeclareCount = 0
    End If
-ElseIf Area = 3 Then
+ElseIf Area = 3 Or Area = 5 Then
    Set EPPI = New CExPromotionPartItem
    EPPI.EX_WORKS_PRICE_ID = id
    

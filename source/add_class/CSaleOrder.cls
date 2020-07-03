@@ -136,8 +136,10 @@ Public PRO_OTHER2_KG   As Double
 Public PRO_OTHER3_KG   As Double
 
 Public EX_PROMOTION_PART_ITEM_ID As Long
+Public EX_PROMOTION_EXTRA_PART_ITEM_ID As Long
 Public EX_PROMOTION_DLC_ITEM_ID As Long
 Public DISCOUNT_AMOUNT_PART As Double
+Public DISCOUNT_EXTRA_AMOUNT_PART As Double
 Public DISCOUNT_AMOUNT_DLC As Double
 
 Public EX_WORKS_PRICE_ITEM_ID As Long
@@ -831,8 +833,10 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       USER_APPLOVE_PRICE = NVLS(Rs("USER_APPLOVE_PRICE"), "")
       
       EX_PROMOTION_PART_ITEM_ID = NVLI(Rs("EX_PROMOTION_PART_ITEM_ID"), -1)
+      EX_PROMOTION_EXTRA_PART_ITEM_ID = NVLI(Rs("EX_PROMOTION_EXTRA_PART_ITEM_ID"), -1)
       EX_PROMOTION_DLC_ITEM_ID = NVLI(Rs("EX_PROMOTION_DLC_ITEM_ID"), -1)
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
    ElseIf Ind = 2 Then
       CUSTOMER_ID = NVLI(Rs("CUSTOMER_ID"), -1)
@@ -1077,7 +1081,7 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim TempID1 As String
 Dim TempID2 As String
@@ -1087,6 +1091,7 @@ Dim TempID7 As String
 Dim TempID8 As String
 Dim TempID9 As String
 Dim TempID10 As String
+Dim TempID11 As String
 
    TempID1 = PIG_STATUS
    If PIG_STATUS <= 0 Then
@@ -1128,10 +1133,15 @@ Dim TempID10 As String
       TempID10 = "NULL"
    End If
    
+   TempID11 = EX_PROMOTION_EXTRA_PART_ITEM_ID
+   If EX_PROMOTION_EXTRA_PART_ITEM_ID <= 0 Then
+      TempID11 = "NULL"
+   End If
+   
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("SALE_ORDER_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("SALE_ORDER_SEQ", id, glbErrorLog)
       
       SQL1 = "INSERT INTO SALE_ORDER " & _
                      "( " & _
@@ -1196,17 +1206,19 @@ Dim TempID10 As String
                     "    EX_WORKS_PRICE_ITEM_ID, " & _
                     "    EX_DELIVERY_COST_ITEM_ID, " & _
                     "    EX_PROMOTION_PART_ITEM_ID, " & _
+                    "    EX_PROMOTION_EXTRA_PART_ITEM_ID, " & _
                     "    EX_PROMOTION_DLC_ITEM_ID, " & _
                     "    PACKAGE_RATE, " & _
                     "    RATE_CUSTOMER, " & _
                     "    DISCOUNT_AMOUNT_PART, " & _
+                    "    DISCOUNT_EXTRA_AMOUNT_PART, " & _
                     "    DISCOUNT_AMOUNT_DLC, " & _
                     "    USER_APPLOVE_PRICE" & _
                      ") " & _
                      "VALUES "
             SQL1 = SQL1 & _
                      "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "" & DO_ID & "," & _
                          "" & PART_ITEM_ID & "," & _
                          "" & LOCATION_ID & "," & _
@@ -1267,15 +1279,17 @@ Dim TempID10 As String
                         TempID7 & "," & _
                         TempID8 & "," & _
                         TempID9 & "," & _
+                        TempID11 & "," & _
                         TempID10 & "," & _
                         PACKAGE_RATE & "," & _
                         RATE_CUSTOMER & "," & _
                         DISCOUNT_AMOUNT_PART & "," & _
+                        DISCOUNT_EXTRA_AMOUNT_PART & "," & _
                         DISCOUNT_AMOUNT_DLC & "," & _
                         "'" & USER_APPLOVE_PRICE & "'" & _
                      ") "
-         SALE_ORDER_ID = ID
-   Else 'Show edit
+         SALE_ORDER_ID = id
+   Else 'Show edit  DISCOUNT_EXTRA_AMOUNT_PART
 '      Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       
       SQL1 = "UPDATE SALE_ORDER SET " & _
@@ -1336,10 +1350,12 @@ Dim TempID10 As String
                 "   EX_WORKS_PRICE_ITEM_ID = " & TempID7 & ", " & _
                 "   EX_DELIVERY_COST_ITEM_ID = " & TempID8 & ", " & _
                 "   EX_PROMOTION_PART_ITEM_ID = " & TempID9 & ", " & _
+                "   EX_PROMOTION_EXTRA_PART_ITEM_ID = " & TempID11 & ", " & _
                 "   EX_PROMOTION_DLC_ITEM_ID = " & TempID10 & ", " & _
                 "   PACKAGE_RATE = " & PACKAGE_RATE & ", " & _
                 "   RATE_CUSTOMER = " & RATE_CUSTOMER & ", " & _
                 "   DISCOUNT_AMOUNT_PART = " & DISCOUNT_AMOUNT_PART & ", " & _
+                "   DISCOUNT_EXTRA_AMOUNT_PART = " & DISCOUNT_EXTRA_AMOUNT_PART & ", " & _
                 "   DISCOUNT_AMOUNT_DLC = " & DISCOUNT_AMOUNT_DLC & ", " & _
                 "   USER_APPLOVE_PRICE = '" & USER_APPLOVE_PRICE & "'" & _
                  " WHERE SALE_ORDER_ID = " & SALE_ORDER_ID '

@@ -120,7 +120,7 @@ Private m_Rs As ADODB.Recordset
 Public TempCollection As Collection
 Public m_CollPalletInLot As Collection
 Public TempLotItemWh As CLotItemWH
-Public ID As Long
+Public id As Long
 Public OKClick As Boolean
 Public ShowMode As SHOW_MODE_TYPE
 Public HeaderText As String
@@ -146,7 +146,7 @@ Dim PD  As CPalletDoc
      If Area = 2 Then
          txtPalletNo.Text = 99
      Else
-       Set PD = TempCollection.Item(ID)
+       Set PD = TempCollection.Item(id)
        txtPalletNo.Text = PD.PALLET_DOC_NO
        txtCapacityAmount.Text = PD.CAPACITY_AMOUNT
        PD.TEMP_PALLET_CAP_LAST = PD.CAPACITY_AMOUNT
@@ -249,7 +249,7 @@ PALLET_NO = Format(Trim(txtPalletNo.Text), "00")
    If ShowMode = SHOW_ADD Then
       Set PD = New CPalletDoc
    Else
-      Set PD = TempCollection.Item(ID)
+      Set PD = TempCollection.Item(id)
    End If
    
    Dim t_PD As CPalletDoc
@@ -304,7 +304,7 @@ Private Sub Form_Activate()
          Call QueryData(True)
          tempPallet = txtPalletNo.Text
       ElseIf ShowMode = SHOW_ADD Then
-         ID = 0
+         id = 0
          txtPalletNo.Enabled = True
       End If
       TempValue = txtCapacityAmount.Text

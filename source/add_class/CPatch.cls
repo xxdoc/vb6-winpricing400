@@ -25132,3 +25132,364 @@ ErrorHandler:
       glbErrorLog.ShowUserError
    End If
 End Function
+Public Function Patch_2020_03_27_1_lek() As Boolean
+On Error GoTo ErrorHandler
+Dim SQL As String
+Dim ServerDateTime As String
+Dim HasBegin As Boolean
+Dim VersionStr As String
+
+   VersionStr = "2020_03_27_1_lek"
+   HasBegin = False
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+   SQL = "ALTER TABLE DELIVERY_CUS_ITEM ADD HIDE_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE DELIVERY_CUS_ITEM SET HIDE_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   m_Conn.BeginTrans
+   HasBegin = True
+
+   SQL = "INSERT INTO PATCH_DELIVERY "
+   SQL = SQL & "( "
+   SQL = SQL & "PATCH_DELIVERY_ID, "
+   SQL = SQL & "PATCH_VERSION, "
+   SQL = SQL & "PATCH_DATE, "
+   SQL = SQL & "PATCH_BY "
+   SQL = SQL & ") VALUES "
+   SQL = SQL & "( "
+   SQL = SQL & "GEN_ID(PATCH_DELIVERY_SEQ, 1), "
+   SQL = SQL & "'" & VersionStr & "', "
+   SQL = SQL & "'" & ServerDateTime & "', "
+   SQL = SQL & "" & glbUser.USER_ID & " "
+   SQL = SQL & ")"
+   m_Conn.Execute (SQL)
+
+   m_Conn.CommitTrans
+   HasBegin = False
+
+   glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " done."
+   glbErrorLog.ShowUserError
+   
+   Patch_2020_03_27_1_lek = True
+   Exit Function
+ErrorHandler:
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.1" & m_Conn.Errors(0)
+      glbErrorLog.ShowUserError
+   If HasBegin Then
+      m_Conn.RollbackTrans
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.2"
+      glbErrorLog.ShowUserError
+   End If
+End Function
+
+Public Function Patch_2020_05_28_1_lek() As Boolean
+On Error GoTo ErrorHandler
+Dim SQL As String
+Dim ServerDateTime As String
+Dim HasBegin As Boolean
+Dim VersionStr As String
+
+   VersionStr = "2020_05_28_1_lek"
+   HasBegin = False
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+   SQL = "ALTER TABLE EX_WORKS_PRICE ADD EX_WORKS_PRICE_NOTE   STRING_TYPE "
+   m_Conn.Execute (SQL)
+
+'EX_WORKS_PRICE_ITEM
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD APPROVED_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD APPROVED_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_WORKS_PRICE_ITEM SET APPROVED_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD VERIFY_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD VERIFY_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_WORKS_PRICE_ITEM SET VERIFY_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   'EX_DELIVERY_COST_ITEM
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD APPROVED_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD APPROVED_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_DELIVERY_COST_ITEM SET APPROVED_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD VERIFY_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD VERIFY_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_DELIVERY_COST_ITEM SET VERIFY_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+  'EX_PROMOTION_PART_ITEM
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD APPROVED_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD APPROVED_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_PROMOTION_PART_ITEM SET APPROVED_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD VERIFY_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD VERIFY_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_PROMOTION_PART_ITEM SET VERIFY_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+     'EX_PROMOTION_DLC_ITEM
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD APPROVED_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD APPROVED_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_PROMOTION_DLC_ITEM SET APPROVED_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD VERIFY_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD VERIFY_NAME   CODE_TYPE "
+   m_Conn.Execute (SQL)
+   
+   SQL = "UPDATE EX_PROMOTION_DLC_ITEM SET VERIFY_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD LAST_EDIT_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD LAST_EDIT_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD LAST_EDIT_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD LAST_EDIT_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_WORKS_PRICE_ITEM SET LAST_EDIT_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_DELIVERY_COST_ITEM SET LAST_EDIT_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_PROMOTION_PART_ITEM SET LAST_EDIT_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_PROMOTION_DLC_ITEM SET LAST_EDIT_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD DECLARE_NEW_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD DECLARE_NEW_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD DECLARE_NEW_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD DECLARE_NEW_FLAG   FLAG_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_WORKS_PRICE_ITEM SET DECLARE_NEW_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_DELIVERY_COST_ITEM SET DECLARE_NEW_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_PROMOTION_PART_ITEM SET DECLARE_NEW_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+
+   SQL = "UPDATE EX_PROMOTION_DLC_ITEM SET DECLARE_NEW_FLAG = 'N' "
+   m_Conn.Execute (SQL)
+   
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD GP_VALUE  MONEY_TYPE "
+   m_Conn.Execute (SQL)
+
+
+   SQL = "ALTER TABLE EX_WORKS_PRICE_ITEM ADD DECLARE_COUNT   ID_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_DELIVERY_COST_ITEM ADD DECLARE_COUNT   ID_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_PROMOTION_PART_ITEM ADD DECLARE_COUNT   ID_TYPE "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE EX_PROMOTION_DLC_ITEM ADD DECLARE_COUNT   ID_TYPE "
+   m_Conn.Execute (SQL)
+   
+   m_Conn.BeginTrans
+   HasBegin = True
+
+   SQL = "INSERT INTO PATCH_DELIVERY "
+   SQL = SQL & "( "
+   SQL = SQL & "PATCH_DELIVERY_ID, "
+   SQL = SQL & "PATCH_VERSION, "
+   SQL = SQL & "PATCH_DATE, "
+   SQL = SQL & "PATCH_BY "
+   SQL = SQL & ") VALUES "
+   SQL = SQL & "( "
+   SQL = SQL & "GEN_ID(PATCH_DELIVERY_SEQ, 1), "
+   SQL = SQL & "'" & VersionStr & "', "
+   SQL = SQL & "'" & ServerDateTime & "', "
+   SQL = SQL & "" & glbUser.USER_ID & " "
+   SQL = SQL & ")"
+   m_Conn.Execute (SQL)
+
+   m_Conn.CommitTrans
+   HasBegin = False
+
+   glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " done."
+   glbErrorLog.ShowUserError
+   
+   Patch_2020_05_28_1_lek = True
+   Exit Function
+ErrorHandler:
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.1" & m_Conn.Errors(0)
+      glbErrorLog.ShowUserError
+   If HasBegin Then
+      m_Conn.RollbackTrans
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.2"
+      glbErrorLog.ShowUserError
+   End If
+End Function
+Public Function Patch_2020_06_20_1_lek() As Boolean
+On Error GoTo ErrorHandler
+Dim SQL As String
+Dim ServerDateTime As String
+Dim HasBegin As Boolean
+Dim VersionStr As String
+
+   VersionStr = "2020_06_20_1_lek"
+   HasBegin = False
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+   
+   SQL = "ALTER TABLE DO_ITEM ADD EX_PROMOTION_EXTRA_PART_ITEM_ID ID_TYPE  "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE DO_ITEM ADD DISCOUNT_EXTRA_AMOUNT_PART  MONEY_TYPE  "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE SALE_ORDER ADD EX_PROMOTION_EXTRA_PART_ITEM_ID ID_TYPE  "
+   m_Conn.Execute (SQL)
+
+   SQL = "ALTER TABLE SALE_ORDER ADD DISCOUNT_EXTRA_AMOUNT_PART  MONEY_TYPE  "
+   m_Conn.Execute (SQL)
+
+
+   SQL = " ALTER TABLE DO_ITEM ADD CONSTRAINT EX_PMT_EXTRA_PART_ITEM_ID_FK  FOREIGN KEY (EX_PROMOTION_EXTRA_PART_ITEM_ID) REFERENCES EX_PROMOTION_PART_ITEM(EX_PROMOTION_PART_ITEM_ID)  "
+   m_Conn.Execute (SQL)
+
+   SQL = " ALTER TABLE SALE_ORDER ADD CONSTRAINT EX_PMT_EXTRA_PART_ITEM_ID_FK2 FOREIGN KEY (EX_PROMOTION_EXTRA_PART_ITEM_ID) REFERENCES EX_PROMOTION_PART_ITEM(EX_PROMOTION_PART_ITEM_ID)  "
+   m_Conn.Execute (SQL)
+   
+
+   
+   
+   m_Conn.BeginTrans
+   HasBegin = True
+
+   SQL = "INSERT INTO PATCH_DELIVERY "
+   SQL = SQL & "( "
+   SQL = SQL & "PATCH_DELIVERY_ID, "
+   SQL = SQL & "PATCH_VERSION, "
+   SQL = SQL & "PATCH_DATE, "
+   SQL = SQL & "PATCH_BY "
+   SQL = SQL & ") VALUES "
+   SQL = SQL & "( "
+   SQL = SQL & "GEN_ID(PATCH_DELIVERY_SEQ, 1), "
+   SQL = SQL & "'" & VersionStr & "', "
+   SQL = SQL & "'" & ServerDateTime & "', "
+   SQL = SQL & "" & glbUser.USER_ID & " "
+   SQL = SQL & ")"
+   m_Conn.Execute (SQL)
+
+   m_Conn.CommitTrans
+   HasBegin = False
+
+   glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " done."
+   glbErrorLog.ShowUserError
+   
+   Patch_2020_06_20_1_lek = True
+   Exit Function
+ErrorHandler:
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.1" & m_Conn.Errors(0)
+      glbErrorLog.ShowUserError
+   If HasBegin Then
+      m_Conn.RollbackTrans
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.2"
+      glbErrorLog.ShowUserError
+   End If
+End Function
+Public Function Patch_2020_06_29_1_lek() As Boolean
+On Error GoTo ErrorHandler
+Dim SQL As String
+Dim ServerDateTime As String
+Dim HasBegin As Boolean
+Dim VersionStr As String
+
+   VersionStr = "2020_06_29_1_lek"
+   HasBegin = False
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+  SQL = "ALTER TABLE USER_ACCOUNT ALTER COLUMN USER_STATUS2 TO USER_STATUS3 "
+   m_Conn.Execute (SQL)
+
+   m_Conn.BeginTrans
+   HasBegin = True
+
+   SQL = "INSERT INTO PATCH_DELIVERY "
+   SQL = SQL & "( "
+   SQL = SQL & "PATCH_DELIVERY_ID, "
+   SQL = SQL & "PATCH_VERSION, "
+   SQL = SQL & "PATCH_DATE, "
+   SQL = SQL & "PATCH_BY "
+   SQL = SQL & ") VALUES "
+   SQL = SQL & "( "
+   SQL = SQL & "GEN_ID(PATCH_DELIVERY_SEQ, 1), "
+   SQL = SQL & "'" & VersionStr & "', "
+   SQL = SQL & "'" & ServerDateTime & "', "
+   SQL = SQL & "" & glbUser.USER_ID & " "
+   SQL = SQL & ")"
+   m_Conn.Execute (SQL)
+
+   m_Conn.CommitTrans
+   HasBegin = False
+
+   glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " done."
+   glbErrorLog.ShowUserError
+
+   Patch_2020_06_29_1_lek = True
+   Exit Function
+ErrorHandler:
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.1" & m_Conn.Errors(0)
+      glbErrorLog.ShowUserError
+   If HasBegin Then
+      m_Conn.RollbackTrans
+      glbErrorLog.LocalErrorMsg = "Patch to version " & VersionStr & " Error.2"
+      glbErrorLog.ShowUserError
+   End If
+End Function

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmAddEditDO2 
@@ -96,8 +96,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   74
             Top             =   390
             Width           =   4335
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold1Amount 
             Height          =   435
@@ -105,8 +105,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   73
             Top             =   390
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold2Desc 
             Height          =   435
@@ -114,8 +114,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   77
             Top             =   840
             Width           =   4335
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold2Amount 
             Height          =   435
@@ -123,8 +123,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   76
             Top             =   840
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold3Desc 
             Height          =   435
@@ -132,8 +132,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   80
             Top             =   1290
             Width           =   4335
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold3Amount 
             Height          =   435
@@ -141,8 +141,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   79
             Top             =   1290
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold4Desc 
             Height          =   435
@@ -150,8 +150,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   83
             Top             =   1740
             Width           =   4335
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtHold4Amount 
             Height          =   435
@@ -159,8 +159,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   82
             Top             =   1740
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin VB.Label lblHold4 
             Alignment       =   1  'Right Justify
@@ -283,8 +283,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   60
             Top             =   2010
             Width           =   1125
-            _extentx        =   1984
-            _extenty        =   714
+            _ExtentX        =   1984
+            _ExtentY        =   714
          End
          Begin prjFarmManagement.uctlDate uctlDueDate 
             Height          =   405
@@ -292,8 +292,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   52
             Top             =   150
             Width           =   3855
-            _extentx        =   6800
-            _extenty        =   714
+            _ExtentX        =   6800
+            _ExtentY        =   714
          End
          Begin prjFarmManagement.uctlTextBox txtPayment 
             Height          =   435
@@ -301,8 +301,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   55
             Top             =   1050
             Width           =   4305
-            _extentx        =   7594
-            _extenty        =   767
+            _ExtentX        =   7594
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtNote 
             Height          =   435
@@ -310,8 +310,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   53
             Top             =   600
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlDate uctlShipDate 
             Height          =   405
@@ -319,8 +319,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   56
             Top             =   1050
             Width           =   3855
-            _extentx        =   6800
-            _extenty        =   714
+            _ExtentX        =   6800
+            _ExtentY        =   714
          End
          Begin prjFarmManagement.uctlTextBox txtPONo 
             Height          =   435
@@ -328,8 +328,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   54
             Top             =   600
             Width           =   2805
-            _extentx        =   4948
-            _extenty        =   767
+            _ExtentX        =   4948
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextLookup uctlSellByLookup 
             Height          =   435
@@ -337,8 +337,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   57
             Top             =   1530
             Width           =   4305
-            _extentx        =   9499
-            _extenty        =   767
+            _ExtentX        =   9499
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtCredit 
             Height          =   435
@@ -346,8 +346,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   51
             Top             =   150
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtTempDONo 
             Height          =   435
@@ -355,8 +355,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   59
             Top             =   1980
             Width           =   4305
-            _extentx        =   7594
-            _extenty        =   767
+            _ExtentX        =   7594
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTime uctlTime2 
             Height          =   405
@@ -364,8 +364,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   61
             Top             =   2010
             Width           =   1125
-            _extentx        =   1984
-            _extenty        =   714
+            _ExtentX        =   1984
+            _ExtentY        =   714
          End
          Begin prjFarmManagement.uctlTextBox txtGeneration 
             Height          =   435
@@ -373,8 +373,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   119
             Top             =   120
             Width           =   1515
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtReference 
             Height          =   435
@@ -382,8 +382,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   121
             Top             =   600
             Width           =   2475
-            _extentx        =   4366
-            _extenty        =   767
+            _ExtentX        =   4366
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlTextBox txtFarmName 
             Height          =   435
@@ -391,8 +391,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   123
             Top             =   1560
             Width           =   3195
-            _extentx        =   5636
-            _extenty        =   767
+            _ExtentX        =   5636
+            _ExtentY        =   767
          End
          Begin VB.Label lblFarmName 
             Alignment       =   1  'Right Justify
@@ -547,8 +547,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   3
          Top             =   1320
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlDate uctlDocumentDate 
          Height          =   405
@@ -556,8 +556,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   1
          Top             =   870
          Width           =   3855
-         _extentx        =   6800
-         _extenty        =   714
+         _ExtentX        =   6800
+         _ExtentY        =   714
       End
       Begin MSComctlLib.TabStrip TabStrip1 
          Height          =   555
@@ -590,8 +590,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   0
          Top             =   870
          Width           =   2190
-         _extentx        =   5001
-         _extenty        =   767
+         _ExtentX        =   5001
+         _ExtentY        =   767
       End
       Begin MSComDlg.CommonDialog dlgAdd 
          Left            =   120
@@ -657,8 +657,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   9
          Top             =   2640
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtNetTotal 
          Height          =   435
@@ -666,8 +666,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   10
          Top             =   2640
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtDiscount 
          Height          =   435
@@ -675,8 +675,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   11
          Top             =   3090
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtIncludeDiscount 
          Height          =   435
@@ -684,8 +684,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   12
          Top             =   3090
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtCashDiscount 
          Height          =   435
@@ -694,8 +694,8 @@ Begin VB.Form frmAddEditDO2
          Top             =   3840
          Visible         =   0   'False
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtLeft 
          Height          =   435
@@ -703,8 +703,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   14
          Top             =   3540
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtCashDiscountAmount 
          Height          =   435
@@ -712,8 +712,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   13
          Top             =   3540
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin Threed.SSFrame SSFrame4 
          Height          =   2595
@@ -755,8 +755,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   101
             Top             =   270
             Width           =   3465
-            _extentx        =   5001
-            _extenty        =   767
+            _ExtentX        =   5001
+            _ExtentY        =   767
          End
          Begin prjFarmManagement.uctlDate uctlCheckDate 
             Height          =   405
@@ -764,8 +764,8 @@ Begin VB.Form frmAddEditDO2
             TabIndex        =   104
             Top             =   720
             Width           =   3855
-            _extentx        =   6800
-            _extenty        =   714
+            _ExtentX        =   6800
+            _ExtentY        =   714
          End
          Begin VB.Label lblBankBranch 
             Alignment       =   1  'Right Justify
@@ -814,8 +814,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   16
          Top             =   3960
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtTotalRcp 
          Height          =   435
@@ -823,8 +823,8 @@ Begin VB.Form frmAddEditDO2
          TabIndex        =   15
          Top             =   3960
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlDeliveryCusLookup 
          Height          =   435
@@ -833,8 +833,8 @@ Begin VB.Form frmAddEditDO2
          Top             =   4440
          Visible         =   0   'False
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin Threed.SSCheck chkDlcShow 
          Height          =   435
@@ -1250,14 +1250,14 @@ Private m_Employees As Collection
 Private m_Resources As Collection
 Private m_CustomerPictures As Collection
 Private m_DeliveryCus As Collection
-Private m_ExWorkPricesItem As Collection
-Private m_ExDeliveryCostItem As Collection
+'Private m_ExWorkPricesItem As Collection
+'Private m_ExDeliveryCostItem As Collection
 Private m_Cd As Collection
 
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public Area As Long
 Public DocumentType As Long
 Public ReceiptType As Long
@@ -1283,7 +1283,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
             
-      m_BillingDoc.BILLING_DOC_ID = ID
+      m_BillingDoc.BILLING_DOC_ID = id
       If Not glbDaily.QueryBillingDoc(m_BillingDoc, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
          Call EnableForm(Me, True)
@@ -1481,7 +1481,7 @@ Dim TempUserName As String
          End If
    End If
    
-   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, ID) Then
+   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtDocumentNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       txtDocumentNo.Text = ""
@@ -1600,7 +1600,7 @@ Else
    End If
    
    m_BillingDoc.AddEditMode = ShowMode
-   m_BillingDoc.BILLING_DOC_ID = ID
+   m_BillingDoc.BILLING_DOC_ID = id
    m_BillingDoc.DOCUMENT_DATE = uctlDocumentDate.ShowDate
    m_BillingDoc.DOCUMENT_NO = txtDocumentNo.Text
    If Area = 1 Then
@@ -2339,7 +2339,7 @@ Dim ServerDateTime As String
          If Cd.GetFieldValue("AUTO_BEGIN_FLAG") = "Y" Then
                 GetDocumentNo = TempStr2 & "-" & Format(1, TempStr3) & "-" & TempStr
                Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
-               If CheckNewMounth And CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo, ID) Then
+               If CheckNewMounth And CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo, id) Then
 '                  GetDocumentNo = GetDocumentNo & Format(1, TempStr3) 'เริ่มจาก 1 เสมอ
                   TempStr3 = Format(1, TempStr3) 'เริ่มจาก 1 เสมอ
                   m_BillingDoc.RUNNING_NO = 1
@@ -2358,7 +2358,7 @@ Dim ServerDateTime As String
          GetDocumentNo = ""
       End If
       
-   If Not CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo, ID) Then
+   If Not CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo, id) Then
       txtDocumentNo.Text = ""
       DocAdd = DocAdd + 1
       GetDocumentNo = GetDocumentNo(DocumentType)
@@ -2553,7 +2553,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
    
    If Not VerifyGrid(GridEX1.Value(1)) Then
@@ -2569,7 +2569,7 @@ Dim OKClick As Boolean
       End If
    End If
    
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 1 Then
@@ -2579,8 +2579,7 @@ Dim OKClick As Boolean
       frmAddEditDoItem2.DocumentDate = uctlDocumentDate.ShowDate
       frmAddEditDoItem2.SubscriberID = -1
       frmAddEditDoItem2.Area = Area
-      frmAddEditDoItem2.ID = ID
-'      frmAddEditDoItem.DeliveryCostFlag = EditDeliveryCostFlag
+      frmAddEditDoItem2.id = id
       frmAddEditDoItem2.COMMIT_FLAG = m_BillingDoc.OLD_COMMIT_FLAG
       Set frmAddEditDoItem2.TempCollection = m_BillingDoc.DoItems
       frmAddEditDoItem2.HeaderText = MapText("แก้ไขรายการใบส่งสินค้า")
@@ -2609,7 +2608,7 @@ Dim OKClick As Boolean
          glbErrorLog.ShowUserError
          Exit Sub
       End If
-      frmAddEditBillingDiscount.ID = ID
+      frmAddEditBillingDiscount.id = id
       frmAddEditBillingDiscount.Area = Area
       frmAddEditBillingDiscount.COMMIT_FLAG = m_BillingDoc.COMMIT_FLAG
       Set frmAddEditBillingDiscount.TempCollection = m_BillingDoc.BillingDiscounts
@@ -2636,7 +2635,7 @@ Dim OKClick As Boolean
    ElseIf TabStrip1.SelectedItem.Index = 5 Then
       frmAddEditCashTran.Area = Area
       Set frmAddEditCashTran.ParentForm = Me
-      frmAddEditCashTran.ID = ID
+      frmAddEditCashTran.id = id
       frmAddEditCashTran.HeaderText = "แก้ไขรายการการชำระเงิน"
       frmAddEditCashTran.ShowMode = SHOW_EDIT
       Set frmAddEditCashTran.TempCollection = m_BillingDoc.Payments
@@ -2743,7 +2742,7 @@ Dim Cs As CCustomer
          glbErrorLog.ShowUserError
          Exit Sub
       End If
-      frmAddEditTransport.ID = ID
+      frmAddEditTransport.id = id
       frmAddEditTransport.DocumentDate = uctlDocumentDate.ShowDate
       frmAddEditTransport.DocumentNo = m_BillingDoc.DOCUMENT_NO
       frmAddEditTransport.BillingdocID = m_BillingDoc.BILLING_DOC_ID
@@ -2796,12 +2795,12 @@ Dim TempError As String
    
 
    'ตรวจเอกสาร
-   If ID <> 0 Then
+   If id <> 0 Then
       Dim RT As CReceiptItem
       Set RT = New CReceiptItem
       Set m_Rs1 = New ADODB.Recordset
       RT.RECEIPT_ITEM_ID = -1
-      RT.DO_ID = ID
+      RT.DO_ID = id
       Call RT.QueryData(108, m_Rs1, iCount)
       Set RT = Nothing
       
@@ -2834,7 +2833,7 @@ Dim TempError As String
       End If
       
       ShowMode = SHOW_EDIT
-      ID = m_BillingDoc.BILLING_DOC_ID
+      id = m_BillingDoc.BILLING_DOC_ID
       m_BillingDoc.QueryFlag = 1
       QueryData (True)
       m_HasModify = False
@@ -3063,7 +3062,7 @@ Dim ReportMode As Long
       End If
       
       glbParameterObj.ReportKey = ReportKey
-      glbParameterObj.ID = m_BillingDoc.BILLING_DOC_ID
+      glbParameterObj.id = m_BillingDoc.BILLING_DOC_ID
       glbParameterObj.DocType = DocumentType
       glbParameterObj.PrintCount = C
       
@@ -3099,7 +3098,7 @@ Dim ReportMode As Long
    Else
       frmReportConfig.ReportMode = ReportMode
       frmReportConfig.ShowMode = EditMode
-      frmReportConfig.ID = Rc.REPORT_CONFIG_ID
+      frmReportConfig.id = Rc.REPORT_CONFIG_ID
       frmReportConfig.ReportKey = ReportKey
       frmReportConfig.HeaderText = HeaderText
       Load frmReportConfig
@@ -3118,7 +3117,7 @@ Dim Result As Boolean
    End If
    
    ShowMode = SHOW_EDIT
-   ID = m_BillingDoc.BILLING_DOC_ID
+   id = m_BillingDoc.BILLING_DOC_ID
    m_BillingDoc.QueryFlag = 1
    QueryData (True)
    m_HasModify = False
@@ -3205,8 +3204,8 @@ Private Sub Form_Activate()
          
       End If
       DocAdd = 0
-      Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
-      Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
+'      Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
+'      Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
       
       Call EnableForm(Me, True)
       m_HasModify = False
@@ -3267,8 +3266,8 @@ Private Sub Form_Unload(Cancel As Integer)
    Set m_Resources = Nothing
    Set m_CustomerPictures = Nothing
    Set m_DeliveryCus = Nothing
-   Set m_ExWorkPricesItem = Nothing
-   Set m_ExDeliveryCostItem = Nothing
+'   Set m_ExWorkPricesItem = Nothing
+'   Set m_ExDeliveryCostItem = Nothing
    Set m_Cd = Nothing
 End Sub
 
@@ -3680,8 +3679,8 @@ Private Sub Form_Load()
    Set m_Resources = New Collection
    Set m_CustomerPictures = New Collection
    Set m_DeliveryCus = New Collection
-   Set m_ExWorkPricesItem = New Collection
-   Set m_ExDeliveryCostItem = New Collection
+'   Set m_ExWorkPricesItem = New Collection
+'   Set m_ExDeliveryCostItem = New Collection
    Set m_Cd = New Collection
 End Sub
 
@@ -4175,7 +4174,7 @@ Dim ItemCount As Long
    Set Doc = New CDoItem
    Set m_Rs = New ADODB.Recordset
    Doc.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
-   Doc.EXCEPT_BILLING_ID = ID
+   Doc.EXCEPT_BILLING_ID = id
    Call Doc.QueryData(9, m_Rs, ItemCount)
    If ItemCount > 0 Then
       Call Doc.PopulateFromRS(9, m_Rs)
@@ -4335,7 +4334,7 @@ Dim TempWeekDate As Long
    Doc.FROM_DATE = FromDate
    Doc.TO_DATE = ToDate
    Doc.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
-   Doc.EXCEPT_BILLING_ID = ID
+   Doc.EXCEPT_BILLING_ID = id
    Call Doc.QueryData(9, m_Rs, ItemCount)
    If ItemCount > 0 Then
       Call Doc.PopulateFromRS(9, m_Rs)

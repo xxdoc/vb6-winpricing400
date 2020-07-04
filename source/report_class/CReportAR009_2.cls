@@ -184,14 +184,14 @@ Dim iCount As Long
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(3, "^", "วันที่ส่งของ", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(0, "^", "ยอดหนี้", ">")
-   Call m_Headers1.AddField(Cf)
+'   Call Cf.SetFieldValue(0, "^", "ยอดหนี้", ">")
+'   Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "ยอดรับชำระ", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(0, "^", "ส่วนลดเงินสด", ">")
-   Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(0, "^", "คงเหลือ", ">")
-   Call m_Headers1.AddField(Cf)
+'   Call Cf.SetFieldValue(0, "^", "ส่วนลดเงินสด", ">")
+'   Call m_Headers1.AddField(Cf)
+'   Call Cf.SetFieldValue(0, "^", "คงเหลือ", ">")
+'   Call m_Headers1.AddField(Cf)
    
    Set Cf = Nothing
 
@@ -381,77 +381,78 @@ Dim Ri As CReceiptItem
       While Not Rs.EOF
          Call Ri.PopulateFromRS(10, Rs)
          I = I + 1
+         J = 0
          Call m_Details1.ClearField
          
          Ri.PAID_AMOUNT = Val(Format(Ri.PAID_AMOUNT, "0.00"))
          Ri.CASH_DISCOUNT = Val(Format(Ri.CASH_DISCOUNT, "0.00"))
-
-          Set Hc = m_Headers1.Fields(1)
+          
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = I
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(2)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = Ri.RECEIPT_NO
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(3)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = DateToStringExtEx2(Ri.RECEIPT_DATE)
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(4)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = Ri.CUSTOMER_CODE
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(5)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = Ri.CUSTOMER_NAME
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(6)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = Ri.BILL_NO
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(7)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = DateToStringExtEx2(Ri.BILL_DATE)
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
 
-          Set Hc = m_Headers1.Fields(8)
-         TempStr = FormatNumber(0)
-         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
-         Call m_Details1.AddField(BodyCf)
-         Total1(6) = Total1(6) + (0)
-         Total2(6) = Total2(6) + (0)
-         Total3(6) = Total3(6) + (0)
-
-          Set Hc = m_Headers1.Fields(9)
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
          TempStr = FormatNumber(Ri.PAID_AMOUNT)
          Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         Total1(7) = Total1(7) + (Ri.PAID_AMOUNT)
-         Total2(7) = Total2(7) + (Ri.PAID_AMOUNT)
-         Total3(7) = Total3(7) + (Ri.PAID_AMOUNT)
+         Total1(J) = Total1(J) + (Ri.PAID_AMOUNT)
+         Total2(J) = Total2(J) + (Ri.PAID_AMOUNT)
+         Total3(J) = Total3(J) + (Ri.PAID_AMOUNT)
 
-          Set Hc = m_Headers1.Fields(10)
-         TempStr = FormatNumber(Ri.CASH_DISCOUNT)
-         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
-         Call m_Details1.AddField(BodyCf)
-         Total1(8) = Total1(8) + (Ri.CASH_DISCOUNT)
-         Total2(8) = Total2(8) + (Ri.CASH_DISCOUNT)
-         Total3(8) = Total3(8) + (Ri.CASH_DISCOUNT)
+'          Set Hc = m_Headers1.Fields(10)
+'         TempStr = FormatNumber(Ri.CASH_DISCOUNT)
+'         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+'         Call m_Details1.AddField(BodyCf)
+'         Total1(8) = Total1(8) + (Ri.CASH_DISCOUNT)
+'         Total2(8) = Total2(8) + (Ri.CASH_DISCOUNT)
+'         Total3(8) = Total3(8) + (Ri.CASH_DISCOUNT)
 
-          Set Hc = m_Headers1.Fields(11)
-         TempStr = FormatNumber(0)
-         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
-         Call m_Details1.AddField(BodyCf)
-         Total1(9) = Total1(9) + (0)
-         Total2(9) = Total2(9) + (0)
-         Total3(9) = Total3(9) + (0)
+'          Set Hc = m_Headers1.Fields(11)
+'         TempStr = FormatNumber(0)
+'         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+'         Call m_Details1.AddField(BodyCf)
+'         Total1(9) = Total1(9) + (0)
+'         Total2(9) = Total2(9) + (0)
+'         Total3(9) = Total3(9) + (0)
 
          Call m_Details1.GetString(1, TempStr1, TempStr2)
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
@@ -467,12 +468,6 @@ Dim Ri As CReceiptItem
       Call Vsp.AddTable(strFormat, "", TempStr2)
       Vsp.FontBold = False
       
-'      Call GenerateFooter("รวม", "ลูกค้า", "", Total1, m_Details1, 0)
-'      Call m_Details1.GetString(2, TempStr1, TempStr2)
-'      strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
-'      Vsp.FontBold = True
-'      Call Vsp.AddTable(strFormat, "", TempStr2)
-'      Vsp.FontBold = False
 
       Call GenerateFooter("สุทธิ", "", "", Total2, m_Details1, 0)
       Call m_Details1.GetString(2, TempStr1, TempStr2)
@@ -521,12 +516,10 @@ Dim TempStr As String
          TempStr = TXT2
       ElseIf J = 3 Then
          TempStr = ""
-      ElseIf J = 4 Then
-         TempStr = ""
-      ElseIf J = 5 Then
-         TempStr = ""
-      Else
+      ElseIf J = 8 Then
          TempStr = FormatNumber(Tot(J))
+      Else
+         TempStr = ""
       End If
       
       Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)

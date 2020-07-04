@@ -29,6 +29,8 @@ Public USER_ID As Long
 Public USER_NAME As String
 Public IP_ADDRESS As String
 
+Public REAL_NAME As String
+
 Public LOGIN_FROM_DATE As Date
 Public LOGIN_TO_DATE As Date
 
@@ -50,10 +52,11 @@ Dim SubLen As Long
 Dim NewStr As String
 Dim TempDate As String
 
-   SelectStr1 = "SELECT LT.*  "
+   SelectStr1 = "SELECT LT.*,UA.REAL_NAME  "
    SelectStr2 = "SELECT COUNT(*)  "
    
    FromStr = "FROM LOGIN_TRACKING LT "
+   FromStr = FromStr & "LEFT JOIN USER_ACCOUNT UA ON (LT.USER_ID=UA.USER_ID)  "
    
    WhereStr = ""
    If LOGIN_TRACKING_ID > 0 Then
@@ -140,17 +143,19 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
    USER_ID = NVLI(Rs("USER_ID"), -1)
    USER_NAME = NVLS(Rs("USER_NAME"), "")
    IP_ADDRESS = NVLS(Rs("IP_ADDRESS"), "")
+   
+   REAL_NAME = NVLS(Rs("REAL_NAME"), "")
 End Function
 
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("LOGIN_TRACKING_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("LOGIN_TRACKING_SEQ", id, glbErrorLog)
       SQL1 = "INSERT INTO LOGIN_TRACKING " & _
                      "( " & _
                      "   LOGIN_TRACKING_ID, " & _
@@ -166,7 +171,7 @@ Dim ID As Long
                      ") " & _
                      "VALUES "
                SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(DateToStringInt(LOGIN_DATE))) & "'," & _
                          "'" & ChangeQuote(Trim(DateToStringInt(LOGOUT_DATE))) & "'," & _
                          "" & USER_ID & "," & _
@@ -177,8 +182,8 @@ Dim ID As Long
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-               glbUser.USER_ID = ID
-               LOGIN_TRACKING_ID = ID
+               glbUser.USER_ID = id
+               LOGIN_TRACKING_ID = id
    Else 'Show edit
       SQL1 = "UPDATE LOGIN_TRACKING SET " & _
                      "   LOGIN_DATE = '" & ChangeQuote(Trim(DateToStringInt(LOGIN_DATE))) & "', " & _

@@ -117,6 +117,7 @@ Public CUSTOMER_TYPE As Long
 Public BEFORE_DISCOUNT_PRICE As Double
 Public CURRENT_POSITION As Long
 Public ACCEPT_BY As Long
+Public RESPONSE_BY As Long
 Public LOGISTIC_FLAG As String
 Public DOCUMENT_DATE As Date
 Public DUE_DATE As Date
@@ -197,12 +198,14 @@ Public SUM_RATE_OTHER_KG As Double
 Public EX_WORKS_PRICE_ITEM_ID As Long
 Public EX_DELIVERY_COST_ITEM_ID As Long
 Public EX_PROMOTION_PART_ITEM_ID As Long
+Public EX_PROMOTION_EXTRA_PART_ITEM_ID As Long
 Public EX_PROMOTION_DLC_ITEM_ID As Long
 Public PACKAGE_RATE As Double
 Public RATE_CUSTOMER As Double
 Public USER_APPLOVE_PRICE As String
 Public PRICE_THINK_TYPE As Long
 Public DISCOUNT_AMOUNT_PART As Double
+Public DISCOUNT_EXTRA_AMOUNT_PART As Double
 Public DISCOUNT_AMOUNT_DLC As Double
 
 Public DISCOUNT_PER_PACK_PART As Double
@@ -889,7 +892,7 @@ Dim GroupByStr As String
 
       WhereStr = "WHERE (CM.CUSTOMER_ID IS NOT NULL) "
    ElseIf Ind = 41 Then
-      SelectStr1 = "SELECT DISTINCT IVD.ACCEPT_BY,EM.EMP_CODE, UG.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC "
+      SelectStr1 = "SELECT DISTINCT CM.RESPONSE_BY,EM.EMP_CODE, UG.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC "
       SelectStr2 = "SELECT COUNT(*)  "
       
       FromStr = "FROM DO_ITEM UG "
@@ -897,11 +900,11 @@ Dim GroupByStr As String
       FromStr = FromStr & "LEFT OUTER JOIN ACCOUNT AC ON (IVD.ACCOUNT_ID = AC.ACCOUNT_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN CUSTOMER CM ON (AC.CUSTOMER_ID = CM.CUSTOMER_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (UG.PART_ITEM_ID = PI.PART_ITEM_ID) "
-      FromStr = FromStr & "LEFT OUTER JOIN EMPLOYEE EM ON (IVD.ACCEPT_BY = EM.EMP_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN EMPLOYEE EM ON (CM.RESPONSE_BY = EM.EMP_ID) "
 
       WhereStr = "WHERE (CM.CUSTOMER_ID IS NOT NULL AND PI.PART_NO IS NOT NULL) "
    ElseIf Ind = 42 Then
-      SelectStr1 = "SELECT IVD.ACCEPT_BY, UG.PART_ITEM_ID,IVD.YYYYMM, SUM(UG.ITEM_AMOUNT) ITEM_AMOUNT, SUM(UG.TOTAL_WEIGHT) TOTAL_WEIGHT "
+      SelectStr1 = "SELECT CM.RESPONSE_BY, UG.PART_ITEM_ID,IVD.YYYYMM, SUM(UG.ITEM_AMOUNT) ITEM_AMOUNT, SUM(UG.TOTAL_WEIGHT) TOTAL_WEIGHT "
       SelectStr1 = SelectStr1 & ", SUM(UG.TOTAL_PRICE) TOTAL_PRICE, SUM(UG.PACK_AMOUNT) PACK_AMOUNT, SUM(UG.DISCOUNT_AMOUNT) DISCOUNT_AMOUNT, SUM(UG.EXTRA_DISCOUNT) EXTRA_DISCOUNT "
       SelectStr2 = "SELECT COUNT(*)  "
       
@@ -910,7 +913,7 @@ Dim GroupByStr As String
       FromStr = FromStr & "LEFT OUTER JOIN ACCOUNT AC ON (IVD.ACCOUNT_ID = AC.ACCOUNT_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN CUSTOMER CM ON (AC.CUSTOMER_ID = CM.CUSTOMER_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (UG.PART_ITEM_ID = PI.PART_ITEM_ID) "
-      FromStr = FromStr & "LEFT OUTER JOIN EMPLOYEE EM ON (IVD.ACCEPT_BY = EM.EMP_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN EMPLOYEE EM ON (CM.RESPONSE_BY = EM.EMP_ID) "
 
       WhereStr = "WHERE (CM.CUSTOMER_ID IS NOT NULL) "
    ElseIf Ind = 43 Then 'CreportProfit008
@@ -1009,7 +1012,7 @@ Dim GroupByStr As String
       
 '      WhereStr = " WHERE PI.PART_ITEM_ID >0  "
    ElseIf Ind = 49 Then 'CreportProfit009
-      SelectStr1 = "SELECT IVD.DOCUMENT_NO,CM.CUSTOMER_TYPE,CT.CSTTYPE_NAME,MR1.KEY_NAME,PM.PART_MASTER_NO, PI.PART_NO,NM.LONG_NAME CUSTOMER_NAME,CM.CUSTOMER_ID,PI.PART_TYPE, PI.WEIGHT_PER_PACK,PI.PRODUCT_TYPE_ID,LT.TOTAL_INCLUDE_PRICE,LT.TX_AMOUNT,UG.*  "
+      SelectStr1 = "SELECT IVD.DOCUMENT_NO,IVD.PRICE_THINK_TYPE,CM.CUSTOMER_TYPE,CM.CUSTOMER_CODE,CT.CSTTYPE_NAME,MR1.KEY_NAME,PM.PART_MASTER_NO, PI.PART_NO,NM.LONG_NAME CUSTOMER_NAME,CM.CUSTOMER_ID,PI.PART_TYPE, PI.WEIGHT_PER_PACK,PI.PRODUCT_TYPE_ID,LT.TOTAL_INCLUDE_PRICE,LT.TX_AMOUNT,UG.*  "
       SelectStr2 = "SELECT COUNT(*)  "
 
       FromStr = "FROM DO_ITEM UG "
@@ -1271,7 +1274,23 @@ Dim GroupByStr As String
          End If
       End If
    End If
-         
+   
+     If Trim(PART_MASTER_NO) <> "" Then
+      If WildCard(PART_MASTER_NO, SubLen, NewStr) Then
+         If WhereStr = "" Then
+            WhereStr = "WHERE (SUBSTR(PM.PART_MASTER_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (SUBSTR(PM.PART_MASTER_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
+         End If
+      Else
+         If WhereStr = "" Then
+            WhereStr = "WHERE (PM.PART_MASTER_NO = '" & ChangeQuote(Trim(PART_MASTER_NO)) & "')"
+         Else
+            WhereStr = WhereStr & "AND (PM.PART_MASTER_NO = '" & ChangeQuote(Trim(PART_MASTER_NO)) & "')"
+         End If
+      End If
+   End If
+   
    If Trim(PART_NO) <> "" Then
       If WildCard(PART_NO, SubLen, NewStr) Then
          If WhereStr = "" Then
@@ -1442,7 +1461,7 @@ Dim GroupByStr As String
     ElseIf Ind = 40 Then
       GroupByStr = "GROUP BY IVD.ACCEPT_BY,IVD.YYYYMM, UG.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC, PI.PARCEL_TYPE, UG.FEATURE_ID,EM.EMP_CODE,CM.CUSTOMER_CODE "
    ElseIf Ind = 42 Then
-      GroupByStr = "GROUP BY IVD.ACCEPT_BY, UG.PART_ITEM_ID,IVD.YYYYMM "
+      GroupByStr = "GROUP BY CM.RESPONSE_BY, UG.PART_ITEM_ID,IVD.YYYYMM "
    ElseIf Ind = 43 Then
 '      GroupByStr = "GROUP BY CM.CUSTOMER_TYPE,CT.CSTTYPE_NAME,PM.PART_MASTER_NO,MR1.KEY_NAME,PI.PART_NO,PI.WEIGHT_PER_PACK, PI.PARCEL_TYPE,UG.PART_ITEM_ID,UG.PACKAGE_RATE,UG.PRICE_PER_PACK  "
    ElseIf Ind = 47 Then
@@ -1629,7 +1648,7 @@ Dim GroupByStr As String
    ElseIf Ind = 48 Then
      OrderByStr = "ORDER BY BD.BILLING_DOC_ID  "
    ElseIf Ind = 49 Then
-      OrderByStr = "ORDER BY CM.CUSTOMER_TYPE ASC,MR1.KEY_NAME ASC,PM.PART_MASTER_NO ASC,PART_NO  "
+      OrderByStr = "ORDER BY CM.CUSTOMER_TYPE ASC,MR1.KEY_NAME ASC,PM.PART_MASTER_NO ASC,PI.WEIGHT_PER_PACK ASC,PART_NO  "
    ElseIf Ind = 50 Then
       OrderByStr = "ORDER BY CM.CUSTOMER_CODE ASC,IVD.DOCUMENT_DATE ASC,IVD.DOCUMENT_NO  "
    ElseIf Ind = 53 Then
@@ -1733,8 +1752,10 @@ Public Function CopyObject(Ind As Long, TempObj As CDoItem)
    USER_APPLOVE_PRICE = TempObj.USER_APPLOVE_PRICE
    
    EX_PROMOTION_PART_ITEM_ID = TempObj.EX_PROMOTION_PART_ITEM_ID
+   EX_PROMOTION_EXTRA_PART_ITEM_ID = TempObj.EX_PROMOTION_EXTRA_PART_ITEM_ID
    EX_PROMOTION_DLC_ITEM_ID = TempObj.EX_PROMOTION_DLC_ITEM_ID
    DISCOUNT_AMOUNT_PART = TempObj.DISCOUNT_AMOUNT_PART
+   DISCOUNT_EXTRA_AMOUNT_PART = TempObj.DISCOUNT_EXTRA_AMOUNT_PART
    DISCOUNT_AMOUNT_DLC = TempObj.DISCOUNT_AMOUNT_DLC
 
 End Function
@@ -1811,9 +1832,11 @@ Public Function CopyObjectFromSo(Ind As Long, TempObj As CSaleOrder)
    PRO_OTHER3_KG = TempObj.PRO_OTHER3_KG
    USER_APPLOVE_PRICE = TempObj.USER_APPLOVE_PRICE
    DISCOUNT_AMOUNT_PART = TempObj.DISCOUNT_AMOUNT_PART
+   DISCOUNT_EXTRA_AMOUNT_PART = TempObj.DISCOUNT_EXTRA_AMOUNT_PART
    DISCOUNT_AMOUNT_DLC = TempObj.DISCOUNT_AMOUNT_DLC
    
    EX_PROMOTION_PART_ITEM_ID = TempObj.EX_PROMOTION_PART_ITEM_ID
+   EX_PROMOTION_EXTRA_PART_ITEM_ID = TempObj.EX_PROMOTION_EXTRA_PART_ITEM_ID
    EX_PROMOTION_DLC_ITEM_ID = TempObj.EX_PROMOTION_DLC_ITEM_ID
    BILLING_DOC_SO_ID = TempObj.BILLING_DOC_SO_ID
    BILLING_DOC_SO_NO = TempObj.BILLING_DOC_SO_NO
@@ -1970,8 +1993,10 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       USER_APPLOVE_PRICE = NVLS(Rs("USER_APPLOVE_PRICE"), "")
       
       EX_PROMOTION_PART_ITEM_ID = NVLI(Rs("EX_PROMOTION_PART_ITEM_ID"), -1)
+      EX_PROMOTION_EXTRA_PART_ITEM_ID = NVLI(Rs("EX_PROMOTION_EXTRA_PART_ITEM_ID"), -1)
       EX_PROMOTION_DLC_ITEM_ID = NVLI(Rs("EX_PROMOTION_DLC_ITEM_ID"), -1)
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
 
    ElseIf Ind = 2 Then
@@ -2503,14 +2528,14 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       EXTRA_DISCOUNT = NVLD(Rs("EXTRA_DISCOUNT"), 0)
       
    ElseIf Ind = 41 Then
-      ACCEPT_BY = NVLI(Rs("ACCEPT_BY"), -1)
+      ACCEPT_BY = NVLI(Rs("RESPONSE_BY"), -1)
       EMP_CODE = NVLS(Rs("EMP_CODE"), "")
    
       PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
       PART_NO = NVLS(Rs("PART_NO"), "")
       PART_DESC = NVLS(Rs("PART_DESC"), "")
    ElseIf Ind = 42 Then
-      ACCEPT_BY = NVLI(Rs("ACCEPT_BY"), -1)
+      ACCEPT_BY = NVLI(Rs("RESPONSE_BY"), -1)
       YYYYMM = NVLS(Rs("YYYYMM"), "")
       PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
       
@@ -2595,6 +2620,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PRICE_THINK_TYPE = NVLI(Rs("PRICE_THINK_TYPE"), -1)
       
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
       DISCOUNT_PER_PACK_PART = NVLD(Rs("DISCOUNT_PER_PACK_PART"), 0)
       DISCOUNT_PER_PACK_DLC = NVLD(Rs("DISCOUNT_PER_PACK_DLC"), 0)
@@ -2652,6 +2678,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       RATE_TYPE_CUS = NVLI(Rs("RATE_TYPE_CUS"), -1)
       
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
       
       DISCOUNT_PER_PACK_PART = NVLD(Rs("DISCOUNT_PER_PACK_PART"), 0)
@@ -2712,6 +2739,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       SALE_LNAME = NVLS(Rs("SALE_LNAME"), "")
       
       DISCOUNT_AMOUNT_PART = NVLD(Rs("DISCOUNT_AMOUNT_PART"), 0)
+      DISCOUNT_EXTRA_AMOUNT_PART = NVLD(Rs("DISCOUNT_EXTRA_AMOUNT_PART"), 0)
       DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
       
       DISCOUNT_PER_PACK_PART = NVLD(Rs("DISCOUNT_PER_PACK_PART"), 0)
@@ -2756,6 +2784,11 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PRICE_PER_PACK = NVLD(Rs("PRICE_PER_PACK"), 0)
       PART_MASTER_NO = NVLS(Rs("PART_MASTER_NO"), "")
       CUSTOMER_NAME = NVLS(Rs("CUSTOMER_NAME"), "")
+      RATE_DRIVER_TRANSPORT = NVLD(Rs("RATE_DRIVER_TRANSPORT"), 0)
+      CUSTOMER_CODE = NVLS(Rs("CUSTOMER_CODE"), "")
+      PRICE_THINK_TYPE = NVLI(Rs("PRICE_THINK_TYPE"), 0)
+      RATE_CUSTOMER = NVLD(Rs("RATE_CUSTOMER"), 0)
+      DISCOUNT_AMOUNT_DLC = NVLD(Rs("DISCOUNT_AMOUNT_DLC"), 0)
    ElseIf Ind = 50 Then
       DO_ID = NVLI(Rs("BILLING_DOC_ID"), -1)
       DOCUMENT_NO = NVLS(Rs("DOCUMENT_NO"), "")
@@ -2845,7 +2878,7 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim TempID1 As String
 Dim TempID2 As String
@@ -2857,7 +2890,7 @@ Dim TempID7 As String
 Dim TempID8 As String
 Dim TempID9 As String
 Dim TempID10  As String
-
+Dim TempID11  As String
 
    TempID1 = PIG_STATUS
    If PIG_STATUS <= 0 Then
@@ -2909,10 +2942,17 @@ Dim TempID10  As String
       TempID10 = "NULL"
    End If
    
+   TempID11 = EX_PROMOTION_EXTRA_PART_ITEM_ID
+   If EX_PROMOTION_EXTRA_PART_ITEM_ID <= 0 Then
+      TempID11 = "NULL"
+   End If
+   
+   'EX_PROMOTION_EXTRA_PART_ITEM_ID
+   
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("DO_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("DO_ITEM_SEQ", id, glbErrorLog)
       
       SQL1 = "INSERT INTO DO_ITEM " & _
                      "( " & _
@@ -2980,17 +3020,19 @@ Dim TempID10  As String
                     "    EX_WORKS_PRICE_ITEM_ID, " & _
                     "    EX_DELIVERY_COST_ITEM_ID, " & _
                     "    EX_PROMOTION_PART_ITEM_ID, " & _
+                    "    EX_PROMOTION_EXTRA_PART_ITEM_ID, " & _
                     "    EX_PROMOTION_DLC_ITEM_ID, " & _
                     "    PACKAGE_RATE, " & _
                     "    RATE_CUSTOMER, " & _
                     "    DISCOUNT_AMOUNT_PART, " & _
+                    "    DISCOUNT_EXTRA_AMOUNT_PART, " & _
                     "    DISCOUNT_AMOUNT_DLC, " & _
                     "    USER_APPLOVE_PRICE" & _
                      ") " & _
                      "VALUES "
             SQL1 = SQL1 & _
                      "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "" & DO_ID & "," & _
                          "" & PART_ITEM_ID & "," & _
                          "" & LOCATION_ID & "," & _
@@ -3054,14 +3096,16 @@ Dim TempID10  As String
                         TempID7 & "," & _
                         TempID8 & "," & _
                         TempID9 & "," & _
+                        TempID11 & "," & _
                         TempID10 & "," & _
                         PACKAGE_RATE & "," & _
                         RATE_CUSTOMER & "," & _
                         DISCOUNT_AMOUNT_PART & "," & _
+                        DISCOUNT_EXTRA_AMOUNT_PART & "," & _
                         DISCOUNT_AMOUNT_DLC & "," & _
                         "'" & USER_APPLOVE_PRICE & "'" & _
                      ") "
-         DO_ITEM_ID = ID
+         DO_ITEM_ID = id
    Else 'Show edit
 '      Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       
@@ -3125,10 +3169,12 @@ Dim TempID10  As String
                 "   EX_WORKS_PRICE_ITEM_ID = " & TempID7 & ", " & _
                 "   EX_DELIVERY_COST_ITEM_ID = " & TempID8 & ", " & _
                 "   EX_PROMOTION_PART_ITEM_ID = " & TempID9 & ", " & _
+                "   EX_PROMOTION_EXTRA_PART_ITEM_ID = " & TempID11 & ", " & _
                 "   EX_PROMOTION_DLC_ITEM_ID = " & TempID10 & ", " & _
                 "   PACKAGE_RATE = " & PACKAGE_RATE & ", " & _
                 "   RATE_CUSTOMER = " & RATE_CUSTOMER & ", " & _
                 "   DISCOUNT_AMOUNT_PART = " & DISCOUNT_AMOUNT_PART & ", " & _
+                "   DISCOUNT_EXTRA_AMOUNT_PART = " & DISCOUNT_EXTRA_AMOUNT_PART & ", " & _
                 "   DISCOUNT_AMOUNT_DLC = " & DISCOUNT_AMOUNT_DLC & ", " & _
                 "   USER_APPLOVE_PRICE = '" & USER_APPLOVE_PRICE & "'" & _
                  " WHERE DO_ITEM_ID = " & DO_ITEM_ID '

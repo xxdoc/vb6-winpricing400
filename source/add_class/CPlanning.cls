@@ -30,9 +30,16 @@ Public PLANNING_DATE As Date
 Public PLANNING_DESC As String
 Public PLAN_VERSION As Long
 
+Public PLANNING_ITEM_ID As Long
+Public PLANNING_SUB_TYPE As Long
+Public PART_ITEM_ID As Long
+Public PART_TYPE_GROUP As String
+Public PART_GROUP_ID As Long
+Public PLAN_AMOUNT As Double
+
 Public KEY_LOOKUP As String
 Public KEY_ID As Long
-Public ID As Long
+Public id As Long
 
 Public FROM_DATE As Date
 Public TO_DATE As Date
@@ -83,6 +90,14 @@ Dim GroupByStr As String
       WhereStr = ""
    
       FromStr = "FROM PLANNING PN "
+   ElseIf Ind = 3 Then
+       SelectStr1 = "SELECT PN.PLANNING_ID,PN.PLANNING_DATE,PN.PLANNING_FROM,PN.PLANNING_TO,PNI.PART_ITEM_ID,PNI.PLAN_AMOUNT,PN.PLAN_VERSION "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      WhereStr = ""
+   
+      FromStr = "FROM PLANNING PN "
+      FromStr = FromStr & "LEFT OUTER JOIN PLANNING_ITEM PNI ON (PN.PLANNING_ID = PNI.PLANNING_ID)  "
    End If
    
    If PLANNING_ID > 0 Then
@@ -155,7 +170,7 @@ Dim GroupByStr As String
    If Ind = 2 Then
    '   GroupByStr = "GROUP BY PN.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC "
    ElseIf Ind = 3 Then
-   '   GroupByStr = "GROUP BY PN.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC,PI.PARCEL_TYPE "
+    ' GroupByStr = "GROUP BY PN.PLANNING_ID,PN.PLANNING_DATE,PN.PLANNING_FROM,PN.PLANNING_TO,PNI.PART_ITEM_ID,PNI.PLAN_AMOUNT "
    End If
    
    OrderByStr = ""
@@ -171,6 +186,8 @@ Dim GroupByStr As String
       Else
          OrderByStr = "ORDER BY PN.PLANNING_DATE DESC,PN.PLAN_VERSION "
       End If
+   ElseIf Ind = 3 Then
+       OrderByStr = "ORDER BY PN.PLANNING_DATE,PN.PLAN_VERSION "
    End If
    
    If OrderType = 1 Then
@@ -204,13 +221,26 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PLAN_VERSION = NVLI(Rs("PLAN_VERSION"), 0)
    ElseIf Ind = 2 Then
       PLAN_VERSION = NVLI(Rs("PLAN_VERSION"), 0)
+   ElseIf Ind = 3 Then
+      PLANNING_ID = NVLI(Rs("PLANNING_ID"), -1)
+'      PLANNING_AREA = NVLI(Rs("PLANNING_AREA"), -1)
+      
+      PLANNING_FROM = InternalDateToDate(NVLS(Rs("PLANNING_FROM"), ""))
+      PLANNING_TO = InternalDateToDate(NVLS(Rs("PLANNING_TO"), ""))
+      PLANNING_DATE = InternalDateToDate(NVLS(Rs("PLANNING_DATE"), ""))
+      
+'      PLANNING_DESC = NVLS(Rs("PLANNING_DESC"), "")
+      PLAN_VERSION = NVLI(Rs("PLAN_VERSION"), 0)
+      
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      PLAN_AMOUNT = NVLD(Rs("PLAN_AMOUNT"), 0)
    End If
 End Function
 
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 Dim TempID2 As String
 Dim TempID3 As String

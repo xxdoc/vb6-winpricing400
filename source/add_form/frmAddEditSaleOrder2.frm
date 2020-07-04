@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmAddEditSaleOrder2 
@@ -140,8 +140,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   4
          Top             =   1350
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlDate uctlDocumentDate 
          Height          =   405
@@ -149,8 +149,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   2
          Top             =   930
          Width           =   3855
-         _extentx        =   6800
-         _extenty        =   714
+         _ExtentX        =   6800
+         _ExtentY        =   714
       End
       Begin MSComctlLib.TabStrip TabStrip1 
          Height          =   555
@@ -183,8 +183,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   0
          Top             =   900
          Width           =   2535
-         _extentx        =   5001
-         _extenty        =   767
+         _ExtentX        =   5001
+         _ExtentY        =   767
       End
       Begin MSComDlg.CommonDialog dlgAdd 
          Left            =   0
@@ -250,8 +250,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   9
          Top             =   2670
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtTotalDiscount 
          Height          =   435
@@ -260,8 +260,8 @@ Begin VB.Form frmAddEditSaleOrder2
          Top             =   2670
          Visible         =   0   'False
          Width           =   1335
-         _extentx        =   2408
-         _extenty        =   767
+         _ExtentX        =   2408
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtNetTotal 
          Height          =   435
@@ -269,8 +269,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   11
          Top             =   2670
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlSellByLookup 
          Height          =   435
@@ -278,8 +278,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   14
          Top             =   4020
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtDiscount 
          Height          =   435
@@ -287,8 +287,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   12
          Top             =   3120
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtIncludeDiscount 
          Height          =   435
@@ -296,8 +296,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   39
          Top             =   3120
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtDeposit 
          Height          =   435
@@ -305,8 +305,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   44
          Top             =   3570
          Width           =   1605
-         _extentx        =   2831
-         _extenty        =   767
+         _ExtentX        =   2831
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtLeft 
          Height          =   435
@@ -314,8 +314,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   13
          Top             =   3570
          Width           =   1575
-         _extentx        =   2778
-         _extenty        =   767
+         _ExtentX        =   2778
+         _ExtentY        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlDeliveryCusLookup 
          Height          =   435
@@ -323,8 +323,8 @@ Begin VB.Form frmAddEditSaleOrder2
          TabIndex        =   57
          Top             =   4560
          Width           =   5385
-         _extentx        =   9499
-         _extenty        =   767
+         _ExtentX        =   9499
+         _ExtentY        =   767
       End
       Begin Threed.SSCommand cmdAccessDeliveryCus 
          Height          =   405
@@ -681,12 +681,13 @@ Private m_DeliveryCus As Collection
 Private m_ExWorkPricesItem As Collection
 Private m_ExDeliveryCostItem As Collection
 Private m_ExPromotionPartItem As Collection
+Private m_ExPromotionExtraPartItem As Collection
 Private m_ExPromotionDlcItem As Collection
 
 Public HeaderText As String
 Public ShowMode As SHOW_MODE_TYPE
 Public OKClick As Boolean
-Public ID As Long
+Public id As Long
 Public Area As Long
 Public DocumentType As Long
 
@@ -716,7 +717,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
             
-      m_BillingDoc.BILLING_DOC_ID = ID
+      m_BillingDoc.BILLING_DOC_ID = id
       If Not glbDaily.QueryBillingDoc(m_BillingDoc, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
          Call EnableForm(Me, True)
@@ -835,7 +836,7 @@ End If
       Exit Function
    End If
 
-   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, ID) Then
+   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtDocumentNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       txtDocumentNo.Text = ""
@@ -850,7 +851,7 @@ End If
    End If
    
    m_BillingDoc.AddEditMode = ShowMode
-   m_BillingDoc.BILLING_DOC_ID = ID
+   m_BillingDoc.BILLING_DOC_ID = id
     m_BillingDoc.DOCUMENT_DATE = uctlDocumentDate.ShowDate
    m_BillingDoc.DOCUMENT_NO = txtDocumentNo.Text
    If Area = 1 Then
@@ -1045,7 +1046,7 @@ ElseIf lMenuChosen = 5 Then
 End If
 
  If CUSTOMER_ID > 0 Then
-   Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID) 'LOAD สถานที่จัดส่ง
+   Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง
    Set uctlDeliveryCusLookup.MyCollection = m_DeliveryCus
 End If
 Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 3, uctlDocumentDate.ShowDate) 'ส่ง 3 ไปดึงค่าขนส่งที่คิดให้รถรับจ้าง
@@ -1098,10 +1099,11 @@ Dim oMenu As cPopupMenu
             frmAddEditSaleOrderItem2.AccountID = cboAccount.ItemData(cboAccount.ListIndex)
          End If
          
-         Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
-         Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
-         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate)
-         Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
+         Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
+         Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate, , "Y")
+         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 3)
+         Call LoadExPromotionPartItem(Nothing, m_ExPromotionExtraPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 5)
+         Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate, , "Y")
          
          frmAddEditSaleOrderItem2.DocumentType = DocumentType
          frmAddEditSaleOrderItem2.DocumentDate = uctlDocumentDate.ShowDate
@@ -1113,6 +1115,7 @@ Dim oMenu As cPopupMenu
          Set frmAddEditSaleOrderItem2.m_ExWorkPricesItem = m_ExWorkPricesItem
          Set frmAddEditSaleOrderItem2.m_ExDeliveryCostItem = m_ExDeliveryCostItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionPartItem = m_ExPromotionPartItem
+         Set frmAddEditSaleOrderItem2.m_ExPromotionExtraPartItem = m_ExPromotionExtraPartItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionDlcItem = m_ExPromotionDlcItem
          Set frmAddEditSaleOrderItem2.m_DeliveryCus = m_DeliveryCus
          frmAddEditSaleOrderItem2.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
@@ -1253,7 +1256,7 @@ Dim ServerDateTime As String
          
          If Cd.GetFieldValue("AUTO_BEGIN_FLAG") = "Y" Then
                
-               If CheckNewMounth And CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo & Format(1, TempStr), ID) Then
+               If CheckNewMounth And CheckUniqueNs(DO_PLAN_UNIQUE, GetDocumentNo & Format(1, TempStr), id) Then
                   GetDocumentNo = GetDocumentNo & Format(1, TempStr) 'เริ่มจาก 1 เสมอ
                   m_BillingDoc.RUNNING_NO = 1
                Else
@@ -1418,7 +1421,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
 Dim lMenuChosen As Long
 Dim oMenu As cPopupMenu
@@ -1436,7 +1439,7 @@ Dim oMenu As cPopupMenu
       End If
    End If
    
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 1 Then
@@ -1454,10 +1457,11 @@ Dim oMenu As cPopupMenu
          
 
          If lMenuChosen = 1 Then
-            Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
-            Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
-            Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate)
-            Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
+            Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate, , "Y")
+            Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate, , "Y")
+            Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 3)
+            Call LoadExPromotionPartItem(Nothing, m_ExPromotionExtraPartItem, , 2, uctlDocumentDate.ShowDate, , "Y", 5)
+            Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate, , "Y")
             
              frmAddEditSaleOrderItem2.TypeSale = 1 'แก้ไขขายสินค้าและค่าขนส่ง
              frmAddEditSaleOrderItem2.HeaderText = MapText("แก้ไขรายการใบ SO ขายอาหาร")
@@ -1469,7 +1473,7 @@ Dim oMenu As cPopupMenu
          frmAddEditSaleOrderItem2.DocumentType = DocumentType
          frmAddEditSaleOrderItem2.DocumentDate = uctlDocumentDate.ShowDate
          frmAddEditSaleOrderItem2.Area = Area
-         frmAddEditSaleOrderItem2.ID = ID
+         frmAddEditSaleOrderItem2.id = id
          frmAddEditSaleOrderItem2.COMMIT_FLAG = m_BillingDoc.COMMIT_FLAG
          Set frmAddEditSaleOrderItem2.TempCollection = m_BillingDoc.SaleOrders
          
@@ -1477,6 +1481,7 @@ Dim oMenu As cPopupMenu
          Set frmAddEditSaleOrderItem2.m_ExWorkPricesItem = m_ExWorkPricesItem
          Set frmAddEditSaleOrderItem2.m_ExDeliveryCostItem = m_ExDeliveryCostItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionPartItem = m_ExPromotionPartItem
+         Set frmAddEditSaleOrderItem2.m_ExPromotionExtraPartItem = m_ExPromotionExtraPartItem
          Set frmAddEditSaleOrderItem2.m_ExPromotionDlcItem = m_ExPromotionDlcItem
          Set frmAddEditSaleOrderItem2.m_DeliveryCus = m_DeliveryCus
          frmAddEditSaleOrderItem2.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
@@ -1516,90 +1521,6 @@ Dim oMenu As cPopupMenu
    If OKClick Then
       m_HasModify = True
    End If
-'Dim IsOK As Boolean
-'Dim ItemCount As Long
-'Dim IsCanLock As Boolean
-'Dim ID As Long
-'Dim OKClick As Boolean
-'
-'   If Not VerifyGrid(GridEX1.Value(1)) Then
-'      Exit Sub
-'   End If
-'
-'   If Area = 1 Then
-'      If Not VerifyCombo(lblAccountNo, cboAccount) Then
-'         Exit Sub
-'      End If
-'      If Not VerifyDate(lblDocumentDate, uctlDocumentDate) Then
-'         Exit Sub
-'      End If
-'   End If
-'
-'   ID = Val(GridEX1.Value(2))
-'   OKClick = False
-'
-'   If TabStrip1.SelectedItem.Index = 1 Then
-'
-'       If Area = 1 Then
-'         frmAddEditSaleOrderItem2.AccountID = cboAccount.ItemData(cboAccount.ListIndex)
-'      End If
-'
-'      Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, , 2, uctlDocumentDate.ShowDate)
-'      Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, , 2, uctlDocumentDate.ShowDate)
-'      Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, , 2, uctlDocumentDate.ShowDate)
-'      Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, , 2, uctlDocumentDate.ShowDate)
-'
-'      frmAddEditSaleOrderItem2.DocumentType = DocumentType
-'      frmAddEditSaleOrderItem2.DocumentDate = uctlDocumentDate.ShowDate
-'      frmAddEditSaleOrderItem2.Area = Area
-'      frmAddEditSaleOrderItem2.ID = ID
-'      frmAddEditSaleOrderItem2.COMMIT_FLAG = m_BillingDoc.COMMIT_FLAG
-'      Set frmAddEditSaleOrderItem2.TempCollection = m_BillingDoc.SaleOrders
-'
-'      Set frmAddEditSaleOrderItem2.m_Customers = m_Customers
-'      Set frmAddEditSaleOrderItem2.m_ExWorkPricesItem = m_ExWorkPricesItem
-'      Set frmAddEditSaleOrderItem2.m_ExDeliveryCostItem = m_ExDeliveryCostItem
-'      Set frmAddEditSaleOrderItem2.m_ExPromotionPartItem = m_ExPromotionPartItem
-'      Set frmAddEditSaleOrderItem2.m_ExPromotionDlcItem = m_ExPromotionDlcItem
-'      Set frmAddEditSaleOrderItem2.m_DeliveryCus = m_DeliveryCus
-'      frmAddEditSaleOrderItem2.CUSTOMER_ID = uctlCustomerLookup.MyCombo.ItemData(Minus2Zero(uctlCustomerLookup.MyCombo.ListIndex))
-'      frmAddEditSaleOrderItem2.DELIVERY_CUS_ITEM_ID = uctlDeliveryCusLookup.MyCombo.ItemData(Minus2Zero(uctlDeliveryCusLookup.MyCombo.ListIndex))
-'      frmAddEditSaleOrderItem2.PRICE_THINK_TYPE = PRICE_THINK_TYPE 'cboRateType.ListIndex
-'      frmAddEditSaleOrderItem2.CAL_RATE_DELIVERY_TYPE = CAL_RATE_DELIVERY_TYPE
-'      frmAddEditSaleOrderItem2.CAL_PRICE_PART_CENTER_FLAG = CAL_PRICE_PART_CENTER_FLAG
-'      frmAddEditSaleOrderItem2.CAL_PRICE_DLC_CENTER_FLAG = CAL_PRICE_DLC_CENTER_FLAG
-'      frmAddEditSaleOrderItem2.ISuctlDeliveryCusLookup = ISuctlDeliveryCusLookup
-'      frmAddEditSaleOrderItem2.TypeSale = 3 'แก้ไขขายสินค้าและค่าขนส่ง
-'      frmAddEditSaleOrderItem2.SuccessFlag = m_BillingDoc.SUCCESS_FLAG
-'
-'      frmAddEditSaleOrderItem2.HeaderText = MapText("แก้ไขรายการใบ SO")
-'      frmAddEditSaleOrderItem2.ParentShowMode = ShowMode
-'      frmAddEditSaleOrderItem2.ShowMode = SHOW_EDIT
-'      Load frmAddEditSaleOrderItem2
-'      frmAddEditSaleOrderItem2.Show 1
-'
-'      OKClick = frmAddEditSaleOrderItem2.OKClick
-'      NewUpdatePrice = frmAddEditSaleOrderItem2.NewUpdatePrice
-'
-'      ISuctlDeliveryCusLookup = frmAddEditSaleOrderItem2.ISuctlDeliveryCusLookup
-'
-'      Unload frmAddEditSaleOrderItem2
-'      Set frmAddEditSaleOrderItem2 = Nothing
-'
-'      If OKClick Then
-'         Call GetTotalPrice
-'         GridEX1.ItemCount = CountItem(m_BillingDoc.SaleOrders)
-'         GridEX1.Rebind
-'      End If
-'   ElseIf TabStrip1.SelectedItem.Index = 2 Then
-'   ElseIf TabStrip1.SelectedItem.Index = 3 Then
-'   ElseIf TabStrip1.SelectedItem.Index = 4 Then
-'   ElseIf TabStrip1.SelectedItem.Index = 5 Then
-'   End If
-'
-'   If OKClick Then
-'      m_HasModify = True
-'   End If
 End Sub
 
 Private Sub CalculateIncludePrice()
@@ -1646,12 +1567,33 @@ Private Sub cmdEditCon_Click()
 End Sub
 
 Private Sub cmdOK_Click()
-   If Not SaveData Then
+Dim oMenu As cPopupMenu
+Dim lMenuChosen  As Long
+
+   Set oMenu = New cPopupMenu
+   lMenuChosen = oMenu.Popup("บันทึก", "-", "บันทึกและออกจากหน้าจอ")
+   If lMenuChosen = 0 Then
       Exit Sub
    End If
    
-   OKClick = True
-   Unload Me
+   If lMenuChosen = 1 Then
+      If Not SaveData Then
+         Exit Sub
+      End If
+      
+      ShowMode = SHOW_EDIT
+      id = m_BillingDoc.BILLING_DOC_ID
+      m_BillingDoc.QueryFlag = 1
+      QueryData (True)
+      m_HasModify = False
+   ElseIf lMenuChosen = 3 Then
+      If Not SaveData Then
+         Exit Sub
+      End If
+   
+      OKClick = True
+      Unload Me
+   End If
 End Sub
 
 Private Sub cmdPictureAdd_Click()
@@ -1797,7 +1739,7 @@ Dim ReportMode As Long
    Else
       frmReportConfig.ReportMode = ReportMode
       frmReportConfig.ShowMode = EditMode
-      frmReportConfig.ID = Rc.REPORT_CONFIG_ID
+      frmReportConfig.id = Rc.REPORT_CONFIG_ID
       frmReportConfig.ReportKey = ReportKey
       frmReportConfig.HeaderText = HeaderText
       Load frmReportConfig
@@ -1827,7 +1769,7 @@ Dim Result As Boolean
    End If
    
    ShowMode = SHOW_EDIT
-   ID = m_BillingDoc.BILLING_DOC_ID
+   id = m_BillingDoc.BILLING_DOC_ID
    m_BillingDoc.QueryFlag = 1
    QueryData (True)
    m_HasModify = False
@@ -1935,6 +1877,7 @@ Private Sub Form_Unload(Cancel As Integer)
    Set m_ExWorkPricesItem = Nothing
    Set m_ExDeliveryCostItem = Nothing
    Set m_ExPromotionPartItem = Nothing
+   Set m_ExPromotionExtraPartItem = Nothing
    Set m_ExPromotionDlcItem = Nothing
 End Sub
 
@@ -2168,6 +2111,7 @@ Private Sub Form_Load()
    Set m_ExWorkPricesItem = New Collection
    Set m_ExDeliveryCostItem = New Collection
    Set m_ExPromotionPartItem = New Collection
+   Set m_ExPromotionExtraPartItem = New Collection
    Set m_ExPromotionDlcItem = New Collection
 End Sub
 
@@ -2302,7 +2246,7 @@ Private Sub txtDiscount_Change()
    Call CalculateAmount
 End Sub
 Private Sub txtDocumentNo_LostFocus()
-   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, ID) Then
+   If Not CheckUniqueNs(DO_PLAN_UNIQUE, txtDocumentNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtDocumentNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Exit Sub
@@ -2406,7 +2350,11 @@ Dim TempD2 As CCustomer
    
      
    If CUSTOMER_ID > 0 Then
-       Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID) 'LOAD สถานที่จัดส่ง
+    If ShowMode = SHOW_ADD Then
+       Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง เฉพาะที่ ที่เปิดใช้งาน
+   Else
+      Call LoadDeliveryCus(uctlDeliveryCusLookup.MyCombo, m_DeliveryCus, CUSTOMER_ID, , , , "N") 'LOAD สถานที่จัดส่ง ทุกที่
+   End If
       Set uctlDeliveryCusLookup.MyCollection = m_DeliveryCus
      
      Set TempD2 = GetObject("CCustomer", m_Customers, Trim(str(CUSTOMER_ID)), False)

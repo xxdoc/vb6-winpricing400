@@ -144,7 +144,7 @@ Dim ErrorObj As clsErrorLog
       Exit Function
    End If
    
-   If (m_Rs1.EOF) Or (NVLS(m_Rs1("USER_STATUS2"), "Y") <> "Y") Then
+   If (m_Rs1.EOF) Or (NVLS(m_Rs1("USER_STATUS3"), "Y") <> "Y") Then
       ErrorObj.LocalErrorMsg = "บัญชีรายชื่อนี้ไม่สามารถเข้าถึงข้อมูลส่วนนี้ได้"
       ErrorObj.SystemErrorMsg = " ไม่สามารถเข้าถึงส่วน " & AccName
       ErrorObj.RoutineName = "CheckAccRightUserPassword"

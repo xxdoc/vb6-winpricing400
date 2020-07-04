@@ -185,7 +185,7 @@ Dim PP As CParameterProcess
 
    Set Cf = New CReportField
 
-If mcolParam("SHOW_ORDER_BILL") = 1 Then
+'If mcolParam("SHOW_ORDER_BILL") = 1 Then
    Call Cf.SetFieldValue(3, "^", "ประเภทสินค้า.", "^")
    Call m_Headers0.AddField(Cf)
    Call Cf.SetFieldValue(18, "^", "รายได้จาการขาย.", "^")
@@ -241,7 +241,7 @@ If mcolParam("SHOW_ORDER_BILL") = 1 Then
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(2, "^", "%GP", ">")
    Call m_Headers1.AddField(Cf)
-End If
+'End If
 
 
    Set Cf = Nothing

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmWinPricingMain 
    ClientHeight    =   8520
    ClientLeft      =   120
@@ -219,7 +219,7 @@ Begin VB.Form frmWinPricingMain
          Left            =   360
          TabIndex        =   5
          Top             =   5490
-         Width           =   3045
+         Width           =   4005
       End
       Begin VB.Label lblUserName 
          Caption         =   "Label1"
@@ -227,7 +227,7 @@ Begin VB.Form frmWinPricingMain
          Left            =   360
          TabIndex        =   4
          Top             =   4980
-         Width           =   3045
+         Width           =   4005
       End
    End
    Begin Threed.SSPanel pnlHeader 
@@ -2010,7 +2010,7 @@ ElseIf Key = "INVENTORY-WH_REPORT" Then
       End If
 
       Set oMenu = New cPopupMenu
-      lMenuChosen = oMenu.Popup("ราคาสินค้าหน้าโรง", "-", "ราคาค่าขนส่ง", "-", "โปรโมชั่นราคาค่าสินค้า", "-", "โปรโมชั่นราคาค่าขนส่ง")
+      lMenuChosen = oMenu.Popup("ราคาสินค้าหน้าโรง", "-", "ราคาค่าขนส่ง", "-", "ส่วนลดราคาค่าสินค้า(หน้าบิล)", "-", "ส่วนลดราคาค่าขนส่งหน้าบิล", "-", "ส่วนลดพิเศษราคาค่าสินค้า(หลังบิล)")
       If lMenuChosen <= 0 Then
          Call EnableForm(Me, True)
          Exit Sub
@@ -2056,6 +2056,17 @@ ElseIf Key = "INVENTORY-WH_REPORT" Then
          End If
          
          frmExWorksPrice.Area = 4
+         Load frmExWorksPrice
+         frmExWorksPrice.Show 1
+         Unload frmExWorksPrice
+         Set frmExWorksPrice = Nothing
+      ElseIf lMenuChosen = 9 Then
+         If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART-EXTRA") Then
+            Call EnableForm(Me, True)
+            Exit Sub
+         End If
+         
+         frmExWorksPrice.Area = 5
          Load frmExWorksPrice
          frmExWorksPrice.Show 1
          Unload frmExWorksPrice
@@ -2465,7 +2476,7 @@ Private Sub Timer1_Timer()
    lblUsername.Caption = MapText("ผู้ใช้ : ") & " " & glbUser.USER_NAME
    lblUserGroup.Caption = MapText("กลุ่มผู้ใช้ : ") & " " & glbUser.GROUP_NAME
    
-Timer1.Enabled = True
+   Timer1.Enabled = True
 End Sub
 Private Sub trvMain_NodeClick(ByVal Node As MSComctlLib.Node)
    If Node Is Nothing Then

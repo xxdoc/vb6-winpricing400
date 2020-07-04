@@ -32,6 +32,16 @@ Public EX_WORKS_PRICE_TYPE As Long
 Public FROM_ACTIVE_DATE As Date
 Public TO_VALID_DATE As Date
 Public BETWEEN_DATE As Date
+Public EX_WORKS_PRICE_NOTE As String
+
+Public DECLARE_COUNT As Long
+Public DECLARE_NEW_FLAG As String
+Public LAST_EDIT_FLAG As String
+Public APPROVED_FLAG As String
+Public APPROVED_NAME As String
+Public VERIFY_FLAG As String
+Public VERIFY_NAME As String
+
 
 Public EX_WORKS_PRICE_ITEM_ID As Long
 Public PART_ITEM_ID As Long
@@ -260,7 +270,7 @@ End If
       End If
    End If
    
-      If Trim(PART_NO) <> "" Then
+   If Trim(PART_NO) <> "" Then
       If WildCard(PART_NO, SubLen, NewStr) Then
          If WhereStr = "" Then
             WhereStr = "WHERE (SUBSTR(PI.PART_NO,1," & SubLen & ") = '" & ChangeQuote(Trim(NewStr)) & "')"
@@ -275,6 +285,33 @@ End If
          End If
       End If
    End If
+
+If Ind = 2 Or Ind = 3 Or Ind = 4 Or Ind = 5 Then
+   If Len(APPROVED_FLAG) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         If EX_WORKS_PRICE_TYPE = 1 Then
+            WhereStr = "WHERE (EWPI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         ElseIf EX_WORKS_PRICE_TYPE = 2 Then
+            WhereStr = "WHERE (EDCI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         ElseIf EX_WORKS_PRICE_TYPE = 3 Then
+            WhereStr = "WHERE (EPPI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         ElseIf EX_WORKS_PRICE_TYPE = 4 Then
+            WhereStr = "WHERE (EPDI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         End If
+      Else
+          If EX_WORKS_PRICE_TYPE = 1 Then
+            WhereStr = WhereStr & "AND (EWPI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         ElseIf EX_WORKS_PRICE_TYPE = 2 Then
+            WhereStr = WhereStr & "AND (EDCI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         ElseIf EX_WORKS_PRICE_TYPE = 3 Then
+            WhereStr = WhereStr & "AND (EPPI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         ElseIf EX_WORKS_PRICE_TYPE = 4 Then
+            WhereStr = WhereStr & "AND (EPDI.APPROVED_FLAG = '" & APPROVED_FLAG & "') "
+         End If
+      End If
+   End If
+End If
+
    
    OrderByStr = ""
    OrderTypeStr = ""
@@ -350,6 +387,7 @@ If Ind = 1 Then
    FROM_ACTIVE_DATE = InternalDateToDate(NVLS(Rs("FROM_ACTIVE_DATE"), ""))
    TO_VALID_DATE = InternalDateToDate(NVLS(Rs("TO_VALID_DATE"), ""))
    MODIFY_DATE = InternalDateToDate(NVLS(Rs("MODIFY_DATE"), ""))
+   EX_WORKS_PRICE_NOTE = NVLS(Rs("EX_WORKS_PRICE_NOTE"), "")
    
    KEY_ID = EX_WORKS_PRICE_ID
    KEY_LOOKUP = EX_WORKS_PRICE_CODE
@@ -446,16 +484,16 @@ End Function
 Public Function AddEditData(Optional AutoGenerateFlag As Boolean = True)
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", id, glbErrorLog)
       If AutoGenerateFlag Then
-         Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", ID, glbErrorLog)
+         Call glbDatabaseMngr.GetSeqID("EX_WORKS_PRICE_SEQ", id, glbErrorLog)
       Else
-         ID = EX_WORKS_PRICE_ID
+         id = EX_WORKS_PRICE_ID
       End If
       
       SQL1 = "INSERT INTO EX_WORKS_PRICE " & _
@@ -464,6 +502,7 @@ Dim ID As Long
                      "   EX_WORKS_PRICE_CODE, " & _
                      "   EX_WORKS_PRICE_DATE, " & _
                      "   EX_WORKS_PRICE_DESC, " & _
+                     "   EX_WORKS_PRICE_NOTE, " & _
                      "   EX_WORKS_PRICE_STATUS, " & _
                      "   EX_WORKS_PRICE_LEVEL, " & _
                      "   EX_WORKS_PRICE_TYPE, " & _
@@ -476,10 +515,11 @@ Dim ID As Long
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "'" & ChangeQuote(Trim(EX_WORKS_PRICE_CODE)) & "'," & _
                          "'" & ChangeQuote(Trim(DateToStringInt(EX_WORKS_PRICE_DATE))) & "'," & _
                          "'" & ChangeQuote(Trim(EX_WORKS_PRICE_DESC)) & "'," & _
+                         "'" & ChangeQuote(Trim(EX_WORKS_PRICE_NOTE)) & "'," & _
                          "" & EX_WORKS_PRICE_STATUS & "," & _
                          "'" & EX_WORKS_PRICE_LEVEL & "'," & _
                          "" & EX_WORKS_PRICE_TYPE & "," & _
@@ -490,26 +530,26 @@ Dim ID As Long
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         EX_WORKS_PRICE_ID = ID
+         EX_WORKS_PRICE_ID = id
    Else 'Show edit
       SQL1 = "UPDATE EX_WORKS_PRICE SET " & _
                      "   EX_WORKS_PRICE_CODE = '" & ChangeQuote(Trim(EX_WORKS_PRICE_CODE)) & "', " & _
                      "   EX_WORKS_PRICE_DATE  = '" & ChangeQuote(Trim(DateToStringInt(EX_WORKS_PRICE_DATE))) & "', " & _
                      "   EX_WORKS_PRICE_DESC  = '" & ChangeQuote(Trim(EX_WORKS_PRICE_DESC)) & "', " & _
+                     "   EX_WORKS_PRICE_NOTE  = '" & ChangeQuote(Trim(EX_WORKS_PRICE_NOTE)) & "', " & _
                      "   EX_WORKS_PRICE_STATUS  = " & EX_WORKS_PRICE_STATUS & ", " & _
                       "   EX_WORKS_PRICE_LEVEL  = '" & EX_WORKS_PRICE_LEVEL & "', " & _
                       "   EX_WORKS_PRICE_TYPE  = " & EX_WORKS_PRICE_TYPE & ", " & _
                       "   FROM_ACTIVE_DATE   = '" & ChangeQuote(Trim(DateToStringInt(FROM_ACTIVE_DATE))) & "', " & _
                       "   TO_VALID_DATE   = '" & ChangeQuote(Trim(DateToStringInt(TO_VALID_DATE))) & "', " & _
-                    "    MODIFY_DATE = '" & ServerDateTime & "', " & _
-                    "    MODIFY_BY = " & glbUser.USER_ID & " " & _
-                     "WHERE EX_WORKS_PRICE_ID = " & EX_WORKS_PRICE_ID
+                     "    MODIFY_DATE = '" & ServerDateTime & "', " & _
+                     "    MODIFY_BY = " & glbUser.USER_ID & " " & _
+                      "WHERE EX_WORKS_PRICE_ID = " & EX_WORKS_PRICE_ID
    End If
-   
    If (AddEditMode = SHOW_ADD) Or (AddEditMode = SHOW_EDIT) Then
       m_Conn.Execute (SQL1)
    End If
-   
+
 End Function
 
 Public Function DeleteData()
@@ -530,7 +570,6 @@ Dim SQL1 As String
       SQL1 = "DELETE FROM EX_WORKS_PRICE WHERE EX_WORKS_PRICE_ID = " & EX_WORKS_PRICE_ID
       m_Conn.Execute (SQL1)
 End Function
-
 Private Sub Class_Terminate()
    Set ExWorksPriceItem = Nothing
    Set ExDeliveryCost = Nothing

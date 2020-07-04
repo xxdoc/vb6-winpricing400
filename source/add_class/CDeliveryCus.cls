@@ -18,6 +18,7 @@ Private m_Conn As ADODB.Connection
 Public DELIVERY_CUS_ITEM_ID As Long
 Public DELIVERY_CUS_ITEM_CODE As String
 Public DELIVERY_CUS_ITEM_NAME As String
+Public HIDE_FLAG As String
 Public CUSTOMER_ID As Long
 
 Public OrderBy As Long
@@ -35,13 +36,19 @@ End Sub
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim Temp1 As String
+Dim TempID1 As String
    
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
+   TempID1 = HIDE_FLAG
+   If Len(HIDE_FLAG) <= 0 Then
+      TempID1 = "N"
+   End If
+   
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("DELIVERY_CUS_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("DELIVERY_CUS_ITEM_SEQ", id, glbErrorLog)
       
       SQL1 = "INSERT INTO DELIVERY_CUS_ITEM  " & _
                      "( " & _
@@ -49,6 +56,7 @@ Dim Temp1 As String
                      "   DELIVERY_CUS_ITEM_CODE ," & _
                      "   DELIVERY_CUS_ITEM_NAME, " & _
                      "   CUSTOMER_ID, " & _
+                     "   HIDE_FLAG, " & _
                      "   CREATE_DATE, " & _
                      "    CREATE_BY, " & _
                      "    MODIFY_DATE, " & _
@@ -56,21 +64,23 @@ Dim Temp1 As String
                      ") " & _
                      "VALUES "
                SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                         "'" & ChangeQuote(Trim(DELIVERY_CUS_ITEM_CODE)) & "', " & _
                         "'" & ChangeQuote(Trim(DELIVERY_CUS_ITEM_NAME)) & "', " & _
                         "" & ChangeQuote(Trim(CUSTOMER_ID)) & ", " & _
+                        "'" & ChangeQuote(Trim(TempID1)) & "', " & _
                         "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & "," & _
                         "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & "" & _
                      ") "
-                  DELIVERY_CUS_ITEM_ID = ID
+                  DELIVERY_CUS_ITEM_ID = id
    Else 'Show edit
       SQL1 = "UPDATE DELIVERY_CUS_ITEM  SET " & _
                      "   DELIVERY_CUS_ITEM_CODE = '" & ChangeQuote(Trim(DELIVERY_CUS_ITEM_CODE)) & "', " & _
                      "   DELIVERY_CUS_ITEM_NAME = '" & ChangeQuote(Trim(DELIVERY_CUS_ITEM_NAME)) & "', " & _
-                     "   CUSTOMER_ID = '" & ChangeQuote(Trim(CUSTOMER_ID)) & "', " & _
+                     "   CUSTOMER_ID = " & ChangeQuote(Trim(CUSTOMER_ID)) & ", " & _
+                     "   HIDE_FLAG = '" & ChangeQuote(Trim(TempID1)) & "', " & _
                     "    MODIFY_DATE = '" & ServerDateTime & "', " & _
                     "    MODIFY_BY = " & glbUser.USER_ID & "" & _
                     "WHERE DELIVERY_CUS_ITEM_ID = " & DELIVERY_CUS_ITEM_ID
@@ -123,6 +133,14 @@ Dim NewStr As String
       End If
    End If
    
+     If Len(HIDE_FLAG) > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (DCI.HIDE_FLAG = '" & HIDE_FLAG & "') "
+      Else
+         WhereStr = WhereStr & "AND (DCI.HIDE_FLAG = '" & HIDE_FLAG & "') "
+      End If
+   End If
+   
    If CUSTOMER_ID > 0 Then
       If Len(WhereStr) <= 0 Then
          WhereStr = "WHERE (DCI.CUSTOMER_ID = " & CUSTOMER_ID & ") "
@@ -161,6 +179,7 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       DELIVERY_CUS_ITEM_CODE = NVLS(Rs("DELIVERY_CUS_ITEM_CODE"), "")
       DELIVERY_CUS_ITEM_NAME = NVLS(Rs("DELIVERY_CUS_ITEM_NAME"), "")
       CUSTOMER_ID = NVLI(Rs("CUSTOMER_ID"), -1)
+      HIDE_FLAG = NVLS(Rs("HIDE_FLAG"), "")
       
       KEY_LOOKUP = DELIVERY_CUS_ITEM_CODE
       KEY_ID = DELIVERY_CUS_ITEM_ID

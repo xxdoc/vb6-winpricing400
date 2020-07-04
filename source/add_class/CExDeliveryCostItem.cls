@@ -38,7 +38,18 @@ Public CUSTOMER_NAME As String
 Public DELIVERY_CUS_ITEM_ID As Long
 Public DELIVERY_CUS_ITEM_CODE As String
 Public DELIVERY_CUS_ITEM_NAME As String
+Public HIDE_FLAG As String
 Public SocPartType As Long
+
+Public DECLARE_COUNT As Long
+Public DECLARE_NEW_FLAG As String
+Public LAST_EDIT_FLAG As String
+Public APPROVED_FLAG As String
+Public APPROVED_NAME As String
+Public VERIFY_FLAG As String
+Public VERIFY_NAME As String
+Public MODIFY_BY As Long
+Public CREATE_BY As Long
 
 Private Sub Class_Initialize()
    Set m_Conn = glbDatabaseMngr.DBConnection
@@ -68,6 +79,16 @@ Dim SubLen As Long
       FromStr = FromStr & "LEFT OUTER JOIN DELIVERY_CUS_ITEM DCI ON (EDCI.DELIVERY_CUS_ITEM_ID = DCI.DELIVERY_CUS_ITEM_ID) "
 
       WhereStr = ""
+   ElseIf Ind = 2 Then
+      SelectStr1 = "SELECT MAX(EDCI.DECLARE_COUNT) DECLARE_COUNT "
+      SelectStr2 = "SELECT COUNT(*)  "
+     
+     FromStr = "FROM EX_DELIVERY_COST_ITEM EDCI "
+   ElseIf Ind = 3 Then
+      SelectStr1 = "SELECT DISTINCT EDCI.DECLARE_COUNT  "
+      SelectStr2 = "SELECT COUNT(*)  "
+     
+     FromStr = "FROM EX_DELIVERY_COST_ITEM EDCI "
    End If
    
    If EX_DELIVERY_COST_ITEM_ID > 0 Then
@@ -112,6 +133,47 @@ Dim SubLen As Long
       End If
    End If
    
+   If Trim(VERIFY_FLAG) <> "" Then
+      If WhereStr = "" Then
+         WhereStr = "WHERE (EDCI.VERIFY_FLAG = '" & ChangeQuote(Trim(VERIFY_FLAG)) & "')"
+      Else
+         WhereStr = WhereStr & "AND (EDCI.VERIFY_FLAG = '" & ChangeQuote(Trim(VERIFY_FLAG)) & "')"
+      End If
+   End If
+   
+   If Trim(APPROVED_FLAG) <> "" Then
+      If WhereStr = "" Then
+         WhereStr = "WHERE (EDCI.APPROVED_FLAG = '" & ChangeQuote(Trim(APPROVED_FLAG)) & "')"
+      Else
+         WhereStr = WhereStr & "AND (EDCI.APPROVED_FLAG = '" & ChangeQuote(Trim(APPROVED_FLAG)) & "')"
+      End If
+   End If
+   
+   If Trim(DECLARE_NEW_FLAG) <> "" Then
+      If WhereStr = "" Then
+         WhereStr = "WHERE (EDCI.DECLARE_NEW_FLAG = '" & ChangeQuote(Trim(DECLARE_NEW_FLAG)) & "')"
+      Else
+         WhereStr = WhereStr & "AND (EDCI.DECLARE_NEW_FLAG = '" & ChangeQuote(Trim(DECLARE_NEW_FLAG)) & "')"
+      End If
+   End If
+
+   If DECLARE_COUNT > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (EDCI.DECLARE_COUNT = " & DECLARE_COUNT & ") "
+      Else
+         WhereStr = WhereStr & "AND (EDCI.DECLARE_COUNT = " & DECLARE_COUNT & ") "
+      End If
+   End If
+   
+   If Trim(HIDE_FLAG) <> "" Then
+      If WhereStr = "" Then
+         WhereStr = "WHERE (DCI.HIDE_FLAG = '" & ChangeQuote(Trim(HIDE_FLAG)) & "')"
+      Else
+         WhereStr = WhereStr & "AND (DCI.HIDE_FLAG = '" & ChangeQuote(Trim(HIDE_FLAG)) & "')"
+      End If
+   End If
+   '
+   
    OrderByStr = ""
    OrderTypeStr = ""
       
@@ -123,8 +185,11 @@ Dim SubLen As Long
       Else
          OrderByStr = "ORDER BY EDCI.EX_DELIVERY_COST_ITEM_ID "
       End If
+   ElseIf Ind = 3 Then
+      OrderByStr = "ORDER BY DECLARE_COUNT DESC "
    End If
    
+If Ind = 1 Then
    If OrderType = 1 Then
       OrderTypeStr = "ASC "
    ElseIf OrderType = 2 Then
@@ -132,6 +197,7 @@ Dim SubLen As Long
    Else
       OrderTypeStr = "ASC "
    End If
+End If
    
    SQL1 = SelectStr1 & FromStr & WhereStr & OrderByStr & OrderTypeStr
    SQL2 = SelectStr2 & FromStr & WhereStr
@@ -155,14 +221,34 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       WEIGHT_PER_PACK_CUS = NVLI(Rs("WEIGHT_PER_PACK_CUS"), -1)
       RATE_TYPE = NVLI(Rs("RATE_TYPE"), -1)
       RATE_TYPE_CUS = NVLI(Rs("RATE_TYPE_CUS"), -1)
+      
+      DECLARE_COUNT = NVLI(Rs("DECLARE_COUNT"), -1)
+      DECLARE_NEW_FLAG = NVLS(Rs("DECLARE_NEW_FLAG"), "")
+      LAST_EDIT_FLAG = NVLS(Rs("LAST_EDIT_FLAG"), "")
+      APPROVED_FLAG = NVLS(Rs("APPROVED_FLAG"), "")
+      APPROVED_NAME = NVLS(Rs("APPROVED_NAME"), "")
+      VERIFY_FLAG = NVLS(Rs("VERIFY_FLAG"), "")
+      VERIFY_NAME = NVLS(Rs("VERIFY_NAME"), "")
+      
+      MODIFY_BY = NVLI(Rs("MODIFY_BY"), -1)
+      CREATE_BY = NVLI(Rs("CREATE_BY"), -1)
+   ElseIf Ind = 2 Then
+      DECLARE_COUNT = NVLI(Rs("DECLARE_COUNT"), -1)
+   ElseIf Ind = 3 Then
+      DECLARE_COUNT = NVLI(Rs("DECLARE_COUNT"), -1)
    End If
 End Function
 Public Function AddEditData(Optional AutoGenerateFlag As Boolean = True)
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 Dim TempID2 As String
+
+Dim TempID01 As String
+Dim TempID02 As String
+Dim TempID03 As String
+Dim TempID04 As String
    
    TempID1 = CUSTOMER_ID
    If CUSTOMER_ID <= 0 Then
@@ -174,10 +260,31 @@ Dim TempID2 As String
       TempID2 = "NULL"
    End If
    
+   
+   TempID01 = VERIFY_FLAG
+   If Len(VERIFY_FLAG) <= 0 Then
+      TempID01 = "N"
+   End If
+   
+  TempID02 = APPROVED_FLAG
+   If Len(APPROVED_FLAG) <= 0 Then
+      TempID02 = "N"
+   End If
+   
+   TempID03 = LAST_EDIT_FLAG
+   If Len(LAST_EDIT_FLAG) <= 0 Then
+      TempID03 = "N"
+   End If
+   
+   TempID04 = DECLARE_NEW_FLAG
+   If Len(DECLARE_NEW_FLAG) <= 0 Then
+      TempID04 = "Y" 'ให้เป็นการประกาศราคาใหม่ไปก่อน เรื่องค่าขนส่ง
+   End If
+   
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
 
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("EX_DELIVERY_COST_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("EX_DELIVERY_COST_ITEM_SEQ", id, glbErrorLog)
       
       SQL1 = "INSERT INTO EX_DELIVERY_COST_ITEM " & _
                      "( " & _
@@ -191,6 +298,13 @@ Dim TempID2 As String
                      "   RATE_CUSTOMER, " & _
                      "   WEIGHT_PER_PACK, " & _
                      "   WEIGHT_PER_PACK_CUS, " & _
+                     "   DECLARE_COUNT," & _
+                     "   DECLARE_NEW_FLAG," & _
+                     "   LAST_EDIT_FLAG, " & _
+                     "   APPROVED_FLAG, " & _
+                     "   APPROVED_NAME, " & _
+                     "   VERIFY_FLAG, " & _
+                     "   VERIFY_NAME, " & _
                      "   CREATE_DATE, " & _
                      "   CREATE_BY, " & _
                      "   MODIFY_DATE, " & _
@@ -198,7 +312,7 @@ Dim TempID2 As String
                      ") " & _
                      "VALUES "
                SQL1 = SQL1 & "( " & _
-                         ID & "," & _
+                         id & "," & _
                         "" & EX_WORKS_PRICE_ID & ", " & _
                         RATE_TYPE & ", " & _
                         RATE_TYPE_CUS & ", " & _
@@ -208,12 +322,19 @@ Dim TempID2 As String
                         RATE_CUSTOMER & ", " & _
                         WEIGHT_PER_PACK & ", " & _
                         WEIGHT_PER_PACK_CUS & ", " & _
+                          DECLARE_COUNT & ", " & _
+                        "'" & TempID04 & "'," & _
+                        "'" & TempID03 & "'," & _
+                        "'" & TempID02 & "'," & _
+                        "'" & APPROVED_NAME & "'," & _
+                        "'" & TempID01 & "'," & _
+                        "'" & VERIFY_NAME & "'," & _
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & "," & _
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-               EX_DELIVERY_COST_ITEM_ID = ID
+               EX_DELIVERY_COST_ITEM_ID = id
    Else 'Show edit
       SQL1 = "UPDATE EX_DELIVERY_COST_ITEM SET " & _
                      "   EX_WORKS_PRICE_ID = " & EX_WORKS_PRICE_ID & ", " & _
@@ -225,6 +346,13 @@ Dim TempID2 As String
                      "   RATE_CUSTOMER = " & RATE_CUSTOMER & ", " & _
                      "   WEIGHT_PER_PACK = " & WEIGHT_PER_PACK & ", " & _
                      "   WEIGHT_PER_PACK_CUS = " & WEIGHT_PER_PACK_CUS & ", " & _
+                     "   DECLARE_COUNT = " & DECLARE_COUNT & ", " & _
+                     "   DECLARE_NEW_FLAG= '" & TempID04 & "', " & _
+                     "   LAST_EDIT_FLAG= '" & TempID03 & "', " & _
+                     "   APPROVED_FLAG  = '" & TempID02 & "', " & _
+                     "   APPROVED_NAME  = '" & APPROVED_NAME & "', " & _
+                     "   VERIFY_FLAG  = '" & TempID01 & "', " & _
+                     "   VERIFY_NAME  = '" & VERIFY_NAME & "', " & _
                     "    MODIFY_DATE = '" & ServerDateTime & "', " & _
                     "    MODIFY_BY = " & glbUser.USER_ID & " " & _
                      "WHERE EX_DELIVERY_COST_ITEM_ID = " & EX_DELIVERY_COST_ITEM_ID
@@ -245,5 +373,35 @@ Private Sub Class_Terminate()
  Set m_Conn = Nothing
 End Sub
 
+Public Sub UpdateApprovedFlag(ProcessType As Long, CountUpdate As Long)
+Dim ServerDateTime As String
+Dim SQL1 As String
+Dim strTable As String
+Dim WhereStr As String
 
+   Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+
+   SQL1 = "UPDATE EX_DELIVERY_COST_ITEM SET "
+ 
+   If ProcessType = 1 Then
+      SQL1 = SQL1 & "   VERIFY_FLAG = '" & VERIFY_FLAG & "', "
+      SQL1 = SQL1 & "   VERIFY_NAME = '" & VERIFY_NAME & "'"
+   ElseIf ProcessType = 3 Then
+      SQL1 = SQL1 & "   APPROVED_FLAG = '" & APPROVED_FLAG & "', "
+      SQL1 = SQL1 & "   APPROVED_NAME = '" & APPROVED_NAME & "', "
+      SQL1 = SQL1 & "   DECLARE_COUNT = '" & DECLARE_COUNT & "', "
+      SQL1 = SQL1 & "   LAST_EDIT_FLAG = '" & LAST_EDIT_FLAG & "'"
+   End If
+      
+      SQL1 = SQL1 & "WHERE (EX_DELIVERY_COST_ITEM_ID = " & EX_DELIVERY_COST_ITEM_ID & ")"
+          
+            If ProcessType = 1 Then
+               SQL1 = SQL1 & " AND (APPROVED_FLAG='N')" 'ถ้าจะตรวจสอบต้องไม่มีการอนุมัติมาก่อน
+            ElseIf ProcessType = 3 Then
+               SQL1 = SQL1 & " AND (VERIFY_FLAG='Y') " 'ถ้าจะอนุมัติต้องมีการตรวจสอบก่อน
+            End If
+   SQL1 = SQL1 & " AND (DECLARE_NEW_FLAG='Y') " 'ต้องเป็นที่ตัวประกาศใหม่เท่านั้น
+   
+    Call m_Conn.Execute(SQL1, CountUpdate)
+End Sub
 

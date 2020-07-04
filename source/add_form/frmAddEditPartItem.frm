@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditPartItem 
    BackColor       =   &H80000000&
@@ -39,8 +39,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   32
          Top             =   2880
          Width           =   2055
-         _ExtentX        =   3625
-         _ExtentY        =   767
+         _extentx        =   3625
+         _extenty        =   767
       End
       Begin VB.ComboBox cboParcelType 
          Height          =   315
@@ -72,12 +72,12 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   2
          Top             =   1470
          Width           =   4485
-         _ExtentX        =   13309
-         _ExtentY        =   767
+         _extentx        =   13309
+         _extenty        =   767
       End
       Begin Threed.SSPanel pnlHeader 
          Height          =   705
-         Left            =   0
+         Left            =   10
          TabIndex        =   12
          Top             =   0
          Width           =   11895
@@ -92,8 +92,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   0
          Top             =   1020
          Width           =   2955
-         _ExtentX        =   5212
-         _ExtentY        =   767
+         _extentx        =   5212
+         _extenty        =   767
       End
       Begin GridEX20.GridEX GridEX1 
          Height          =   3315
@@ -166,8 +166,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   1
          Top             =   1020
          Width           =   2175
-         _ExtentX        =   5212
-         _ExtentY        =   767
+         _extentx        =   5212
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtBillDesc 
          Height          =   435
@@ -175,8 +175,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   3
          Top             =   1470
          Width           =   3945
-         _ExtentX        =   5212
-         _ExtentY        =   767
+         _extentx        =   5212
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtWeightPerPack 
          Height          =   435
@@ -184,8 +184,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   5
          Top             =   1920
          Width           =   1455
-         _ExtentX        =   5212
-         _ExtentY        =   767
+         _extentx        =   5212
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtMin 
          Height          =   435
@@ -193,8 +193,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   26
          Top             =   2400
          Width           =   1455
-         _ExtentX        =   5212
-         _ExtentY        =   767
+         _extentx        =   5212
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtMax 
          Height          =   435
@@ -202,8 +202,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   28
          Top             =   1920
          Width           =   1455
-         _ExtentX        =   5212
-         _ExtentY        =   767
+         _extentx        =   5212
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlLocationLookup 
          Height          =   435
@@ -211,8 +211,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   33
          Top             =   3360
          Width           =   5355
-         _ExtentX        =   9446
-         _ExtentY        =   767
+         _extentx        =   9446
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextBox txtNumberLabID 
          Height          =   435
@@ -220,8 +220,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   34
          Top             =   3360
          Width           =   2055
-         _ExtentX        =   3625
-         _ExtentY        =   767
+         _extentx        =   3625
+         _extenty        =   767
       End
       Begin prjFarmManagement.uctlTextLookup uctlPartMaster 
          Height          =   435
@@ -229,8 +229,8 @@ Begin VB.Form frmAddEditPartItem
          TabIndex        =   38
          Top             =   3840
          Width           =   5355
-         _ExtentX        =   9446
-         _ExtentY        =   767
+         _extentx        =   9446
+         _extenty        =   767
       End
       Begin VB.Label lblProductType 
          Alignment       =   1  'Right Justify
@@ -397,7 +397,7 @@ Begin VB.Form frmAddEditPartItem
          _ExtentX        =   4524
          _ExtentY        =   609
          _Version        =   131073
-         Caption         =   "SSCheck1"
+         Caption         =   "chkPigFlag"
          TripleState     =   -1  'True
       End
       Begin VB.Label lblPartType 
@@ -466,7 +466,7 @@ Private m_Rs As ADODB.Recordset
 Private m_PartItem As CPartItem
 Private m_Sp As CSystemParam
 
-Public ID As Long
+Public id As Long
 Public OKClick As Boolean
 Public ShowMode As SHOW_MODE_TYPE
 Public HeaderText As String
@@ -504,6 +504,8 @@ Private Sub chkCancelFlag_Click(Value As Integer)
 ' End If
    m_HasModify = True
 End Sub
+
+
 
 Private Sub cmdAdd_Click()
 Dim OKClick As Boolean
@@ -600,18 +602,18 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
       
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    OKClick = False
    
    If TabStrip1.SelectedItem.Index = 3 Then
-      frmAddEditPartItemSpec.ID = ID
+      frmAddEditPartItemSpec.id = id
       Set frmAddEditPartItemSpec.TempCollection = m_PartItem.HumidRates
       frmAddEditPartItemSpec.HeaderText = MapText("แก้ไขเกณฑ์ความชื้น")
       frmAddEditPartItemSpec.ShowMode = SHOW_EDIT
@@ -628,7 +630,7 @@ Dim OKClick As Boolean
          GridEX1.Rebind
       End If
    ElseIf TabStrip1.SelectedItem.Index = 4 Then
-        frmAddEditPartItemPicture.ID = ID
+        frmAddEditPartItemPicture.id = id
          Set frmAddEditPartItemPicture.ParentForm = Me
          Set frmAddEditPartItemPicture.TempCollection = m_PartItem.Pictures
          frmAddEditPartItemPicture.ShowMode = SHOW_EDIT
@@ -669,7 +671,7 @@ Dim lMenuChosen  As Long
       End If
       
       ShowMode = SHOW_EDIT
-      ID = m_PartItem.PART_ITEM_ID
+      id = m_PartItem.PART_ITEM_ID
       m_PartItem.QueryFlag = 1
       QueryData (True)
       m_HasModify = False
@@ -840,7 +842,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
       
-      m_PartItem.PART_ITEM_ID = ID
+      m_PartItem.PART_ITEM_ID = id
       m_PartItem.QueryFlag = 1
       If Not glbDaily.QueryPartItem(m_PartItem, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -1070,7 +1072,8 @@ Dim IsOK As Boolean
       If Not VerifyCombo(lblProductType, cboProductType, False) Then
          Exit Function
       End If
-      'ProductType
+      
+      'uctlPartMaster
       
    End If
    
@@ -1092,7 +1095,7 @@ Dim IsOK As Boolean
       End If
    End If
    
-   If Not CheckUniqueNs(PARTNO_UNIQUE, txtPartNo.Text, ID) Then
+   If Not CheckUniqueNs(PARTNO_UNIQUE, txtPartNo.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtPartNo.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Exit Function
@@ -1103,7 +1106,7 @@ Dim IsOK As Boolean
       Exit Function
    End If
    
-   m_PartItem.PART_ITEM_ID = ID
+   m_PartItem.PART_ITEM_ID = id
    m_PartItem.AddEditMode = ShowMode
    m_PartItem.PIG_FLAG = Check2Flag(chkPigFlag.Value)
    m_PartItem.CANCEL_FLAG = Check2Flag(chkCancelFlag.Value)
@@ -1162,7 +1165,7 @@ Private Sub Form_Activate()
          Call QueryData(True)
       ElseIf ShowMode = SHOW_ADD Then
          Call LoadPartType(cboPartType, , PartGroupID)
-         ID = 0
+         id = 0
       End If
       
       m_HasModify = False

@@ -289,17 +289,23 @@ ElseIf Area = 2 Then
    End If
    frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาค่าขนส่ง")
 ElseIf Area = 3 Then
-   If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_ADD", "เพิ่มข้อมูลราคาโปรโมชั่นสินค้า") Then
+   If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_ADD", "เพิ่มข้อมูลราคาส่วนลดค่าสินค้า(หน้าบิล)") Then
       Call EnableForm(Me, True)
       Exit Sub
    End If
-   frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาโปรโมชั่นสินค้า")
+   frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาส่วนลดค่าสินค้า(หน้าบิล)")
 ElseIf Area = 4 Then
-   If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-DELIVERY_ADD", "เพิ่มข้อมูลราคาโปรโมชั่นค่าขนส่ง") Then
+   If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-DELIVERY_ADD", "เพิ่มข้อมูลราคาส่วนลดค่าขนส่ง") Then
       Call EnableForm(Me, True)
       Exit Sub
    End If
-   frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาโปรโมชั่นค่าขนส่ง")
+   frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาส่วนลดค่าขนส่ง")
+ElseIf Area = 5 Then
+   If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART-EXTRA_ADD", "เพิ่มข้อมูลราคาส่วนลดพิเศษค่าสินค้า(หลังบิล)") Then
+      Call EnableForm(Me, True)
+      Exit Sub
+   End If
+   frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาส่วนลดพิเศษค่าสินค้า(หลังบิล)")
 End If
   frmAddEditExWorksPrice.Area = Area
    frmAddEditExWorksPrice.ShowMode = SHOW_ADD
@@ -327,7 +333,7 @@ Private Sub cmdDelete_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
   If Area = 1 Then
       If Not VerifyAccessRight("PACKAGE-CENTER_EX-WORKS-PRICE_DELETE", "ลบข้อมูลราคาสินค้า") Then
          Call EnableForm(Me, True)
@@ -339,7 +345,7 @@ Dim ID As Long
          Exit Sub
       End If
    ElseIf Area = 3 Then
-      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_DELETE", "ลบข้อมูลโปรโมชั่นราคาค่าสินค้า") Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_DELETE", "ลบข้อมูลราคาส่วนลดค่าสินค้า(หน้าบิล)") Then
          Call EnableForm(Me, True)
          Exit Sub
       End If
@@ -348,30 +354,35 @@ Dim ID As Long
          Call EnableForm(Me, True)
          Exit Sub
       End If
+   ElseIf Area = 5 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART-EXTRA_DELETE", "ลบข้อมูลราคาส่วนลดพิเศษค่าสินค้า(หลังบิล)") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
    End If
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
-   ID = GridEX1.Value(1)
+   id = GridEX1.Value(1)
    
-   Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
    If Not ConfirmDelete(GridEX1.Value(2)) Then
-      Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
       Exit Sub
    End If
 
    Call EnableForm(Me, False)
-   If Not glbDaily.DeleteExWorksPrice(ID, IsOK, True, glbErrorLog) Then
+   If Not glbDaily.DeleteExWorksPrice(id, IsOK, True, glbErrorLog) Then
       m_ExWorksPrice.EX_WORKS_PRICE_ID = -1
       glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
-      Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
       Call EnableForm(Me, True)
       Exit Sub
    End If
    
    Call QueryData(True)
    
-   Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
    Call EnableForm(Me, True)
 End Sub
 
@@ -379,7 +390,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim OKClick As Boolean
    If Area = 1 Then
    If Not VerifyAccessRight("PACKAGE-CENTER_EX-WORKS-PRICE_EDIT", "แก้ไขข้อมูลราคาสินค้า") Then
@@ -391,10 +402,10 @@ Dim OKClick As Boolean
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(1))
-   Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   id = Val(GridEX1.Value(1))
+   Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
    
-   frmAddEditExWorksPrice.ID = ID
+   frmAddEditExWorksPrice.id = id
    frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลราคาสินค้า")
 ElseIf Area = 2 Then
       If Not VerifyAccessRight("PACKAGE-CENTER_DELIVERY-COST_EDIT", "แก้ไขข้อมูลราคาค่าขนส่ง") Then
@@ -406,13 +417,13 @@ ElseIf Area = 2 Then
          Exit Sub
       End If
       
-      ID = Val(GridEX1.Value(1))
-      Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      id = Val(GridEX1.Value(1))
+      Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
       
-      frmAddEditExWorksPrice.ID = ID
+      frmAddEditExWorksPrice.id = id
       frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลราคาค่าขนส่ง")
    ElseIf Area = 3 Then
-      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_EDIT", "แก้ไขข้อมูลโปรโมชั่นราคาสินค้า") Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_EDIT", "แก้ไขข้อมูลราคาส่วนลดค่าสินค้า(หน้าบิล)") Then
          Call EnableForm(Me, True)
          Exit Sub
       End If
@@ -421,13 +432,13 @@ ElseIf Area = 2 Then
          Exit Sub
       End If
       
-      ID = Val(GridEX1.Value(1))
-      Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      id = Val(GridEX1.Value(1))
+      Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
       
-      frmAddEditExWorksPrice.ID = ID
-      frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลโปรโมชั่นราคาสินค้า")
+      frmAddEditExWorksPrice.id = id
+      frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลราคาส่วนลดค่าสินค้า(หน้าบิล)")
    ElseIf Area = 4 Then
-      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-DELIVERY_EDIT", "แก้ไขข้อมูลโปรโมชั่นราคาค่าขนส่ง") Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-DELIVERY_EDIT", "แก้ไขข้อมูลส่วนลดราคาค่าขนส่ง") Then
          Call EnableForm(Me, True)
          Exit Sub
       End If
@@ -436,12 +447,27 @@ ElseIf Area = 2 Then
          Exit Sub
       End If
       
-      ID = Val(GridEX1.Value(1))
-      Call glbDatabaseMngr.LockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+      id = Val(GridEX1.Value(1))
+      Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
       
-      frmAddEditExWorksPrice.ID = ID
-      frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลโปรโมชั่นราคาค่าขนส่ง")
-   End If
+      frmAddEditExWorksPrice.id = id
+      frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลส่วนลดราคาค่าขนส่ง")
+   ElseIf Area = 5 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART-EXTRA_EDIT", "แก้ไขข้อมูลราคาส่วนลดพิเศษค่าสินค้า(หลังบิล)") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
+      
+      If Not VerifyGrid(GridEX1.Value(1)) Then
+         Exit Sub
+      End If
+      
+      id = Val(GridEX1.Value(1))
+      Call glbDatabaseMngr.LockTable(m_TableName, id, IsCanLock, glbErrorLog)
+      
+      frmAddEditExWorksPrice.id = id
+      frmAddEditExWorksPrice.HeaderText = MapText("แก้ไขข้อมูลราคาส่วนลดพิเศษค่าสินค้า(หลังบิล)")
+   End If '
    frmAddEditExWorksPrice.Area = Area
    frmAddEditExWorksPrice.ShowMode = SHOW_EDIT
    Load frmAddEditExWorksPrice
@@ -455,7 +481,7 @@ ElseIf Area = 2 Then
    If OKClick Then
       Call QueryData(True)
    End If
-   Call glbDatabaseMngr.UnLockTable(m_TableName, ID, IsCanLock, glbErrorLog)
+   Call glbDatabaseMngr.UnLockTable(m_TableName, id, IsCanLock, glbErrorLog)
 
 End Sub
 
@@ -636,28 +662,22 @@ Private Sub InitFormLayout()
    If Area = 1 Then
       Me.Caption = MapText("ข้อมูลแพคเกจราคาค่าสินค้าหน้าโรง")
       pnlHeader.Caption = MapText("ข้อมูลแพคเกจราคาค่าสินค้าหน้าโรง")
-      Call InitGrid1
-      Call InitNormalLabel(lblPackageCode, MapText("แพคเกจ"))
-      Call InitNormalLabel(lblDesc, MapText("รายละเอียดแพคเกจ"))
    ElseIf Area = 2 Then
       Me.Caption = MapText("ข้อมูลแพคเกจราคาค่าขนส่ง")
       pnlHeader.Caption = MapText("ข้อมูลแพคเกจราคาค่าขนส่ง")
-      Call InitGrid1
-      Call InitNormalLabel(lblPackageCode, MapText("แพคเกจ"))
-      Call InitNormalLabel(lblDesc, MapText("รายละเอียดแพคเกจ"))
    ElseIf Area = 3 Then
-      Me.Caption = MapText("ข้อมูลแพคเกจโปรโมชั่นราคาสินค้า")
-      pnlHeader.Caption = MapText("ข้อมูลแพคเกจโปรโมชั่นราคาสินค้า")
-      Call InitGrid1
-      Call InitNormalLabel(lblPackageCode, MapText("แพคเกจ"))
-      Call InitNormalLabel(lblDesc, MapText("รายละเอียดแพคเกจ"))
+      Me.Caption = MapText("ข้อมูลแพคเกจส่วนลดราคาสินค้า")
+      pnlHeader.Caption = MapText("ข้อมูลแพคเกจส่วนลดราคาสินค้า")
    ElseIf Area = 4 Then
-      Me.Caption = MapText("ข้อมูลแพคเกจโปรโมชั่นราคาค่าขนส่ง")
-      pnlHeader.Caption = MapText("ข้อมูลแพคเกจโปรโมชั่นราคาค่าขนส่ง")
-      Call InitGrid1
-      Call InitNormalLabel(lblPackageCode, MapText("แพคเกจ"))
-      Call InitNormalLabel(lblDesc, MapText("รายละเอียดแพคเกจ"))
+      Me.Caption = MapText("ข้อมูลแพคเกจส่วนลดราคาค่าขนส่ง")
+      pnlHeader.Caption = MapText("ข้อมูลแพคเกจส่วนลดราคาค่าขนส่ง")
+   ElseIf Area = 5 Then
+      Me.Caption = MapText("ข้อมูลแพคเกจส่วนลดพิเศษราคาสินค้า")
+      pnlHeader.Caption = MapText("ข้อมูลแพคเกจส่วนลดพิเศษราคาสินค้า")
    End If
+   Call InitGrid1
+   Call InitNormalLabel(lblPackageCode, MapText("แพคเกจ"))
+   Call InitNormalLabel(lblDesc, MapText("รายละเอียดแพคเกจ"))
    Call InitNormalLabel(lblOrderBy, MapText("เรียงตาม"))
    Call InitNormalLabel(lblOrderType, MapText("เรียงจาก"))
    
@@ -692,6 +712,8 @@ Private Sub InitFormLayout()
    Call InitMainButton(cmdDelete, MapText("ลบ (F6)"))
    Call InitMainButton(cmdSearch, MapText("ค้นหา (F5)"))
    Call InitMainButton(cmdClear, MapText("เคลียร์ (F4)"))
+   
+   cmdImport.Visible = False
    
 End Sub
 
@@ -748,6 +770,41 @@ Dim OKClick As Boolean
    
    Call EnableForm(Me, False)
    If lMenuChosen = 1 Then
+   
+   If Area = 1 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_EX-WORKS-PRICE_ADD", "เพิ่มข้อมูลราคาสินค้า") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
+      frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาสินค้า")
+   ElseIf Area = 2 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_DELIVERY-COST_ADD", "เพิ่มข้อมูลราคาค่าขนส่ง") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
+      frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาค่าขนส่ง")
+   ElseIf Area = 3 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART_ADD", "เพิ่มข้อมูลส่วนลดราคาสินค้า") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
+      frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาโปรโมชั่นสินค้า")
+   ElseIf Area = 4 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-DELIVERY_ADD", "เพิ่มข้อมูลราคาส่วนลดค่าขนส่ง") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
+      frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาโปรโมชั่นค่าขนส่ง")
+   ElseIf Area = 5 Then
+      If Not VerifyAccessRight("PACKAGE-CENTER_PROMOTION-PART-EXTRA_ADD", "เพิ่มข้อมูลส่วนลดพิเศษราคาสินค้า") Then
+         Call EnableForm(Me, True)
+         Exit Sub
+      End If
+      frmAddEditExWorksPrice.HeaderText = MapText("เพิ่มข้อมูลราคาโปรโมชั่นสินค้า")
+   End If
+   
+   
+   
       Set Ms = New CExWorksPrice
       Ms.EX_WORKS_PRICE_ID = TempID1
       Call glbDaily.CopyExWorksPrice(Ms, IsOK, True, glbErrorLog)

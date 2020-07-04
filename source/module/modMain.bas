@@ -819,9 +819,11 @@ Private Sub GetParentItemDesc(Acc As String, Ri As CRightItem, ReportName As Str
    ElseIf Acc = "PACKAGE-CENTER_DELIVERY-COST" Then
       Ri.RIGHT_ITEM_DESC = "ราคาประกาศค่าขนส่ง"
    ElseIf Acc = "PACKAGE-CENTER_PROMOTION-PART" Then
-      Ri.RIGHT_ITEM_DESC = "ราคาโปรโมชั่นค่าสินค้า"
+      Ri.RIGHT_ITEM_DESC = "ราคาส่วนลดค่าสินค้า(หน้าบิล)"
    ElseIf Acc = "PACKAGE-CENTER_PROMOTION-DELIVERY" Then
       Ri.RIGHT_ITEM_DESC = "ราคาโปรโมชั่นค่าขนส่ง"
+   ElseIf Acc = "PACKAGE-CENTER_PROMOTION-PART-EXTRA" Then
+      Ri.RIGHT_ITEM_DESC = "ราคาส่วนลดพิเศษค่าสินค้า(หลังบิล)"
    ElseIf Acc = "PRODUCT" Then
       Ri.RIGHT_ITEM_DESC = "ระบบการผลิต"
    
@@ -4846,7 +4848,23 @@ Dim p As CPatch
   If Not p.IsPatch("2019_11_12_1_lek") Then '354
       Call p.Patch_2019_11_12_1_lek
    End If
-'Patch_2019_11_12_1_lek
+   
+   If Not p.IsPatch("2020_03_27_1_lek") Then '355
+      Call p.Patch_2020_03_27_1_lek
+   End If
+   
+   If Not p.IsPatch("2020_05_28_1_lek") Then '356
+      Call p.Patch_2020_05_28_1_lek
+   End If
+   
+   If Not p.IsPatch("2020_06_20_1_lek") Then '357
+      Call p.Patch_2020_06_20_1_lek
+   End If
+   
+   If Not p.IsPatch("2020_06_29_1_lek") Then '358
+      Call p.Patch_2020_06_29_1_lek
+   End If
+   
    Set p = Nothing
 End Sub
 Public Function MyDiff(ByVal D1 As Double, ByVal D2 As Double) As Double
@@ -5567,6 +5585,8 @@ Public Function ConvertPerPack(id As Integer) As String
       ConvertPerPack = MapText("BAG")
    ElseIf id = 21 Then
       ConvertPerPack = MapText("BULK")
+   Else
+     ConvertPerPack = MapText("")
    End If
 End Function
 
@@ -7425,30 +7445,23 @@ ErrorHandler:
    ErrorObj.ModuleName = MODULE_NAME
    ErrorObj.SystemErrorMsg = Err.DESCRIPTION
 End Function
-Public Function calExWorksPrice(Pi As CPartItem, DELIVERY_CUS_ITEM_ID As Long, CUSTOMER_ID As Long, PRICE_THINK_TYPE As Long, m_ExWorkPricesItem As Collection, m_ExDeliveryCostItem As Collection, m_Customers As Collection, ByRef TempData As Collection, m_ExPromotionPartItem As Collection, m_ExPromotionDlcItem As Collection, ByRef RatePromotionPart As Double, ByRef RatePromotionDlc As Double) As Double
+Public Function calExWorksPrice(Pi As CPartItem, DELIVERY_CUS_ITEM_ID As Long, CUSTOMER_ID As Long, PRICE_THINK_TYPE As Long, m_ExWorkPricesItem As Collection, m_ExDeliveryCostItem As Collection, m_Customers As Collection, ByRef TempData As Collection, m_ExPromotionPartItem As Collection, m_ExPromotionExtraPartItem As Collection, m_ExPromotionDlcItem As Collection, ByRef RatePromotionPart As Double, ByRef RatePromotionExtraPart As Double, ByRef RatePromotionDlc As Double) As Double
 Dim RateWotkPrice As Double
 Dim RateDeliveryCost As Double
-Dim RateOther As Double 'Pi
-'Dim RatePromotionPart As Double
-'Dim RatePromotionDlc As Double
-
-
+Dim RateOther As Double
 Dim RateWotkPriceFlag As Boolean
 Dim RateDeliveryCostFlag As Boolean
 Dim RateOtherFlag As Boolean
 Dim RatePromotionPartFlag As Boolean
+Dim RatePromotionExtraPartFlag As Boolean
 Dim RatePromotionDlcFlag As Boolean
-
-
 Dim TempD As CExWorksPrice
 Dim TempD2 As CCustomer
-
 Dim tempRate As CDoItem
 Set tempRate = New CDoItem
-
 calExWorksPrice = 0
+
 Set TempData = New Collection
-'calExDeliveryCost
       If Pi.PART_TYPE = 10 Or Pi.PART_TYPE = 21 Then 'จะเข้าทำเฉพาะ Bag กับ Bulk เท่านั้น
        'คิดราคาสินค้า
          Set TempD = GetObject("CExWorksPrice", m_ExWorkPricesItem, Trim(str(Pi.PART_ITEM_ID)), False)  'ค้นหาราคาสินค้าตาม id สินค้า
@@ -7473,7 +7486,7 @@ Set TempData = New Collection
 
           'จบการคิดราคาค่าขนส่ง
           
-           'คิดโปรโมชั่นสินค้า
+           'คิดส่วนลดสินค้า(หน้าบิล)
           'm_ExPromotionPartItem
          Set TempD = GetObject("CExWorksPrice", m_ExPromotionPartItem, Trim(str(CUSTOMER_ID)) & "-" & Trim(str(Pi.PART_ITEM_ID)), False)  'ค้นหาราคาสินค้าตาม id สินค้า
          If Not TempD Is Nothing Then
@@ -7485,7 +7498,21 @@ Set TempData = New Collection
          Else
            RatePromotionPartFlag = False
          End If
-          'จบคิดโปรโมชั่นสินค้า
+          'จบคิดส่วนลดสินค้า(หน้าบิล)
+          
+            'คิดส่วนลดสินค้าพิเศษ(หลังบิล)
+          'm_ExPromotionPartItem
+         Set TempD = GetObject("CExWorksPrice", m_ExPromotionExtraPartItem, Trim(str(CUSTOMER_ID)) & "-" & Trim(str(Pi.PART_ITEM_ID)), False)  'ค้นหาราคาสินค้าตาม id สินค้า
+         If Not TempD Is Nothing Then
+            RatePromotionExtraPart = TempD.DISCOUNT_AMOUNT
+
+            tempRate.EX_PROMOTION_EXTRA_PART_ITEM_ID = TempD.EX_PROMOTION_PART_ITEM_ID
+            tempRate.DISCOUNT_EXTRA_AMOUNT_PART = RatePromotionExtraPart
+            RatePromotionExtraPartFlag = True
+         Else
+           RatePromotionExtraPartFlag = False
+         End If
+          'จบคิดส่วนลดสินค้าพิเศษ(หลังบิล)
           
          'คิดโปรโมชั่นค่าขนส่ง
           'm_ExPromotionPartItem
@@ -7538,40 +7565,43 @@ Set TempData = New Collection
          
          Call TempData.add(tempRate, Trim(str(CUSTOMER_ID)))
          
-         
           If PRICE_THINK_TYPE = 1 Then
             If Not RateWotkPriceFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาสินค้า กรุณากำหนดราคาสินค้าก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = 0
                Exit Function
             End If
          ElseIf PRICE_THINK_TYPE = 2 Then
              If Not RateWotkPriceFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาสินค้า กรุณากำหนดราคาสินค้าก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = 0
                Exit Function
             End If
             
             If Not RateDeliveryCostFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาค่าขนส่ง กรุณากำหนดราคาค่าขนส่งก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = 0
                Exit Function
             End If
          ElseIf PRICE_THINK_TYPE = 3 Then
              If Not RateWotkPriceFlag Then
                glbErrorLog.LocalErrorMsg = "ยังไม่ได้กำหนดราคาสินค้า กรุณากำหนดราคาสินค้าก่อน"
                glbErrorLog.ShowUserError
+               calExWorksPrice = 0
                Exit Function
             End If
          End If
-'         RateWotkPrice = RateWotkPrice - RatePromotionPart
+
          If PRICE_THINK_TYPE = 1 Then
-            calExWorksPrice = RateWotkPrice + RateOther
+            calExWorksPrice = RateWotkPrice + RateOther - RatePromotionExtraPart 'ลบส่วนลดพิเศษสินค้าไปด้วย
          ElseIf PRICE_THINK_TYPE = 2 Then
             RateDeliveryCost = RateDeliveryCost - RatePromotionDlc 'ถ้ามีส่วนลดค่าขนส่งก็ให้ลบออกไปด้วย
-            calExWorksPrice = RateWotkPrice + RateDeliveryCost + RateOther
+            calExWorksPrice = RateWotkPrice + RateDeliveryCost + RateOther - RatePromotionExtraPart 'ลบส่วนลดพิเศษสินค้าไปด้วย
          ElseIf PRICE_THINK_TYPE = 3 Then
-            calExWorksPrice = RateWotkPrice + RateOther
+            calExWorksPrice = RateWotkPrice + RateOther - RatePromotionExtraPart 'ลบส่วนลดพิเศษสินค้าไปด้วย
          Else
            calExWorksPrice = "0"
          End If

@@ -323,6 +323,8 @@ Dim PrevKey1 As String
    cData.DOCUMENT_TYPE_SET = ID2ExportDocTypeSet(mcolParam("EXPORT_DOC_TYPE"))
    cData.TX_TYPE = "E"
    cData.COMMIT_FLAG = ""
+   cData.LAYOUT_ID = mcolParam("DEPARTMENT_ID")
+   cData.EXPENSE_TYPE = mcolParam("EXPENSE_TYPE")
    cData.OrderBy = 1 'mcolParam("ORDER_BY")
    cData.OrderType = mcolParam("ORDER_TYPE")
    Call cData.QueryData(23, Rs, iCount)

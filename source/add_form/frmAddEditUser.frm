@@ -192,7 +192,7 @@ Private m_HasModify As Boolean
 Private m_Rs As ADODB.Recordset
 Private m_User As CUserAccount
 
-Public ID As Long
+Public id As Long
 Public OKClick As Boolean
 Public ShowMode As SHOW_MODE_TYPE
 Public HeaderText As String
@@ -223,7 +223,7 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
       
-      m_User.USER_ID = ID
+      m_User.USER_ID = id
       m_User.QueryFlag = 1
       If Not glbAdmin.QueryUserAccount(m_User, m_Rs, ItemCount, IsOK, glbErrorLog) Then
          glbErrorLog.ShowErrorLog (LOG_FILE_MSGBOX)
@@ -240,7 +240,7 @@ Dim ItemCount As Long
       txtPassword.Text = DecryptText(m_User.USER_PASSWORD)
       txtRealName.Text = m_User.REAL_NAME
       cboUserGroup.ListIndex = IDToListIndex(cboUserGroup, m_User.GROUP_ID)
-      chkEnable.Value = FlagToCheck(m_User.USER_STATUS2)
+      chkEnable.Value = FlagToCheck(m_User.USER_STATUS3)
       cboLogonStatus.ListIndex = IDToListIndex(cboLogonStatus, m_User.LOGON_STATUS)
    End If
    
@@ -270,7 +270,7 @@ Dim IsOK As Boolean
       Exit Function
    End If
 
-   If Not CheckUniqueNs(USERNAME_UNIQUE, txtUsername.Text, ID) Then
+   If Not CheckUniqueNs(USERNAME_UNIQUE, txtUsername.Text, id) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtUsername.Text & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Exit Function
@@ -281,12 +281,12 @@ Dim IsOK As Boolean
       Exit Function
    End If
    
-   m_User.USER_ID = ID
+   m_User.USER_ID = id
    m_User.AddEditMode = ShowMode
    m_User.USER_NAME = txtUsername.Text
    m_User.USER_DESC = txtUserDesc.Text
    m_User.REAL_NAME = txtRealName.Text
-   m_User.USER_STATUS2 = Check2Flag(chkEnable.Value)
+   m_User.USER_STATUS3 = Check2Flag(chkEnable.Value)
    m_User.GROUP_ID = cboUserGroup.ItemData(Minus2Zero(cboUserGroup.ListIndex))
    m_User.EXCEPTION_FLAG = "Y"
    m_User.CHECK_EXPIRE = "N"
@@ -322,7 +322,7 @@ Private Sub Form_Activate()
       If ShowMode = SHOW_EDIT Then
          Call QueryData(True)
       ElseIf ShowMode = SHOW_ADD Then
-         ID = 0
+         id = 0
       End If
       
       m_HasModify = False

@@ -133,6 +133,7 @@ Public HeaderText As String
 Private m_Customer As CCustomer
 Private m_Employee As CEmployee
 Private m_PartItem As CPartItem
+Private m_PartMasterItem As CPartMaster
 Private m_Supplier As CSupplier
 Private m_FreeLance As CFreelance
 Private m_ExWorksPrice As CExWorksPrice
@@ -233,6 +234,30 @@ Dim Temp As Long
    m_PartItem.OrderType = 1
    m_PartItem.CANCEL_FLAG = "N"
    Call m_PartItem.QueryData2(101, m_Rs, ItemCount)
+   
+   Call InitGrid
+   
+   GridEX1.ItemCount = ItemCount
+   GridEX1.Rebind
+   
+   Call EnableForm(Me, True)
+End Sub
+Private Sub QueryPartMasterItem()
+Dim IsOK As Boolean
+Dim ItemCount As Long
+Dim Temp As Long
+      
+   Call EnableForm(Me, False)
+         
+   Dim m_PartMasterItem As CPartMaster
+   Set m_PartMasterItem = New CPartMaster
+   
+   m_PartMasterItem.PART_MASTER_ID = -1
+   m_PartMasterItem.PART_MASTER_NO = PatchWildCard(txtSearchText.Text)
+   m_PartMasterItem.PART_MASTER_NAME = PatchWildCard(txtSearchName.Text)
+   m_PartMasterItem.OrderType = 1
+   m_PartMasterItem.CANCEL_FLAG = "N"
+   Call m_PartMasterItem.QueryData(1, m_Rs, ItemCount)
    
    Call InitGrid
    
@@ -377,6 +402,7 @@ Private Sub Form_Load()
    Set m_Customer = New CCustomer
    Set m_Employee = New CEmployee
    Set m_PartItem = New CPartItem
+   Set m_PartMasterItem = New CPartMaster
    Set m_Supplier = New CSupplier
    Set m_FreeLance = New CFreelance
    Set m_ExWorksPrice = New CExWorksPrice
@@ -389,6 +415,7 @@ Private Sub Form_Unload(Cancel As Integer)
    Set m_Customer = Nothing
    Set m_Employee = Nothing
    Set m_PartItem = Nothing
+   Set m_PartMasterItem = Nothing
    Set m_Supplier = Nothing
    Set m_FreeLance = Nothing
    Set m_ExWorksPrice = Nothing
@@ -443,6 +470,11 @@ Dim RealIndex As Long
       Values(1) = m_PartItem.PART_ITEM_ID
       Values(2) = m_PartItem.PART_NO
        Values(3) = m_PartItem.PART_DESC
+   ElseIf KeySearch = "PART_MASTER_NO" Then
+      Call m_PartMasterItem.PopulateFromRS(1, m_Rs)
+      Values(1) = m_PartMasterItem.PART_MASTER_ID
+      Values(2) = m_PartMasterItem.PART_MASTER_NO
+       Values(3) = m_PartMasterItem.PART_MASTER_NAME
    ElseIf KeySearch = "SUPPLIER_CODE" Then
       Call m_Supplier.PopulateFromRS(3, m_Rs)
       Values(1) = m_Supplier.SUPPLIER_ID
@@ -516,6 +548,8 @@ Private Sub RunQuery()
       Call QueryEmployee
    ElseIf KeySearch = "PART_NO" Then
       Call QueryPartItem
+   ElseIf KeySearch = "PART_MASTER_NO" Then
+      Call QueryPartMasterItem
    ElseIf KeySearch = "SUPPLIER_CODE" Then
       Call QuerySupplier
    ElseIf KeySearch = "FREELANCE_CODE" Then

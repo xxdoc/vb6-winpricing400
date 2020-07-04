@@ -574,7 +574,7 @@ End Function
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim TempID1 As String
 Dim TempID2 As String
 Dim TempID3 As String
@@ -593,7 +593,7 @@ Dim TempID4 As String
    Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("LOT_DOC_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("LOT_DOC_SEQ", id, glbErrorLog)
       SQL1 = "INSERT INTO LOT_DOC " & _
                      "( " & _
                      "LOT_DOC_ID, " & _
@@ -609,7 +609,7 @@ Dim TempID4 As String
                      ") " & _
                      "VALUES "
          SQL1 = SQL1 & "( " & _
-                     ID & "," & _
+                     id & "," & _
                      LOT_ID & "," & _
                      LOT_ITEM_WH_ID & "," & _
                      TempID1 & "," & _
@@ -620,7 +620,7 @@ Dim TempID4 As String
                      "'" & ServerDateTime & "'," & _
                      glbUser.USER_ID & _
                      ") "
-                     LOT_DOC_ID = ID
+                     LOT_DOC_ID = id
    Else 'Show edit
                      SQL1 = "UPDATE LOT_DOC SET " & _
                      "  LOT_ID = " & LOT_ID & ", " & _
@@ -668,6 +668,35 @@ Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
    "  MODIFY_DATE = '" & ServerDateTime & "', " & _
    "  MODIFY_BY = " & glbUser.USER_ID & " " & _
    "  WHERE LOT_DOC_ID_REF = " & LOT_DOC_ID
+
+   If (AddEditMode = SHOW_EDIT) Then
+      m_Conn.Execute (SQL1)
+   End If
+End Function
+
+Public Function AddEditBinNo()
+Dim SQL1 As String
+Dim ServerDateTime As String
+Dim TempID1 As String
+Call glbDatabaseMngr.GetServerDateTime(ServerDateTime, glbErrorLog)
+   
+   SQL1 = "UPDATE LOT_DOC SET " & _
+   "  BIN_NO = " & BIN_NO & ", " & _
+   "  MODIFY_DATE = '" & ServerDateTime & "', " & _
+   "  MODIFY_BY = " & glbUser.USER_ID & " " & _
+   "  WHERE LOT_DOC_ID_REF = " & LOT_DOC_ID
+
+   If (AddEditMode = SHOW_EDIT) Then
+      m_Conn.Execute (SQL1)
+   End If
+   
+   'UPDATE LOT_ITEM_WH
+   SQL1 = "UPDATE LOT_ITEM_WH SET " & _
+   "  BIN_NO = " & BIN_NO & ", " & _
+   "  MODIFY_DATE = '" & ServerDateTime & "', " & _
+   "  MODIFY_BY = " & glbUser.USER_ID & " " & _
+   "  WHERE LOT_ITEM_WH.LOT_ITEM_WH_ID IN  " & _
+   "  (SELECT LOT_DOC.LOT_ITEM_WH_ID FROM LOT_DOC WHERE LOT_DOC.LOT_DOC_ID_REF = " & LOT_DOC_ID & ")"
 
    If (AddEditMode = SHOW_EDIT) Then
       m_Conn.Execute (SQL1)

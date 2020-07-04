@@ -51,12 +51,18 @@ Private m_PartTxtypes As Collection
 Private m_InventoryActItem As Collection
 Private m_PartTxtypeBas As Collection
 
+Private m_PlanMonth As Collection
 Private m_PlanUsePartWeek As Collection
 Private m_PlanUsePartWeek2 As Collection
 Private m_PlanUsePartDay As Collection
 Private m_PlanGetPartDay As Collection
 Private RoColl As Collection
 
+Private FromDate As Date
+Private ToDate As Date
+
+Private FromDate2 As Date
+Private ToDate2 As Date
 
 Private ComeInColl As Collection  'Query จำนวนวัตถุดิบที่เข้ามาก่อนหน้าวันที่ต้องการออก report 1 วัน  เพื่อทำยอดยกมา และ ยอดสะสม
 
@@ -72,6 +78,7 @@ Private Sub Class_Initialize()
    Set m_PartTxtypeBas = New Collection
    Set Rs = New ADODB.Recordset
    
+   Set m_PlanMonth = New Collection
    Set m_PlanUsePartWeek = New Collection
    Set m_PlanUsePartWeek2 = New Collection
    Set m_PlanUsePartDay = New Collection
@@ -93,6 +100,7 @@ Private Sub Class_Terminate()
    Set m_InventoryActItem = Nothing
    Set m_PartTxtypeBas = Nothing
    
+   Set m_PlanMonth = Nothing
    Set m_PlanUsePartWeek = Nothing
    Set m_PlanUsePartWeek2 = Nothing
    Set m_PlanUsePartDay = Nothing
@@ -176,13 +184,40 @@ Dim TempSize As Double
    Call Cf.SetFieldValue(65, "^", "", "^")
    Call m_Headers0.AddField(Cf)
    
-   Call Cf.SetFieldValue(20, "^", "Plan ใช้", "^")
-   Call m_Headers0.AddField(Cf)
+'   Call Cf.SetFieldValue(20, "^", "Plan ใช้", "^")
+'   Call m_Headers0.AddField(Cf)
    
    Call Cf.SetFieldValue(15, "^", "C", "<")
    Call m_Headers1.AddField(Cf)
    Call Cf.SetFieldValue(50, "^", "R/M", "<")
    Call m_Headers1.AddField(Cf)
+   
+   If mcolParam("SHOW_PLAN_MONTH") = 1 Then
+      TempSize = 0
+      TempDate = FromDate
+      While TempDate <= ToDate2
+         Call Cf.SetFieldValue(20, "^", Month(TempDate) & "/" & Year(TempDate), ">")
+         Call m_Headers1.AddField(Cf)
+         TempSize = TempSize + 20
+         TempDate = DateAdd("M", 1, TempDate)
+      Wend
+         
+      Call Cf.SetFieldValue(TempSize, "^", "Plan เดือน", "^")
+      Call m_Headers0.AddField(Cf)
+      TempSize = 0
+   Else
+      Call Cf.SetFieldValue(0, "^", "Plan เดือน", "^")
+      Call m_Headers0.AddField(Cf)
+      
+      Call Cf.SetFieldValue(0, "^", "", ">")
+      Call m_Headers1.AddField(Cf)
+      
+   End If
+   
+   Call Cf.SetFieldValue(20, "^", "Plan ใช้", "^")
+   Call m_Headers0.AddField(Cf)
+   
+   
    
    Call Cf.SetFieldValue(20, "^", Day(mcolParam("FROM_WEEK")) & "-" & Day(DateAdd("D", 6, mcolParam("FROM_WEEK"))), ">")
    Call m_Headers1.AddField(Cf)
@@ -383,6 +418,8 @@ Dim PlanUseOfWeek As Double
 Dim planVersion As Long
 
 
+
+
    RName = "genDoc"
 '-----------------------------------------------------------------------------------------------------
 '                                             Query Here
@@ -393,6 +430,13 @@ If Not mcolParam("SHOW_DATE_OVER") = 1 Then
       mstrErrMsg = "ไม่สามารถใส่ช่วงวันที่ เกิน 7 วันได้"
       Exit Function
    End If
+End If
+
+If mcolParam("SHOW_PLAN_MONTH") = 1 Then
+   Call GetFirstLastDate(DateSerial(mcolParam("FROM_YEAR") - 543, mcolParam("FROM_MONTH"), 1), FromDate, ToDate)
+   Call GetFirstLastDate(DateSerial(mcolParam("TO_YEAR") - 543, mcolParam("TO_MONTH"), 1), FromDate2, ToDate2)
+
+   Call LoadPlanMountAmount(Nothing, m_PlanMonth, FromDate, ToDate2, 4)
 End If
 
    'ถ้าวันที่พิมพ์มากกว่าวันที่เคลื่อนไหว
@@ -491,8 +535,31 @@ End If
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
          Call m_Details1.AddField(BodyCf)
          
-         Set TempPlanningItem = GetObject("CPlanningItem", m_PlanUsePartWeek, m_PlanningItem.PART_ITEM_ID & "-" & mcolParam("FROM_WEEK"))
          Set HeadCf = m_Headers1.Fields(3)
+         If mcolParam("SHOW_PLAN_MONTH") = 1 Then
+            Dim SearchItemNo As CPlanningItem
+            TempDate = FromDate
+            While TempDate <= ToDate2
+            TempStr = ""
+            Set SearchItemNo = GetObject("CPlanningItem", m_PlanMonth, Trim(m_PlanningItem.PART_ITEM_ID & "-" & TempDate), False)
+            If Not SearchItemNo Is Nothing Then
+               TempStr = FormatNumber(SearchItemNo.PLAN_AMOUNT)
+            End If
+            'm_PlanMonth
+               
+               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+               Call m_Details1.AddField(BodyCf)
+                     
+               TempDate = DateAdd("M", 1, TempDate)
+            Wend
+         Else
+               TempStr = ""
+               Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+               Call m_Details1.AddField(BodyCf)
+         End If
+         
+         Set TempPlanningItem = GetObject("CPlanningItem", m_PlanUsePartWeek, m_PlanningItem.PART_ITEM_ID & "-" & mcolParam("FROM_WEEK"))
+         Set HeadCf = m_Headers1.Fields(4)
          PlanUseOfWeek = TempPlanningItem.PLAN_AMOUNT / 1000
          If (Abs(TempPlanningItem.PLAN_AMOUNT / 1000) >= 1) Then
             TempStr = FormatNumberToNull(PlanUseOfWeek, 2)
@@ -501,20 +568,21 @@ End If
          End If
          Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
          Call m_Details1.AddField(BodyCf)
-         Total1(3) = Total1(3) + TempPlanningItem.PLAN_AMOUNT
+         Total1(4) = Total1(4) + TempPlanningItem.PLAN_AMOUNT
          
          Set BalanceLi = GetLotItem(InventoryBals1, Trim(str(m_PlanningItem.PART_ITEM_ID)))
          Set TempLiBa1 = GetLotItem(m_PartTxtypeBas, m_PlanningItem.PART_ITEM_ID & "-" & "I")
          Set TempLiBa2 = GetLotItem(m_PartTxtypeBas, m_PlanningItem.PART_ITEM_ID & "-" & "E")
          
+         
          SumAct = 0
-         J = 3
+         J = 4
          TempDate = mcolParam("FROM_WEEK_DATE")
          While TempDate <= mcolParam("TO_WEEK_DATE")
             J = J + 1
             
             Set HeadCf = m_Headers1.Fields(J)
-            If J = 4 Then 'รอบแรก
+            If J = 5 Then 'รอบแรก
                LeftAmount1 = BalanceLi.NEW_AMOUNT + TempLiBa1.TX_AMOUNT - TempLiBa2.TX_AMOUNT
             End If
             TempStr = FormatNumberToNull(LeftAmount1, 0)

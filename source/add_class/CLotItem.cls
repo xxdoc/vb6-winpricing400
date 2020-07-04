@@ -173,6 +173,8 @@ Public PACK_AMOUNT As Double
 Public PRICE_PER_PACK As Double
 Public TOTAL_PRICE As Double
 
+Public LOT_ID As Long
+
 Public DEPARTMENT_NAME As String
 Public CSTTYPE_NAME As String
 Public PR_NO As String
@@ -686,7 +688,7 @@ Dim GroupByStr As String
     
       WhereStr = ""
    ElseIf Ind = 36 Then              'LoadLotItemFindCostByBilling
-      SelectStr1 = "SELECT BD.BILLING_DOC_ID,PI.PART_ITEM_ID,LI.TOTAL_INCLUDE_PRICE,LI.TX_AMOUNT,LI.TX_TYPE,PI2.PART_TYPE "
+      SelectStr1 = "SELECT PI.PART_ITEM_ID,LD3.LOT_ID,SUM(LI.TOTAL_INCLUDE_PRICE) TOTAL_INCLUDE_PRICE,SUM(LI.TX_AMOUNT) TX_AMOUNT "
       SelectStr2 = "SELECT COUNT(*)  "
       
       FromStr = "FROM BILLING_DOC BD "
@@ -694,12 +696,28 @@ Dim GroupByStr As String
       FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD ON (LIW.LOT_ITEM_WH_ID = LD.LOT_ITEM_WH_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD2 ON (LD.LOT_DOC_ID_REF = LD2.LOT_DOC_ID) "
-      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LD2.LOT_ITEM_WH_ID = LIW2.LOT_ITEM_WH_ID) "
-      FromStr = FromStr & "LEFT OUTER JOIN JOB J ON (LIW2.INVENTORY_WH_DOC_ID = J.INVENTORY_WH_DOC_ID)"
-      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM LI ON (J.INVENTORY_DOC_ID = LI.INVENTORY_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD3 ON (LD2.LOT_ID = LD3.LOT_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LD3.LOT_ITEM_WH_ID =LIW2.LOT_ITEM_WH_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN JOB JB ON (LIW2.INVENTORY_WH_DOC_ID = JB.INVENTORY_WH_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM LI ON (JB.INVENTORY_DOC_ID = LI.INVENTORY_DOC_ID) "
       FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI2 ON (LI.PART_ITEM_ID = PI2.PART_ITEM_ID) "
       
       WhereStr = " WHERE BD.ACCEPT_BY IS NOT NULL "
+      
+'      SelectStr1 = "SELECT BD.BILLING_DOC_ID,PI.PART_ITEM_ID,LI.TOTAL_INCLUDE_PRICE,LI.TX_AMOUNT,LI.TX_TYPE,PI2.PART_TYPE "
+'      SelectStr2 = "SELECT COUNT(*)  "
+'
+'      FromStr = "FROM BILLING_DOC BD "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW ON (BD.INVENTORY_WH_DOC_ID = LIW.INVENTORY_WH_DOC_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LIW.PART_ITEM_ID = PI.PART_ITEM_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD ON (LIW.LOT_ITEM_WH_ID = LD.LOT_ITEM_WH_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_DOC LD2 ON (LD.LOT_DOC_ID_REF = LD2.LOT_DOC_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM_WH LIW2 ON (LD2.LOT_ITEM_WH_ID = LIW2.LOT_ITEM_WH_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN JOB J ON (LIW2.INVENTORY_WH_DOC_ID = J.INVENTORY_WH_DOC_ID)"
+'      FromStr = FromStr & "LEFT OUTER JOIN LOT_ITEM LI ON (J.INVENTORY_DOC_ID = LI.INVENTORY_DOC_ID) "
+'      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI2 ON (LI.PART_ITEM_ID = PI2.PART_ITEM_ID) "
+'
+'      WhereStr = " WHERE BD.ACCEPT_BY IS NOT NULL "
    ElseIf Ind = 37 Then 'CReportInventory007_3
       SelectStr1 = "SELECT LI.*, PT.*, LC.*, PI.*, UN.*, IVD.ADJUST_FLAG, IVD.SUPPLIER_ID, IVD.SUPPLIER_ID_TRUE, IVD.DOCUMENT_DATE, IVD.DOCUMENT_NO, IVD.COMMIT_FLAG, IVD.DOCUMENT_TYPE, IVD.QUE_NO, IVD.RECEIVE_NAME, IVD.TRUCK_NO, IVD.DO_NO, IVD.SENDER_NAME, SP.SUPPLIER_CODE, NM1.LONG_NAME SUPPLIER_NAME,SP2.SUPPLIER_CODE SUPPLIER_CODE_TRUE, SP2.CREDIT CREDIT_TRUE,NM2.LONG_NAME SUPPLIER_NAME_TRUE, DP.PRIORITY1, PG.PACKAGING_NO, PE1.PUREXP_NO PUREXP_NO1, PE1.PUREXP_NAME PUREXP_NAME1, PE1.EXPENSE_RATE EXPENSE_RATE1, PE2.PUREXP_NO PUREXP_NO2, PE2.PUREXP_NAME PUREXP_NAME2, PE2.EXPENSE_RATE EXPENSE_RATE2, PT.PART_GROUP_ID PART_GROUP_ID1 "
       SelectStr1 = SelectStr1 & ",MR1.KEY_CODE ITEM_DESC_NO,MR1.KEY_NAME ITEM_DESC_NAME,IVD.PR_NO "
@@ -732,6 +750,21 @@ Dim GroupByStr As String
       FromStr = FromStr & "LEFT OUTER JOIN LAY_OUT LO ON (IVD.DEPARTMENT_ID = LO.LAY_OUT_ID) "
       
       WhereStr = " WHERE IVD.SUPPLIER_ID_TRUE IS NOT NULL "
+   ElseIf Ind = 38 Then
+      SelectStr1 = "SELECT LI.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC, LI.LOCATION_ID,IVD.DOCUMENT_DATE, SUM(LI.WEIGHT_AMOUNT) WEIGHT_AMOUNT, SUM(LI.PACKAGE_AMOUNT) PACKAGE_AMOUNT, SUM(LI.ACTUAL_PKG_AMOUNT) ACTUAL_PKG_AMOUNT "
+      SelectStr1 = SelectStr1 & ", SUM(LI.PACKAGE_WEIGHT) PACKAGE_WEIGHT, SUM(LI.HUMID_WEIGHT) HUMID_WEIGHT, SUM(LI.OTHER_WEIGHT) OTHER_WEIGHT "
+      SelectStr1 = SelectStr1 & ", SUM(LI.TOTAL_WEIGHT) TOTAL_WEIGHT,  SUM(LI.TX_AMOUNT) TX_AMOUNT,  SUM(LI.TOTAL_ACTUAL_PRICE) TOTAL_ACTUAL_PRICE,  SUM(LI.TOTAL_INCLUDE_PRICE) TOTAL_INCLUDE_PRICE  "
+      SelectStr1 = SelectStr1 & ", SUM(LI.CALCULATE_WEIGHT) CALCULATE_WEIGHT , SUM(LI.EXPENSE1) EXPENSE1, SUM(LI.EXPENSE2) EXPENSE2 "
+      SelectStr2 = "SELECT COUNT(*)  "
+      
+      FromStr = "FROM LOT_ITEM LI "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_ITEM PI ON (LI.PART_ITEM_ID = PI.PART_ITEM_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN PART_TYPE PT ON (PI.PART_TYPE = PT.PART_TYPE_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN LOCATION LC ON (LI.LOCATION_ID = LC.LOCATION_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN INVENTORY_DOC IVD ON (LI.INVENTORY_DOC_ID = IVD.INVENTORY_DOC_ID) "
+      FromStr = FromStr & "LEFT OUTER JOIN SUPPLIER SP ON (SP.SUPPLIER_ID = IVD.SUPPLIER_ID) "
+      
+      WhereStr = ""
    End If
    
    If LOT_ITEM_ID > 0 Then
@@ -861,6 +894,18 @@ Dim GroupByStr As String
          WhereStr = WhereStr & "AND (JB.PROCESS_ID = " & PROCESS_ID & ") "
       End If
    End If
+   
+   
+   
+   If EXPENSE_TYPE > 0 Then
+      If Len(WhereStr) <= 0 Then
+         WhereStr = "WHERE (MR1.KEY_ID = " & EXPENSE_TYPE & ") "
+      Else
+         WhereStr = WhereStr & "AND (MR1.KEY_ID = " & EXPENSE_TYPE & ") "
+      End If
+   End If
+   
+   'EXPENSE_TYPE
    
     If FROM_DATE > -1 Then
       TempDate = DateToStringIntLow(Trim(FROM_DATE))
@@ -1002,6 +1047,10 @@ Dim GroupByStr As String
       GroupByStr = "GROUP BY LI.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC   "
    ElseIf Ind = 34 Then
       GroupByStr = "GROUP BY LI.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC,IVD.DOCUMENT_DATE"
+     ElseIf Ind = 36 Then
+      GroupByStr = "GROUP BY PI.PART_ITEM_ID,LD3.LOT_ID "
+   ElseIf Ind = 38 Then
+      GroupByStr = "GROUP BY LI.PART_ITEM_ID, PI.PART_NO, PI.PART_DESC, LI.LOCATION_ID,IVD.DOCUMENT_DATE  "
    End If
    
    OrderByStr = ""
@@ -1192,7 +1241,7 @@ Dim GroupByStr As String
     ElseIf Ind = 33 Then
       OrderByStr = "ORDER BY PI.PART_NO "
    ElseIf Ind = 36 Then
-      OrderByStr = "ORDER BY  BD.BILLING_DOC_ID "
+      OrderByStr = "ORDER BY  PI.PART_ITEM_ID "
    ElseIf Ind = 37 Then
       If OrderBy = 7 Then
          OrderByStr = "ORDER BY SP2.SUPPLIER_CODE ASC,IVD.DOCUMENT_DATE  "
@@ -1205,8 +1254,8 @@ Dim GroupByStr As String
       Else
          OrderByStr = "ORDER BY SP2.SUPPLIER_CODE ASC,IVD.DOCUMENT_NO  "
       End If
-      
-      
+ ElseIf Ind = 38 Then
+      OrderByStr = "ORDER BY PI.PART_NO ASC,IVD.DOCUMENT_DATE "
    End If
    
    If Not (Ind = 7 Or Ind = 24 Or Ind = 25) Then
@@ -1665,12 +1714,13 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       PRICE_PER_PACK = NVLD(Rs("PRICE_PER_PACK"), -1)
       TOTAL_PRICE = NVLD(Rs("TOTAL_PRICE"), -1)
    ElseIf Ind = 36 Then
-      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), 0)
+'      BILLING_DOC_ID = NVLI(Rs("BILLING_DOC_ID"), 0)
       PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
-      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
+      LOT_ID = NVLI(Rs("LOT_ID"), -1)
+'      TX_TYPE = NVLS(Rs("TX_TYPE"), "")
       TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
       TOTAL_INCLUDE_PRICE = NVLD(Rs("TOTAL_INCLUDE_PRICE"), 0)
-      PART_TYPE = NVLI(Rs("PART_TYPE"), 0)
+'      PART_TYPE = NVLI(Rs("PART_TYPE"), 0)
    ElseIf Ind = 37 Then
       LOT_ITEM_ID = NVLI(Rs("LOT_ITEM_ID"), -1)
       INVENTORY_DOC_ID = NVLI(Rs("INVENTORY_DOC_ID"), -1)
@@ -1791,13 +1841,33 @@ Public Function PopulateFromRS(Ind As Long, Rs As ADODB.Recordset)
       
       ENTRY_DATE = InternalDateToDate(NVLS(Rs("ENTRY_DATE"), ""))
       EXIT_DATE = InternalDateToDate(NVLS(Rs("EXIT_DATE"), ""))
+   ElseIf Ind = 38 Then
+      PART_ITEM_ID = NVLI(Rs("PART_ITEM_ID"), -1)
+      LOCATION_ID = NVLI(Rs("LOCATION_ID"), -1)
+      TX_AMOUNT = NVLD(Rs("TX_AMOUNT"), 0)
+      TOTAL_ACTUAL_PRICE = NVLD(Rs("TOTAL_ACTUAL_PRICE"), 0)
+      TOTAL_INCLUDE_PRICE = NVLD(Rs("TOTAL_INCLUDE_PRICE"), 0)
+      PACKAGE_AMOUNT = NVLD(Rs("PACKAGE_AMOUNT"), 0)
+      ACTUAL_PKG_AMOUNT = NVLD(Rs("ACTUAL_PKG_AMOUNT"), 0)
+      WEIGHT_AMOUNT = NVLD(Rs("WEIGHT_AMOUNT"), 0)
+      PACKAGE_WEIGHT = NVLD(Rs("PACKAGE_WEIGHT"), 0)
+      OTHER_WEIGHT = NVLD(Rs("OTHER_WEIGHT"), 0)
+      HUMID_WEIGHT = NVLD(Rs("HUMID_WEIGHT"), 0)
+      CALCULATE_WEIGHT = NVLD(Rs("CALCULATE_WEIGHT"), 0)
+      PACKAGE_AMOUNT = NVLD(Rs("PACKAGE_AMOUNT"), 0)
+      TOTAL_WEIGHT = NVLD(Rs("TOTAL_WEIGHT"), 0)
+      EXPENSE1 = NVLD(Rs("EXPENSE1"), 0)
+      EXPENSE2 = NVLD(Rs("EXPENSE2"), 0)
+      PART_NO = NVLS(Rs("PART_NO"), "")
+      PART_DESC = NVLS(Rs("PART_DESC"), "")
+      DOCUMENT_DATE = InternalDateToDate(NVLS(Rs("DOCUMENT_DATE"), ""))
    End If
 End Function
 
 Public Function AddEditData()
 Dim ServerDateTime As String
 Dim SQL1 As String
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim TempID1 As String
 Dim TempID2 As String
@@ -1876,7 +1946,7 @@ Dim TempID9 As String
    End If
    
    If AddEditMode = SHOW_ADD Then
-      Call glbDatabaseMngr.GetSeqID("LOT_ITEM_SEQ", ID, glbErrorLog)
+      Call glbDatabaseMngr.GetSeqID("LOT_ITEM_SEQ", id, glbErrorLog)
       Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       
       SQL1 = "INSERT INTO LOT_ITEM " & _
@@ -1958,7 +2028,7 @@ Dim TempID9 As String
                      ") " & _
                      "VALUES " & _
                      "( " & _
-                         ID & "," & _
+                         id & "," & _
                          "" & INVENTORY_DOC_ID & "," & _
                          TempID8 & "," & _
                           TempID9 & "," & _
@@ -2030,7 +2100,7 @@ Dim TempID9 As String
                          "'" & ServerDateTime & "'," & _
                          glbUser.USER_ID & _
                      ") "
-         LOT_ITEM_ID = ID
+         LOT_ITEM_ID = id
    Else 'Show edit
       Call glbDatabaseMngr.GetSeqID("TRANSACTION_SEQUENCE_SEQ", ID2, glbErrorLog)
       

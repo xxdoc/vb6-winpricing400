@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "CReportInventory029"
+Attribute VB_Name = "CReportAR009_3"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Option Explicit
 'User Group Report
 Implements CReportInterface
 
-Private Const MODULE_NAME = "CReportInventory029"
+Private Const MODULE_NAME = "CReportAR009_3"
 Public MODULE_DESC As String
 
 Private WithEvents Vsp As VSPrinter
@@ -32,7 +32,7 @@ Private Rs As ADODB.Recordset
 
 Private Const TITLE_SIZE = 14
 Private Const HEADER_SIZE = 12
-Private Const DETAIL_SIZE = 10
+Private Const DETAIL_SIZE = 12
 
 Private Const TITLE_FORMAT = "<32|<3|<5;"
 
@@ -43,23 +43,36 @@ Private m_HeaderText1 As String
 Private m_HeaderText2 As String
 
 Private m_Headers0 As CFieldList
-Private m_Headers0_1 As CFieldList
 Private m_Headers1 As CFieldList
+Private m_Headers1_1 As CFieldList
+Private m_Headers1_2 As CFieldList
+Private m_Headers1_3 As CFieldList
+Private m_Headers1_4 As CFieldList
 Private m_Details1 As CFieldList
+Private m_Details2 As CFieldList
 Private m_Left As Double
-Private m_PartTxtypes As Collection
+Private m_YearSeqs As Collection
+
+Private m_Customers As Collection
+Private m_Banks As Collection
+Private m_BankBranchs As Collection
 
 Private Sub Class_Initialize()
    Set mcolParam = New Collection
    Set m_TempCol = New Collection
    
    Set m_Headers0 = New CFieldList
-   Set m_Headers0_1 = New CFieldList
    Set m_Headers1 = New CFieldList
+   Set m_Headers1_1 = New CFieldList
+   Set m_Headers1_2 = New CFieldList
+   Set m_Headers1_3 = New CFieldList
+   Set m_Headers1_4 = New CFieldList
    Set m_Details1 = New CFieldList
-   Set m_PartTxtypes = New Collection
-   
-   Set Rs = New ADODB.Recordset
+   Set m_Details2 = New CFieldList
+   Set m_YearSeqs = New Collection
+   Set m_Customers = New Collection
+   Set m_Banks = New Collection
+   Set m_BankBranchs = New Collection
 End Sub
 
 Private Sub Class_Terminate()
@@ -69,15 +82,17 @@ Private Sub Class_Terminate()
    Set m_TempCol = Nothing
    
    Set m_Headers0 = Nothing
-   Set m_Headers0_1 = Nothing
    Set m_Headers1 = Nothing
    Set m_Details1 = Nothing
-   Set m_PartTxtypes = Nothing
-   
-   If Rs.State = adStateOpen Then
-      Rs.Close
-   End If
-   Set Rs = Nothing
+   Set m_YearSeqs = Nothing
+   Set m_Headers1_1 = Nothing
+   Set m_Headers1_2 = Nothing
+   Set m_Headers1_3 = Nothing
+   Set m_Headers1_4 = Nothing
+   Set m_Details2 = Nothing
+   Set m_Customers = Nothing
+   Set m_Banks = Nothing
+   Set m_BankBranchs = Nothing
 End Sub
 
 Private Function CReportInterface_AddParam(varItem As Variant, strIndex As String) As Boolean
@@ -122,13 +137,18 @@ Dim tbdT As TableBorderSettings
 Dim blnBold As Boolean
 Dim iSize As Integer
 Dim alngX() As Long
-Dim Sgi As CSGroupItem
-Dim TempSgi As CSGroupItem
 Dim PrevID As Long
 Dim TempStr1 As String
-Dim TempStr2 As String
+Dim TempStr1_1 As String
 Dim Cf As CReportField
-   
+Dim ExportWidth As Long
+Dim HeadCf As CReportField
+Dim J As Long
+Dim TempStr As String
+Dim TempRs As ADODB.Recordset
+Dim Amt As Double
+Dim iCount As Long
+
    tbdT = Vsp.TableBorder
    blnBold = Vsp.FontBold
    iSize = Vsp.FontSize
@@ -136,63 +156,57 @@ Dim Cf As CReportField
    Vsp.FontSize = HEADER_SIZE
    Vsp.FontBold = True
    Vsp.TableBorder = tbAll
-
+   
    Call m_Headers0.ClearField
-   Call m_Headers0_1.ClearField
    Call m_Headers1.ClearField
 
    Set Cf = New CReportField
 
-   Call Cf.SetFieldValue(4, "^", "", "^")
-   Call m_Headers0.AddField(Cf)
-   Call Cf.SetFieldValue(6, "^", "หน่วยงาน", "<")
-   Call m_Headers0.AddField(Cf)
-   Call Cf.SetFieldValue(13, "^", "ค่าใช้จ่าย", "<")
-   Call m_Headers0.AddField(Cf)
-   Call Cf.SetFieldValue(12, "^", "รายละเอียด", "<")
-   Call m_Headers0.AddField(Cf)
-   '===========
+'   Call Cf.SetFieldValue(4, "^", "รหัสลูกค้า", "<")
+'   Call m_Headers0.AddField(Cf)
+'   Call Cf.SetFieldValue(6, "^", "ชื่อลูกค้า", "<")
+'   Call m_Headers0.AddField(Cf)
+'   Call Cf.SetFieldValue(5, "^", "พนักงานขาย", "<")
+'   Call m_Headers0.AddField(Cf)
+
+   '===
    Call Cf.SetFieldValue(1, "^", "NO.", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "วันที่", "^")
+   Call Cf.SetFieldValue(3, "^", "เลขที่ใบเสร็จ", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(3, "^", "เลขที่เอกสาร", "^")
+   Call Cf.SetFieldValue(3, "^", "วันที่รับชำระ", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(1, "^", "รหัส", "^")
+   Call Cf.SetFieldValue(3, "^", "รหัสลูกค้า", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "แผนก", "<")
+   Call Cf.SetFieldValue(7, "^", "ชื่อลูกค้า", "<")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(0, "^", "ค่าใช้จ่าย", "<")
+   Call Cf.SetFieldValue(3, "^", "เลขที่บิล", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "รหัสพัสดุ", "^")
+   Call Cf.SetFieldValue(3, "^", "วันที่ส่งของ", "^")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(7, "^", "ชื่อพัสดุ", "<")
+'   Call Cf.SetFieldValue(2, "^", "ยอดหนี้", ">")
+'   Call m_Headers1.AddField(Cf)
+   Call Cf.SetFieldValue(2, "^", "ยอดรับชำระ", ">")
    Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "หน่วยนับ", "^")
-   Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "จำนวน", ">")
-   Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(0, "^", "มูลค่า", ">")
-   Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "ราคา @", ">")
-   Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(2, "^", "มูลค่า", ">")
-   Call m_Headers1.AddField(Cf)
-   Call Cf.SetFieldValue(8, "^", "รายละเอียด", "<")
-   Call m_Headers1.AddField(Cf)
-         
+'   Call Cf.SetFieldValue(2, "^", "ส่วนลดเงินสด", ">")
+'   Call m_Headers1.AddField(Cf)
+'   Call Cf.SetFieldValue(2, "^", "คงเหลือ", ">")
+'   Call m_Headers1.AddField(Cf)
+   
    Set Cf = Nothing
-      
-'  Call m_Headers0.GetString(1, TempStr1, TempStr2)
+
+'  Call m_Headers0.GetString(1, TempStr1, TempStr1_1)
 '   strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
-'   strPrint = TempStr2
+'   strPrint = TempStr1_1
 '   Call Vsp.AddTable(strFormat, "", strPrint)
-      
-  Call m_Headers1.GetString(1, TempStr1, TempStr2)
+
+  Call m_Headers1.GetString(1, TempStr1, TempStr1_1)
    strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
-   strPrint = TempStr2
+   strPrint = TempStr1_1
    Call Vsp.AddTable(strFormat, "", strPrint)
             
+   Set TempRs = Nothing
+   
    Vsp.TableBorder = tbdT
    Vsp.FontBold = blnBold
    Vsp.FontSize = iSize
@@ -205,28 +219,36 @@ Dim TempStr2 As String
 Dim TempStr3 As String
 Dim FromDate As String
 Dim ToDate As String
-   
+Dim ToPaidDate As String
+Dim NewDate As Date
+Dim NewFromDate As Date
+Dim NewToDate As Date
+
    mstrErrMsg = ""
    mblnHeader = True
    mblnNewPage = True
    mblnEndPage = True
    Vsp.PaperSize = pprA4 '
-   Vsp.ORIENTATION = orPortrait
-   Vsp.MarginBottom = 1440
-   Vsp.MarginFooter = 1440
-   Vsp.MarginHeader = 1440
+   Vsp.ORIENTATION = orLandscape
+   Vsp.MarginBottom = 700
+   Vsp.MarginFooter = 700
+   Vsp.MarginHeader = 700
    Vsp.MarginLeft = 700
    Vsp.MarginRight = 700
-   Vsp.MarginTop = 1440
+   Vsp.MarginTop = 700
    Vsp.FontName = "AngsanaUPC"
    Vsp.FontSize = DETAIL_SIZE
    
-   FromDate = "จากวันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("FROM_DATE")), "N/A")
-   ToDate = "ถึง " & EmptyToString(DateToStringExtEx2(mcolParam("TO_DATE")), "N/A")
+   Call LoadCustomer(Nothing, m_Customers)
+   Call LoadBank(Nothing, m_Banks)
+   Call LoadBankBranch(Nothing, m_BankBranchs)
    
-   MODULE_DESC = vbCrLf & glbEnterPrise.ENTERPRISE_NAME & " , " & glbEnterPrise.BRANCH_NAME & vbCrLf & _
-                                       mcolParam("REPORT_NAME") & vbCrLf & _
-                                        FromDate & " " & ToDate & " " & mcolParam("LOCATION_NAME")
+   FromDate = "จากวันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("FROM_DATE")), "N/A")
+   ToDate = " ถึง วันที่ " & EmptyToString(DateToStringExtEx2(mcolParam("TO_DATE")), "N/A")
+   
+   MODULE_DESC = glbEnterPrise.ENTERPRISE_NAME & " , " & glbEnterPrise.BRANCH_NAME & vbCrLf & mcolParam("REPORT_NAME") & _
+                                       vbCrLf & FromDate & ToDate & "  " & ToPaidDate
+   
    Call SetReportConfig(Vsp, mcolParam("REPORT_KEY"))
    
    mdblWid = Vsp.PageWidth - Vsp.MarginLeft - Vsp.MarginRight
@@ -238,8 +260,16 @@ Dim ToDate As String
    initDoc = True
 End Function
 
-Private Function GetKey(Li As CLotItem) As String
-   GetKey = Li.EXPENSE_NAME & "-" & Li.DEP_NAME
+Private Function GetItemFromListIndex(TempCol As Collection, Ind As Long) As Object
+   Set GetItemFromListIndex = TempCol(Ind)
+End Function
+
+Private Function GetKey(Mode As Long, Di As CReceiptItem) As String
+   If Mode = 1 Then
+      GetKey = Di.RECEIPT_NO
+   ElseIf Mode = 2 Then
+      GetKey = Di.CUSTOMER_CODE
+   End If
 End Function
 
 Private Sub GenerateHeader(TXT1 As String, TXT2 As String, TXT3 As String, Details As CFieldList)
@@ -274,108 +304,92 @@ End Sub
 Private Function genDoc(isPreview As Boolean) As Boolean
 On Error GoTo ErrHandler
 Dim RName As String
-Dim cData As CLotItem
 Dim I As Long
 Dim J As Long
 Dim strFormat As String
 Dim alngX() As Long
 Dim IsOK As Boolean
+Dim Amt As Double
 Dim HeadCf As CReportField
 Dim BodyCf As CReportField
 Dim TempStr1 As String
 Dim TempStr2 As String
-Dim Pi As CPartItem
 Dim Total1(100) As Double
 Dim Total2(100) As Double
+Dim Total3(100) As Double
 Dim iCount As Long
 Dim TempStr As String
-Dim Amt As Double
-Dim InventoryBals1 As Collection
-Dim Li As CLotItem
-Dim TempLi1 As CLotItem
-Dim TempLi2 As CLotItem
-Dim Sum1 As Double
-Dim Count1 As Double
-Dim BalanceAccums As Collection
-Dim BalanceLi As CLotItem
-Dim LeftAmount1 As Double
-Dim LeftAmount2 As Double
-Dim TempLi As CLotItem
-Dim Tot1 As Double
-Dim Tot2 As Double
 Dim PrevKey1 As String
+Dim PrevKey2 As String
+Dim Width As Double
+Dim TempRs As ADODB.Recordset
+Dim Ap As CCustomer
+Dim Hc As CReportField
+Dim Pi1 As CPaymentItem
+Dim CashAmount As Double
+Dim CheckAmount As Double
+Dim TrnAmount As Double
+Dim FeeAmount As Double
+Dim Bnk As CBank
+Dim Bbr As CBankBranch
+Dim Ri As CReceiptItem
+Dim K As Long
 
+'   m_ApSupAmounts
+'   m_ApSupPaids
+   
    RName = "genDoc"
 '-----------------------------------------------------------------------------------------------------
 '                                             Query Here
 '-----------------------------------------------------------------------------------------------------
    
+   Set Rs = New ADODB.Recordset
+   Set TempRs = New ADODB.Recordset
+   
    If Not initDoc Then Exit Function
-
+   
    Vsp.Preview = isPreview
 '-----------------------------------------------------------------------------------------------------
 '                                         Main Operation Here
 '-----------------------------------------------------------------------------------------------------
-
+   
    For J = 1 To UBound(Total1)
       Total1(J) = 0
+      Total2(J) = 0
+      Total3(J) = 0
    Next J
-
+   
    mblnHeader = False
    Call StartExportFile(Vsp)
    Vsp.StartDoc
    Call printHeader
    mblnHeader = True
-
-   Set cData = New CLotItem
-   cData.LOT_ITEM_ID = -1
-   cData.PART_NO = mcolParam("PART_NO")
-   cData.PART_GROUP_ID = mcolParam("PART_GROUP")
-   cData.PART_TYPE = mcolParam("PART_TYPE")
-   cData.LOCATION_ID = mcolParam("LOCATION_ID")
-   cData.FROM_DATE = mcolParam("FROM_DATE")
-   cData.TO_DATE = mcolParam("TO_DATE")
-   cData.DOCUMENT_TYPE_SET = ID2ExportDocTypeSet(mcolParam("EXPORT_DOC_TYPE"))
-   cData.TX_TYPE = "E"
-   cData.COMMIT_FLAG = ""
-   cData.LAYOUT_ID = mcolParam("DEPARTMENT_ID")
-   cData.EXPENSE_TYPE = mcolParam("EXPENSE_TYPE")
-   cData.OrderBy = 4
-   cData.OrderType = mcolParam("ORDER_TYPE")
-   Call cData.QueryData(21, Rs, iCount)
-
-      If Not Rs.EOF Then
-         Set Li = New CLotItem
-         Call Li.PopulateFromRS(21, Rs)
-         PrevKey1 = GetKey(Li)
-
-         Call GenerateHeader("", Li.DEP_NAME, Li.EXPENSE_NAME, m_Details1)
-         Call m_Details1.GetString(1, TempStr1, TempStr2)
-         strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
-         Vsp.FontBold = True
-         Call Vsp.AddTable(strFormat, "", TempStr2)
-         Vsp.FontBold = False
-
-         Set Li = Nothing
-      End If
-
-      I = 0
-
-      Set BodyCf = New CReportField
-      Set Li = New CLotItem
+   
+       Set BodyCf = New CReportField
+      Set Ri = New CReceiptItem
+      Ri.RECEIPT_ITEM_ID = -1
+      Ri.FROM_DOC_DATE = mcolParam("FROM_DATE")
+      Ri.TO_DOC_DATE = mcolParam("TO_DATE")
+      Ri.OrderBy = 3
+      Ri.CUSTOMER_CODE = mcolParam("CUSTOMER_CODE")
+      Ri.FROM_CUSTOMER_CODE = mcolParam("FROM_CUSTOMER_CODE")
+      Ri.TO_CUSTOMER_CODE = mcolParam("TO_CUSTOMER_CODE")
+      Ri.EMP_CODE = mcolParam("EMP_CODE")
+      Ri.FROM_EMP_CODE = mcolParam("FROM_EMP_CODE")
+      Ri.TO_EMP_CODE = mcolParam("TO_EMP_CODE")
+      Ri.OrderType = 1
+      Ri.DOCUMENT_TYPE = 2
+      Ri.RECEIPT_TYPE = 3
+      Call Ri.QueryData(10, Rs, iCount)
+    
+       K = 0
       While Not Rs.EOF
-         Call Li.PopulateFromRS(21, Rs)
-
-         If PrevKey1 <> GetKey(Li) Then
-            Call GenerateFooter("รวม", "", "", Total1, m_Details1)
+         Call Ri.PopulateFromRS(10, Rs)
+         I = I + 1
+         K = K + 1
+          If PrevKey1 <> Ri.EMP_CODE And I > 1 Then
+            Call GenerateFooter("รวม", PrevKey1, "", Total1, m_Details1, 0)
             Call m_Details1.GetString(2, TempStr1, TempStr2)
-            strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
-            Vsp.FontBold = True
-            Call Vsp.AddTable(strFormat, "", TempStr2)
-            Vsp.FontBold = False
-
-            Call GenerateHeader("", Li.DEP_NAME, Li.EXPENSE_NAME, m_Details1)
-            Call m_Details1.GetString(1, TempStr1, TempStr2)
             strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
             Vsp.FontBold = True
             Call Vsp.AddTable(strFormat, "", TempStr2)
@@ -384,108 +398,115 @@ Dim PrevKey1 As String
             For J = 1 To UBound(Total1)
                Total1(J) = 0
             Next J
-            PrevKey1 = GetKey(Li)
+
+            Vsp = "ชื่อพนักงานขาย  :  " & Ri.SALE_NAME & " " & Ri.SALE_LNAME & " (" & Ri.EMP_CODE & ")"
+            K = 1
+
+         ElseIf I = 1 Then
+            Vsp = "ชื่อพนักงานขาย  :  " & Ri.EMP_NAME & " " & Ri.EMP_LNAME & " (" & Ri.EMP_CODE & ")"
          End If
 
-         I = I + 1
-         Tot1 = 0
-         Tot2 = 0
-
+         PrevKey1 = Ri.EMP_CODE
+         J = 0
          Call m_Details1.ClearField
-
-         Set HeadCf = m_Headers1.Fields(1)
-         TempStr = I
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(2)
-         TempStr = DateToStringExtEx2(Li.DOCUMENT_DATE)
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(3)
-         TempStr = Li.DOCUMENT_NO
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(4)
-         TempStr = Li.DEP_NO
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(5)
-         TempStr = Li.DEP_NAME
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(6)
-         TempStr = Li.EXPENSE_NAME
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(7)
-         TempStr = Li.PART_NO
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(8)
-         TempStr = Li.PART_DESC
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(9)
-         TempStr = Li.UNIT_NAME
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-
-         Set HeadCf = m_Headers1.Fields(10)
-         TempStr = FormatNumber(Li.TX_AMOUNT)
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
-         Call m_Details1.AddField(BodyCf)
-         Total1(10) = Total1(10) + Li.TX_AMOUNT
-         Total2(10) = Total2(10) + Li.TX_AMOUNT
          
-         Set HeadCf = m_Headers1.Fields(11)
-         TempStr = FormatNumber(Li.TOTAL_INCLUDE_PRICE)
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+         Ri.PAID_AMOUNT = Val(Format(Ri.PAID_AMOUNT, "0.00"))
+         Ri.CASH_DISCOUNT = Val(Format(Ri.CASH_DISCOUNT, "0.00"))
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = K
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         Total1(11) = Total1(11) + Li.TOTAL_INCLUDE_PRICE
-         Total2(11) = Total2(11) + Li.TOTAL_INCLUDE_PRICE
-         
-         Set HeadCf = m_Headers1.Fields(12)
-         TempStr = FormatNumber(MyDiffEx(Li.TOTAL_INCLUDE_PRICE, Li.TX_AMOUNT))
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = Ri.RECEIPT_NO
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         Total1(12) = Total1(12) + 0
-         Total2(12) = Total2(12) + 0
-         
-         Set HeadCf = m_Headers1.Fields(13)
-         TempStr = FormatNumber(Li.TOTAL_INCLUDE_PRICE)
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = DateToStringExtEx2(Ri.RECEIPT_DATE)
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         Total1(13) = Total1(13) + Li.TOTAL_INCLUDE_PRICE
-         Total2(13) = Total2(13) + Li.TOTAL_INCLUDE_PRICE
-         
-         Set HeadCf = m_Headers1.Fields(14)
-         TempStr = Li.ITEM_DESC
-         Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = Ri.CUSTOMER_CODE
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
          Call m_Details1.AddField(BodyCf)
-         
-         Call m_Details1.GetString(2, TempStr1, TempStr2)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = Ri.CUSTOMER_NAME
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = Ri.BILL_NO
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = DateToStringExtEx2(Ri.BILL_DATE)
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+
+'          J = J + 1
+'          Set Hc = m_Headers1.Fields(J)
+'         TempStr = FormatNumber(0)
+'         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+'         Call m_Details1.AddField(BodyCf)
+'         Total1(J) = Total1(J) + (0)
+'         Total2(J) = Total2(J) + (0)
+'         Total3(J) = Total3(J) + (0)
+
+          J = J + 1
+          Set Hc = m_Headers1.Fields(J)
+         TempStr = FormatNumber(Ri.PAID_AMOUNT)
+         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+         Call m_Details1.AddField(BodyCf)
+         Total1(J) = Total1(J) + (Ri.PAID_AMOUNT)
+         Total2(J) = Total2(J) + (Ri.PAID_AMOUNT)
+         Total3(J) = Total3(J) + (Ri.PAID_AMOUNT)
+
+'          J = J + 1
+'          Set Hc = m_Headers1.Fields(J)
+'         TempStr = FormatNumber(Ri.CASH_DISCOUNT)
+'         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+'         Call m_Details1.AddField(BodyCf)
+'         Total1(J) = Total1(J) + (Ri.CASH_DISCOUNT)
+'         Total2(J) = Total2(J) + (Ri.CASH_DISCOUNT)
+'         Total3(8) = Total3(8) + (Ri.CASH_DISCOUNT)
+
+'          J = J + 1
+'          Set Hc = m_Headers1.Fields(J)
+'         TempStr = FormatNumber(0)
+'         Call BodyCf.SetFieldValue(Hc.Width, Hc.BodyAlign, TempStr)
+'         Call m_Details1.AddField(BodyCf)
+'         Total1(J) = Total1(J) + (0)
+'         Total2(J) = Total2(J) + (0)
+'         Total3(J) = Total3(J) + (0)
+
+         Call m_Details1.GetString(1, TempStr1, TempStr2)
          strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
          Call Vsp.AddTable(strFormat, "", TempStr2)
 
          Rs.MoveNext
       Wend
 
-      Call GenerateFooter("รวม", "", "", Total1, m_Details1)
+      Call GenerateFooter("รวม", PrevKey1, "", Total1, m_Details1, 0)
       Call m_Details1.GetString(2, TempStr1, TempStr2)
       strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
       Vsp.FontBold = True
       Call Vsp.AddTable(strFormat, "", TempStr2)
       Vsp.FontBold = False
-      
-      Call GenerateFooter("สุทธิ", "", "", Total2, m_Details1)
+   
+
+      Call GenerateFooter("สุทธิ", "", "", Total2, m_Details1, 0)
       Call m_Details1.GetString(2, TempStr1, TempStr2)
       strFormat = VSP_CalTable(TempStr1, mdblWid, alngX)
       Vsp.FontBold = True
@@ -493,13 +514,18 @@ Dim PrevKey1 As String
       Vsp.FontBold = False
 
       Set BodyCf = Nothing
-      Set Li = Nothing
-
-   Vsp.EndDoc
+    Vsp.EndDoc
    Call CloseExportFile(Vsp)
-
-   Set cData = Nothing
-   Set InventoryBals1 = Nothing
+   
+   If TempRs.State = adStateOpen Then
+      TempRs.Close
+   End If
+   Set TempRs = Nothing
+   
+   If Rs.State = adStateOpen Then
+      Rs.Close
+   End If
+   Set Rs = Nothing
    
    genDoc = True
    Exit Function
@@ -509,7 +535,7 @@ ErrHandler:
    Set Rs = Nothing
 End Function
 
-Private Sub GenerateFooter(TXT1 As String, TXT2 As String, TXT3 As String, Tot() As Double, Details As CFieldList)
+Private Sub GenerateFooter(TXT1 As String, TXT2 As String, TXT3 As String, Tot() As Double, Details As CFieldList, DateCount As Long)
 Dim HeadCf As CReportField
 Dim BodyCf As CReportField
 Dim J As Long
@@ -524,17 +550,40 @@ Dim TempStr As String
       If J = 1 Then
          TempStr = TXT1
       ElseIf J = 2 Then
-         TempStr = ""
+         TempStr = TXT2
       ElseIf J = 3 Then
          TempStr = ""
-      ElseIf J = 4 Then
-         TempStr = ""
-      ElseIf (J = 10) Or (J = 11) Or (J = 13) Then
+      ElseIf J = 8 Then
          TempStr = FormatNumber(Tot(J))
-      ElseIf J = 12 Then
-         TempStr = FormatNumber(MyDiffEx(Tot(11), Tot(10)))
       Else
          TempStr = ""
+      End If
+      
+      Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
+      Call Details.AddField(BodyCf)
+   Next HeadCf
+      
+   Set BodyCf = Nothing
+End Sub
+
+Private Sub GenerateBkTr(TXT1 As String, TXT2 As String, TXT3 As String, Tot() As Double, Details As CFieldList, DateCount As Long)
+Dim HeadCf As CReportField
+Dim BodyCf As CReportField
+Dim J As Long
+Dim TempStr As String
+
+   Call Details.ClearField
+   Set BodyCf = New CReportField
+   
+   J = 0
+   For Each HeadCf In m_Headers1.Fields
+      J = J + 1
+      If J = 1 Then
+         TempStr = TXT1
+      ElseIf J = 2 Then
+         TempStr = TXT2
+      Else
+         TempStr = FormatNumber(Tot(J))
       End If
       
       Call BodyCf.SetFieldValue(HeadCf.Width, HeadCf.Align, TempStr, HeadCf.BodyAlign)
@@ -580,18 +629,17 @@ Dim alngX() As Long
    blnItalic = Vsp.FontItalic
    iSize = Vsp.FontSize
    sName = Vsp.FontName
-
+   
    Vsp.FontSize = 8
    dY(0) = Vsp.CurrentY
    Vsp.TextAlign = taLeftBottom
    strFormat = VSP_CalTable(TITLE_FORMAT, mdblWid, alngX)
    Vsp.TableBorder = tbNone
    Call Vsp.AddTable(strFormat, "", "|หน้าที่|: " & Vsp.CurrentPage)
-   Call Vsp.AddTable(strFormat, "", "|วันที่พิมพ์|: " & DateToStringExt(mdteDate))
-   Call Vsp.AddTable(strFormat, "", "|เวลา|: " & Right$(DateToStringExtEx(mdteDate), 8))
-   Call Vsp.AddTable(strFormat, "", "|ผู้ใช้|: " & glbUser.USER_NAME)
+   Call Vsp.AddTable(strFormat, "", "|วัน|: " & DateToStringExt(mdteDate))
+   Call Vsp.AddTable(strFormat, "", "|เวลา|: " & Right$(DateToStringExtEx(Now), 8))
    Vsp.CurrentY = dY(0)
-
+   
    Vsp.FontSize = TITLE_SIZE
    Vsp.FontBold = True
    Vsp.TextAlign = taCenterBottom
@@ -601,7 +649,7 @@ Dim alngX() As Long
       Call printHeader
    End If
    mdY = Vsp.CurrentY
-
+   
    Vsp.TextAlign = talnT
    Vsp.TableBorder = tbdT
    Vsp.FontBold = blnBold
@@ -614,7 +662,5 @@ End Sub
 Private Sub VSP_StartDoc()
 'This event occur when VSPrinter.StartDoc is used and used to initialize some information before generating printed document
 End Sub
-
-
 
 

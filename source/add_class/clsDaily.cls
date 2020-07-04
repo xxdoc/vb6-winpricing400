@@ -2215,7 +2215,47 @@ ErrorHandler:
    IsOK = False
    AddEditCustomer = False
 End Function
+Public Function AddEditCustomerPro(Ug As CCustomer, IsOK As Boolean, AutoCommit As Boolean, ErrorObj As clsErrorLog)
+On Error GoTo ErrorHandler
+Dim RName As String
+Dim HasBegin As Boolean
 
+   RName = "AddEditCustomerPro"
+   AddEditCustomerPro = False
+   HasBegin = False
+
+   If AutoCommit Then
+      m_ADOConn.BeginTrans
+   End If
+   HasBegin = True
+   
+   Call Ug.UpdatePromotion
+   
+   If AutoCommit Then
+      Call m_ADOConn.CommitTrans
+   End If
+   HasBegin = False
+   IsOK = True
+
+   AddEditCustomerPro = True
+   Exit Function
+
+ErrorHandler:
+   If HasBegin Then
+      If AutoCommit Then
+         m_ADOConn.RollbackTrans
+      End If
+   End If
+
+   ErrorObj.LocalErrorMsg = "Runtime error."
+   ErrorObj.SystemErrorMsg = Err.DESCRIPTION
+   ErrorObj.RoutineName = RName
+   ErrorObj.ModuleName = m_ModuleName
+   ErrorObj.ShowErrorLog (LOG_TO_FILE)
+
+   IsOK = False
+   AddEditCustomerPro = False
+End Function
 '==
 Public Function QuerySupplierInfo(Ua As CSupplier, Rs As ADODB.Recordset, ItemCount As Long, IsOK As Boolean, ErrorObj As clsErrorLog) As Boolean
 On Error GoTo ErrorHandler
@@ -3971,7 +4011,7 @@ Dim I As Long
                            Set PD = New CPalletDoc
                            Call PD.PopulateFromRS(2, m_Rs3)
                            PD.Flag = "I"
-                           Call LTD.C_PalletDoc.add(PD, Trim(PD.PALLET_DOC_NO & "-" & str(LTD.LOT_ID)))
+                          Call LTD.C_PalletDoc.add(PD, Trim(PD.PALLET_DOC_NO & "-" & str(LTD.LOT_ID)))
 'Call LTD.C_PalletDoc.add(PD)
                            Set PD = Nothing
                            m_Rs3.MoveNext
@@ -4661,6 +4701,8 @@ Dim SumGoodAmount As Long
              If LTD.IS_EDIT_LOT Then
                Call LTD.AddEditLot
              End If
+             
+             LTD.AddEditBinNo 'UPDATE ถังบรรจุที่จ่ายออกไปด้วย
            ElseIf LTD.Flag = "D" Then
             Call LTD.DeleteData
            End If
@@ -7500,7 +7542,7 @@ Dim HasBegin As Boolean
       U.AddEditMode = SHOW_ADD
       U.USER_NAME = D.FIELD1
       U.USER_PASSWORD = D.FIELD2
-      U.USER_STATUS2 = "Y"
+      U.USER_STATUS3 = "Y"
       U.EXCEPTION_FLAG = "Y"
       U.GROUP_ID = LookupGroupID("")
       If CheckUniqueNs(USERNAME_UNIQUE, U.USER_NAME, -1) Then
@@ -9136,8 +9178,16 @@ Dim iCount As Long
       Dim EWPI As CExWorksPriceItem
       Set EWPI = New CExWorksPriceItem
       EWPI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
+      
+      EWPI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EWPI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EWPI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EWPI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EWPI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EWPI.PART_NO = Ua.PART_NO_SEARCH
       EWPI.EX_WORKS_PRICE_ITEM_ID = -1
+      
       EWPI.OrderBy = 1
       Call EWPI.QueryData(1, m_Rs1, iCount)
       Set EWPI = Nothing
@@ -9158,6 +9208,13 @@ Dim iCount As Long
       EDCI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
       EDCI.EX_DELIVERY_COST_ITEM_ID = -1
       EDCI.CUSTOMER_CODE = Ua.CUSTOMER_CODE_SEARCH
+      
+      EDCI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EDCI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EDCI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EDCI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EDCI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EDCI.OrderBy = 2
       EDCI.OrderType = 1
       Call EDCI.QueryData(1, m_Rs1, iCount)
@@ -9179,6 +9236,13 @@ Dim iCount As Long
       EPPI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
       EPPI.EX_PROMOTION_PART_ITEM_ID = -1
       EPPI.PART_NO = Ua.PART_NO_SEARCH
+      
+      EPPI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EPPI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EPPI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EPPI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EPPI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EPPI.OrderBy = 1
       Call EPPI.QueryData(1, m_Rs1, iCount)
       Set EPPI = Nothing
@@ -9199,6 +9263,13 @@ Dim iCount As Long
       EPDI.EX_WORKS_PRICE_ID = Ua.EX_WORKS_PRICE_ID
       EPDI.EX_PROMOTION_DLC_ITEM_ID = -1
       EPDI.CUSTOMER_CODE = Ua.CUSTOMER_CODE_SEARCH
+      
+      EPDI.VERIFY_FLAG = Ua.VERIFY_FLAG
+      EPDI.APPROVED_FLAG = Ua.APPROVED_FLAG
+      EPDI.LAST_EDIT_FLAG = Ua.LAST_EDIT_FLAG
+      EPDI.DECLARE_NEW_FLAG = Ua.DECLARE_NEW_FLAG
+      EPDI.DECLARE_COUNT = Ua.DECLARE_COUNT
+      
       EPDI.OrderBy = 1
       Call EPDI.QueryData(1, m_Rs1, iCount)
       Set EPDI = Nothing
@@ -9449,6 +9520,7 @@ Dim ACRate As CAcRate
       If EWPI.Flag = "A" Then
          EWPI.AddEditMode = SHOW_ADD
          EWPI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EWPI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EWPI.AddEditData
 
       ElseIf EWPI.Flag = "E" Then
@@ -9464,6 +9536,7 @@ Dim ACRate As CAcRate
       If EDCI.Flag = "A" Then
          EDCI.AddEditMode = SHOW_ADD
          EDCI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EDCI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EDCI.AddEditData
 
       ElseIf EDCI.Flag = "E" Then
@@ -9479,6 +9552,7 @@ Dim ACRate As CAcRate
       If EPPI.Flag = "A" Then
          EPPI.AddEditMode = SHOW_ADD
          EPPI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EPPI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EPPI.AddEditData
 
       ElseIf EPPI.Flag = "E" Then
@@ -9494,6 +9568,7 @@ Dim ACRate As CAcRate
       If EPDI.Flag = "A" Then
          EPDI.AddEditMode = SHOW_ADD
          EPDI.EX_WORKS_PRICE_ID = Ug.EX_WORKS_PRICE_ID
+         EPDI.DECLARE_COUNT = 0 'เริ่มต้นเป็น 0
          Call EPDI.AddEditData
 
       ElseIf EPDI.Flag = "E" Then
@@ -15389,11 +15464,13 @@ Dim ItemCount As Long
    Ug.AddEditMode = SHOW_ADD
    Ug.EX_WORKS_PRICE_ID = -1
    Ug.EX_WORKS_PRICE_CODE = Ug.EX_WORKS_PRICE_CODE & "***"
+   Ug.EX_WORKS_PRICE_DESC = "COPY " & DateToStringExtEx3(Now)
    
    If Ug.EX_WORKS_PRICE_TYPE = 1 Then
    Dim Cmss As CExWorksPriceItem
    For Each Cmss In Ug.ExWorksPriceItem
       Cmss.Flag = "A"
+      Cmss.DECLARE_NEW_FLAG = "N"
       Cmss.AddEditMode = SHOW_ADD
    Next Cmss
    
@@ -15402,22 +15479,25 @@ Dim ItemCount As Long
    Dim CmsCost As CExDeliveryCostItem
    For Each CmsCost In Ug.ExDeliveryCost
       CmsCost.Flag = "A"
+      CmsCost.DECLARE_NEW_FLAG = "N"
       CmsCost.AddEditMode = SHOW_ADD
    Next CmsCost
    
-   ElseIf Ug.EX_WORKS_PRICE_TYPE = 3 Then
+   ElseIf Ug.EX_WORKS_PRICE_TYPE = 3 Or Ug.EX_WORKS_PRICE_TYPE = 5 Then
    Dim Ceppi As CExPromotionPartItem
    For Each Ceppi In Ug.ExPromotionPart
       Ceppi.Flag = "A"
+      Ceppi.DECLARE_NEW_FLAG = "N"
       Ceppi.AddEditMode = SHOW_ADD
    Next Ceppi
    
    ElseIf Ug.EX_WORKS_PRICE_TYPE = 4 Then
-   Dim Cepdi As CExPromotionDlcItem
-   For Each Cepdi In Ug.ExPromotionDlc
-      Cepdi.Flag = "A"
-      Cepdi.AddEditMode = SHOW_ADD
-   Next Cepdi
+      Dim Cepdi As CExPromotionDlcItem
+      For Each Cepdi In Ug.ExPromotionDlc
+         Cepdi.Flag = "A"
+         Cepdi.DECLARE_NEW_FLAG = "N"
+         Cepdi.AddEditMode = SHOW_ADD
+      Next Cepdi
    End If
    
    If AutoCommit Then

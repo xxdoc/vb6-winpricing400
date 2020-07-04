@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#2.0#0"; "THREED20.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{E684D8A3-716C-4E59-AA94-7144C04B0074}#1.1#0"; "GridEX20.ocx"
 Begin VB.Form frmAddEditExWorksPrice 
    BackColor       =   &H80000000&
@@ -8,50 +8,57 @@ Begin VB.Form frmAddEditExWorksPrice
    ClientHeight    =   9450
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   15480
+   ClientWidth     =   18945
    Icon            =   "frmAddEditExWorksPrice.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   9450
-   ScaleWidth      =   15480
+   ScaleWidth      =   18945
    StartUpPosition =   1  'CenterOwner
    Begin Threed.SSFrame SSFrame1 
       Height          =   9495
       Left            =   0
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   0
-      Width           =   15525
-      _ExtentX        =   27384
+      Width           =   19005
+      _ExtentX        =   33523
       _ExtentY        =   16748
       _Version        =   131073
       PictureBackgroundStyle=   2
+      Begin VB.ComboBox cboDeclareCount 
+         Height          =   315
+         Left            =   17160
+         Style           =   2  'Dropdown List
+         TabIndex        =   31
+         Top             =   3240
+         Width           =   1065
+      End
+      Begin VB.TextBox txtNote 
+         Height          =   1935
+         Left            =   7440
+         MultiLine       =   -1  'True
+         TabIndex        =   28
+         Top             =   1560
+         Width           =   9495
+      End
       Begin prjFarmManagement.uctlDate uctlFromActiveDate 
          Height          =   495
          Left            =   1860
-         TabIndex        =   4
+         TabIndex        =   3
          Top             =   2520
          Width           =   4335
          _extentx        =   7646
          _extenty        =   873
       End
-      Begin prjFarmManagement.uctlTextBox txtDesc 
-         Height          =   435
-         Left            =   1860
-         TabIndex        =   2
-         Top             =   1560
-         Width           =   4485
-         _extentx        =   13309
-         _extenty        =   767
-      End
       Begin Threed.SSPanel pnlHeader 
          Height          =   705
-         Left            =   0
-         TabIndex        =   18
+         Left            =   10
+         TabIndex        =   17
          Top             =   0
-         Width           =   15495
-         _ExtentX        =   27331
+         Width           =   18975
+         _ExtentX        =   33470
          _ExtentY        =   1244
          _Version        =   131073
          PictureBackgroundStyle=   2
@@ -68,10 +75,10 @@ Begin VB.Form frmAddEditExWorksPrice
       Begin GridEX20.GridEX GridEX1 
          Height          =   4455
          Left            =   120
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   4080
-         Width           =   15195
-         _ExtentX        =   26802
+         Width           =   18795
+         _ExtentX        =   33152
          _ExtentY        =   7858
          Version         =   "2.0"
          BoundColumnIndex=   ""
@@ -108,10 +115,10 @@ Begin VB.Form frmAddEditExWorksPrice
       Begin MSComctlLib.TabStrip TabStrip1 
          Height          =   555
          Left            =   150
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   3540
-         Width           =   15195
-         _ExtentX        =   26802
+         Width           =   18765
+         _ExtentX        =   33099
          _ExtentY        =   979
          _Version        =   393216
          BeginProperty Tabs {1EFB6598-857C-11D1-B16A-00C0F0283628} 
@@ -133,7 +140,7 @@ Begin VB.Form frmAddEditExWorksPrice
       Begin prjFarmManagement.uctlDate uctlToValidDate 
          Height          =   495
          Left            =   1860
-         TabIndex        =   5
+         TabIndex        =   4
          Top             =   3000
          Width           =   4335
          _extentx        =   7646
@@ -142,7 +149,7 @@ Begin VB.Form frmAddEditExWorksPrice
       Begin prjFarmManagement.uctlDate uctlDocumentDate 
          Height          =   495
          Left            =   1860
-         TabIndex        =   3
+         TabIndex        =   2
          Top             =   2040
          Width           =   4335
          _extentx        =   7646
@@ -150,38 +157,44 @@ Begin VB.Form frmAddEditExWorksPrice
       End
       Begin prjFarmManagement.uctlTextBox txtPartNo 
          Height          =   435
-         Left            =   9120
-         TabIndex        =   13
+         Left            =   12480
+         TabIndex        =   12
          Top             =   1020
          Width           =   4485
          _extentx        =   13309
          _extenty        =   767
       End
-      Begin VB.Label lblPartNo 
+      Begin prjFarmManagement.uctlTextBox txtDesc 
+         Height          =   435
+         Left            =   1860
+         TabIndex        =   30
+         Top             =   1560
+         Width           =   4335
+         _extentx        =   7646
+         _extenty        =   767
+      End
+      Begin VB.Label lblDeclareCount 
+         Caption         =   "Label1"
+         Height          =   435
+         Left            =   17160
+         TabIndex        =   32
+         Top             =   3000
+         Width           =   1695
+      End
+      Begin VB.Label lblDesc 
          Alignment       =   1  'Right Justify
          Caption         =   "Label1"
          Height          =   435
-         Left            =   7320
-         TabIndex        =   24
-         Top             =   1080
-         Width           =   1695
+         Left            =   60
+         TabIndex        =   29
+         Top             =   1680
+         Width           =   1725
       End
-      Begin Threed.SSCommand cmdClear 
+      Begin Threed.SSCommand cmdVerify 
          Height          =   525
-         Left            =   13800
-         TabIndex        =   15
-         Top             =   1600
-         Width           =   1575
-         _ExtentX        =   2778
-         _ExtentY        =   926
-         _Version        =   131073
-         ButtonStyle     =   3
-      End
-      Begin Threed.SSCommand cmdSearch 
-         Height          =   525
-         Left            =   13800
-         TabIndex        =   14
-         Top             =   1020
+         Left            =   8400
+         TabIndex        =   27
+         Top             =   8670
          Width           =   1575
          _ExtentX        =   2778
          _ExtentY        =   926
@@ -190,12 +203,84 @@ Begin VB.Form frmAddEditExWorksPrice
          MouseIcon       =   "frmAddEditExWorksPrice.frx":2F36
          ButtonStyle     =   3
       End
+      Begin Threed.SSCommand cmdApproved 
+         Height          =   525
+         Left            =   10080
+         TabIndex        =   26
+         Top             =   8670
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         MousePointer    =   99
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":3250
+         ButtonStyle     =   3
+      End
+      Begin Threed.SSCommand cmdPrint 
+         Height          =   525
+         Left            =   13920
+         TabIndex        =   25
+         Top             =   8670
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         MousePointer    =   99
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":356A
+         ButtonStyle     =   3
+      End
+      Begin Threed.SSCommand cmdApprove 
+         Height          =   525
+         Left            =   12240
+         TabIndex        =   24
+         Top             =   8670
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         MousePointer    =   99
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":3884
+         ButtonStyle     =   3
+      End
+      Begin VB.Label lblPartNo 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Label1"
+         Height          =   435
+         Left            =   10680
+         TabIndex        =   23
+         Top             =   1080
+         Width           =   1695
+      End
+      Begin Threed.SSCommand cmdClear 
+         Height          =   525
+         Left            =   17160
+         TabIndex        =   14
+         Top             =   1680
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         ButtonStyle     =   3
+      End
+      Begin Threed.SSCommand cmdSearch 
+         Height          =   525
+         Left            =   17160
+         TabIndex        =   13
+         Top             =   1020
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   926
+         _Version        =   131073
+         MousePointer    =   99
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":3B9E
+         ButtonStyle     =   3
+      End
       Begin VB.Label lblDocumentDate 
          Alignment       =   1  'Right Justify
          Caption         =   "Label1"
          Height          =   435
          Left            =   240
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   2160
          Width           =   1575
       End
@@ -204,7 +289,7 @@ Begin VB.Form frmAddEditExWorksPrice
          Caption         =   "Label1"
          Height          =   435
          Left            =   0
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   3120
          Width           =   1815
       End
@@ -213,7 +298,7 @@ Begin VB.Form frmAddEditExWorksPrice
          Caption         =   "Label1"
          Height          =   435
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   2640
          Width           =   1695
       End
@@ -227,39 +312,39 @@ Begin VB.Form frmAddEditExWorksPrice
          _ExtentY        =   714
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditExWorksPrice.frx":3250
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":3EB8
          ButtonStyle     =   3
       End
       Begin Threed.SSCommand cmdDelete 
          Height          =   525
          Left            =   3420
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   8670
          Width           =   1575
          _ExtentX        =   2778
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditExWorksPrice.frx":356A
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":41D2
          ButtonStyle     =   3
       End
       Begin Threed.SSCommand cmdAdd 
          Height          =   525
          Left            =   150
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   8670
          Width           =   1575
          _ExtentX        =   2778
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditExWorksPrice.frx":3884
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":44EC
          ButtonStyle     =   3
       End
       Begin Threed.SSCommand cmdEdit 
          Height          =   525
          Left            =   1770
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   8670
          Width           =   1605
          _ExtentX        =   2831
@@ -270,22 +355,21 @@ Begin VB.Form frmAddEditExWorksPrice
       Begin Threed.SSCheck chkMarket 
          Height          =   345
          Left            =   5760
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   1080
          Width           =   1605
          _ExtentX        =   2831
          _ExtentY        =   609
          _Version        =   131073
-         Caption         =   "SSCheck1"
+         Caption         =   "chkMarket"
          TripleState     =   -1  'True
       End
-      Begin VB.Label lblDesc 
-         Alignment       =   1  'Right Justify
+      Begin VB.Label lblNote 
          Caption         =   "Label1"
          Height          =   435
-         Left            =   120
-         TabIndex        =   20
-         Top             =   1680
+         Left            =   7440
+         TabIndex        =   19
+         Top             =   1080
          Width           =   1695
       End
       Begin VB.Label lblPackageNo 
@@ -293,15 +377,15 @@ Begin VB.Form frmAddEditExWorksPrice
          Caption         =   "Label1"
          Height          =   435
          Left            =   60
-         TabIndex        =   19
+         TabIndex        =   18
          Top             =   1170
          Width           =   1725
       End
       Begin Threed.SSCommand cmdExit 
          Cancel          =   -1  'True
          Height          =   525
-         Left            =   13635
-         TabIndex        =   12
+         Left            =   17235
+         TabIndex        =   11
          Top             =   8670
          Width           =   1605
          _ExtentX        =   2831
@@ -311,15 +395,15 @@ Begin VB.Form frmAddEditExWorksPrice
       End
       Begin Threed.SSCommand cmdOK 
          Height          =   525
-         Left            =   11985
-         TabIndex        =   11
+         Left            =   15600
+         TabIndex        =   10
          Top             =   8670
          Width           =   1605
          _ExtentX        =   2831
          _ExtentY        =   926
          _Version        =   131073
          MousePointer    =   99
-         MouseIcon       =   "frmAddEditExWorksPrice.frx":3B9E
+         MouseIcon       =   "frmAddEditExWorksPrice.frx":4806
          ButtonStyle     =   3
       End
    End
@@ -340,8 +424,9 @@ Private m_ExDeliveryCostItem As Collection
 Private m_ExPromotionPartItem As Collection
 Private m_ExPromotionDlcItem As Collection
 Public Area As Long
+Public canShowGP As Boolean
 
-Public ID As Long
+Public id As Long
 Public OKClick As Boolean
 Public ShowMode As SHOW_MODE_TYPE
 Public HeaderText As String
@@ -385,6 +470,7 @@ lMenuChosen = oMenu.Popup("สินค้า BAG", "-", "สินค้า BULK")
       Set frmAddEditExWorksPriceItem.TempCollection = m_ExWorksPrice.ExWorksPriceItem
       Set frmAddEditExWorksPriceItem.m_ExWorkPricesItem = m_ExWorkPricesItem
       frmAddEditExWorksPriceItem.SocCode = txtPackageNo.Text
+      frmAddEditExWorksPriceItem.canShowGP = canShowGP
       frmAddEditExWorksPriceItem.ShowMode = SHOW_ADD
       Load frmAddEditExWorksPriceItem
       frmAddEditExWorksPriceItem.Show 1
@@ -438,18 +524,18 @@ lMenuChosen = oMenu.Popup("ค่าขนส่งสินค้า BAG", "-", "ค่าขนส่งสินค้า BULK", "-",
       End If
    End If
 ElseIf Area = 3 Then
-  lMenuChosen = oMenu.Popup("ราคาโปรโมชั่นสินค้า BAG", "-", "ราคาโปรโมชั่นสินค้า BULK")
+  lMenuChosen = oMenu.Popup("ราคาส่วนลดสินค้า BAG", "-", "ราคาส่วนลดสินค้า BULK")
    If lMenuChosen = 0 Then
       Exit Sub
    End If
    OKClick = False
    If TabStrip1.SelectedItem.Index = 1 Then
     If lMenuChosen = 1 Then
-      frmAddEditExPromotionPartItem.HeaderText = MapText("ราคาโปรโมชั่นสินค้า BAG")
+      frmAddEditExPromotionPartItem.HeaderText = MapText("ราคาส่วนลดสินค้า BAG")
       frmAddEditExPromotionPartItem.PartType = 10
       frmAddEditExPromotionPartItem.ProductType = 1
     ElseIf lMenuChosen = 3 Then
-      frmAddEditExPromotionPartItem.HeaderText = MapText("ราคาโปรโมชั่นสินค้า BULK")
+      frmAddEditExPromotionPartItem.HeaderText = MapText("ราคาส่วนลดสินค้า BULK")
       frmAddEditExPromotionPartItem.PartType = 21
       frmAddEditExPromotionPartItem.ProductType = 2
     End If
@@ -505,11 +591,222 @@ ElseIf Area = 4 Then
          GridEX1.Rebind
       End If
    End If
+ElseIf Area = 5 Then
+  lMenuChosen = oMenu.Popup("ราคาส่วนลดพิเศษสินค้า BAG", "-", "ราคาส่วนลดพิเศษสินค้า BULK")
+   If lMenuChosen = 0 Then
+      Exit Sub
+   End If
+   OKClick = False
+   If TabStrip1.SelectedItem.Index = 1 Then
+    If lMenuChosen = 1 Then
+      frmAddEditExPromotionPartItem.HeaderText = MapText("ราคาส่วนลดพิเศษสินค้า BAG")
+      frmAddEditExPromotionPartItem.PartType = 10
+      frmAddEditExPromotionPartItem.ProductType = 1
+    ElseIf lMenuChosen = 3 Then
+      frmAddEditExPromotionPartItem.HeaderText = MapText("ราคาส่วนลดพิเศษสินค้า BULK")
+      frmAddEditExPromotionPartItem.PartType = 21
+      frmAddEditExPromotionPartItem.ProductType = 2
+    End If
+      Set frmAddEditExPromotionPartItem.ParentForm = Me
+      Set frmAddEditExPromotionPartItem.TempCollection = m_ExWorksPrice.ExPromotionPart
+      Set frmAddEditExPromotionPartItem.m_ExPromotionPartItem = m_ExPromotionPartItem
+      frmAddEditExPromotionPartItem.SocCode = txtPackageNo.Text
+      frmAddEditExPromotionPartItem.ShowMode = SHOW_ADD
+      Load frmAddEditExPromotionPartItem
+      frmAddEditExPromotionPartItem.Show 1
+   
+      OKClick = frmAddEditExPromotionPartItem.OKClick
+   
+      Unload frmAddEditExPromotionPartItem
+      Set frmAddEditExPromotionPartItem = Nothing
+   
+      If OKClick Then
+         GridEX1.ItemCount = CountItem(m_ExWorksPrice.ExPromotionPart)
+         GridEX1.Rebind
+      End If
+   End If
 End If
    
    If OKClick Then
       m_HasModify = True
    End If
+End Sub
+
+Private Sub cmdApprove_Click()
+Dim oMenu As cPopupMenu
+Dim TempUserName As String
+Dim lMenuChosen As Long
+Dim TempStr As String
+
+   If m_HasModify Or ((Not m_HasModify) And (ShowMode = SHOW_ADD)) Then
+      glbErrorLog.LocalErrorMsg = "กรุณาทำการบันทึกข้อมูลให้เรียบร้อยก่อน"
+      glbErrorLog.ShowUserError
+      Exit Sub
+   End If
+
+   Set oMenu = New cPopupMenu
+   lMenuChosen = oMenu.Popup("ตรวจสอบ ราคา", "-", "อนุมัติ ราคา ")
+   If lMenuChosen = 0 Then
+      Exit Sub
+   End If
+
+'ตรวจสอบสิทธิ์
+If lMenuChosen = 1 Then 'ตรวจสอบสิทธิ์
+   If Area = 1 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_EX-WORKS-PRICE_VERIFY"
+      frmVerifyAccRight.AccDesc = "สามารถตรวจสอบราคาประกาศสินค้าหน้าโรงงานได้"
+   ElseIf Area = 2 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_DELIVERY-COST_VERIFY"
+      frmVerifyAccRight.AccDesc = "สามารถตรวจสอบราคาค่าขนส่งได้"
+   ElseIf Area = 3 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_PROMOTION-PART_VERIFY"
+      frmVerifyAccRight.AccDesc = "สามารถตรวจสอบส่วนลดราคาประกาศสินค้าได้"
+   ElseIf Area = 4 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_PROMOTION-DELIVERY_VERIFY"
+      frmVerifyAccRight.AccDesc = "สามารถตรวจสอบราคาส่วนลดค่าขนส่งได้"
+   ElseIf Area = 5 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_PROMOTION-PART-EXTRA_VERIFY"
+      frmVerifyAccRight.AccDesc = "สามารถตรวจสอบส่วนลดพิเศษราคาประกาศสินค้าได้"
+   End If
+ElseIf lMenuChosen = 3 Then 'อนุมัติ
+   If Area = 1 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_EX-WORKS-PRICE_APPROVE"
+      frmVerifyAccRight.AccDesc = "สามารถอนุมัติราคาประกาศสินค้าหน้าโรงงานได้"
+   ElseIf Area = 2 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_DELIVERY-COST_APPROVE"
+      frmVerifyAccRight.AccDesc = "สามารถอนุมัติราคาค่าขนส่งได้"
+   ElseIf Area = 3 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_PROMOTION-PART_APPROVE"
+      frmVerifyAccRight.AccDesc = "สามารถอนุมัติส่วนลดราคาประกาศสินค้าได้"
+   ElseIf Area = 4 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_PROMOTION-DELIVERY_APPROVE"
+      frmVerifyAccRight.AccDesc = "สามารถอนุมัติราคาโปรโมชั่นค่าขนส่งได้"
+   ElseIf Area = 5 Then
+      frmVerifyAccRight.AccName = "PACKAGE-CENTER_PROMOTION-PART-EXTRA_APPROVE"
+      frmVerifyAccRight.AccDesc = "สามารถอนุมัติส่วนลดพิเศษราคาประกาศสินค้าได้"
+   End If
+End If
+Load frmVerifyAccRight
+frmVerifyAccRight.Show 1
+
+   If frmVerifyAccRight.GrantRight Then
+      TempUserName = frmVerifyAccRight.UserName
+      Unload frmVerifyAccRight
+      Set frmVerifyAccRight = Nothing
+      
+      m_ExWorksPrice.EX_WORKS_PRICE_ID = id
+      
+      Dim tempEWPI As CExWorksPriceItem
+      Dim tempEDCI As CExDeliveryCostItem
+      Dim tempEPPI As CExPromotionPartItem
+      Dim TempEPDI As CExPromotionDlcItem
+      Dim CountUpdate As Long
+      Dim SumCU As Long
+      Dim CountEdit As Long
+      Dim DeclareCount As Long
+      
+      DeclareCount = LoadDeclareCount(m_ExWorksPrice.EX_WORKS_PRICE_ID, Area)
+         If Area = 1 Then
+            For Each tempEWPI In m_ExWorksPrice.ExWorksPriceItem
+               If tempEWPI.LAST_EDIT_FLAG = "Y" Then
+                     If lMenuChosen = 1 Then
+                        tempEWPI.VERIFY_FLAG = "Y"
+                        tempEWPI.VERIFY_NAME = TempUserName
+                        TempStr = "ตรวจสอบเอกสาร"
+                     ElseIf lMenuChosen = 3 Then
+                        tempEWPI.APPROVED_FLAG = "Y"
+                        tempEWPI.APPROVED_NAME = TempUserName
+                        tempEWPI.LAST_EDIT_FLAG = "N" 'เมื่อสั่งอนุมัติแล้ว ให้เปลี่ยนสถานะการ update เอกสาร
+                        tempEWPI.DECLARE_COUNT = DeclareCount + 1
+                        TempStr = "อนุมัติเอกสาร"
+                     End If
+                  CountUpdate = 0
+                  Call tempEWPI.UpdateApprovedFlag(lMenuChosen, CountUpdate)
+                 SumCU = SumCU + CountUpdate
+                 CountEdit = CountEdit + 1
+               End If
+            Next tempEWPI
+         ElseIf Area = 2 Then
+            For Each tempEDCI In m_ExWorksPrice.ExDeliveryCost
+               If tempEDCI.LAST_EDIT_FLAG = "Y" Then
+                     If lMenuChosen = 1 Then
+                        tempEDCI.VERIFY_FLAG = "Y"
+                        tempEDCI.VERIFY_NAME = TempUserName
+                        TempStr = "ตรวจสอบเอกสาร"
+                     ElseIf lMenuChosen = 3 Then
+                        tempEDCI.APPROVED_FLAG = "Y"
+                        tempEDCI.APPROVED_NAME = TempUserName
+                        tempEDCI.LAST_EDIT_FLAG = "N" 'เมื่อสั่งอนุมัติแล้ว ให้เปลี่ยนสถานะการ update เอกสาร
+                        tempEDCI.DECLARE_COUNT = DeclareCount + 1
+                        TempStr = "อนุมัติเอกสาร"
+                     End If
+                  CountUpdate = 0
+                  Call tempEDCI.UpdateApprovedFlag(lMenuChosen, CountUpdate)
+                 SumCU = SumCU + CountUpdate
+                 CountEdit = CountEdit + 1
+               End If
+            Next tempEDCI
+         ElseIf Area = 3 Or Area = 5 Then
+            For Each tempEPPI In m_ExWorksPrice.ExPromotionPart
+               If tempEPPI.LAST_EDIT_FLAG = "Y" Then
+                    If lMenuChosen = 1 Then
+                        tempEPPI.VERIFY_FLAG = "Y"
+                        tempEPPI.VERIFY_NAME = TempUserName
+                        TempStr = "ตรวจสอบเอกสาร"
+                     ElseIf lMenuChosen = 3 Then
+                        tempEPPI.APPROVED_FLAG = "Y"
+                        tempEPPI.APPROVED_NAME = TempUserName
+                        tempEPPI.LAST_EDIT_FLAG = "N" 'เมื่อสั่งอนุมัติแล้ว ให้เปลี่ยนสถานะการ update เอกสาร
+                        tempEPPI.DECLARE_COUNT = DeclareCount + 1
+                        TempStr = "อนุมัติเอกสาร"
+                     End If
+                  CountUpdate = 0
+                  Call tempEPPI.UpdateApprovedFlag(lMenuChosen, CountUpdate)
+                 SumCU = SumCU + CountUpdate
+                 CountEdit = CountEdit + 1
+               End If
+            Next tempEPPI
+         ElseIf Area = 4 Then
+            For Each TempEPDI In m_ExWorksPrice.ExPromotionDlc
+               If TempEPDI.LAST_EDIT_FLAG = "Y" Then
+                    If lMenuChosen = 1 Then
+                        TempEPDI.VERIFY_FLAG = "Y"
+                        TempEPDI.VERIFY_NAME = TempUserName
+                        TempStr = "ตรวจสอบเอกสาร"
+                     ElseIf lMenuChosen = 3 Then
+                        TempEPDI.APPROVED_FLAG = "Y"
+                        TempEPDI.APPROVED_NAME = TempUserName
+                        TempEPDI.LAST_EDIT_FLAG = "N" 'เมื่อสั่งอนุมัติแล้ว ให้เปลี่ยนสถานะการ update เอกสาร
+                        TempEPDI.DECLARE_COUNT = DeclareCount + 1
+                        TempStr = "อนุมัติเอกสาร"
+                     End If
+                  CountUpdate = 0
+                  Call TempEPDI.UpdateApprovedFlag(lMenuChosen, CountUpdate)
+                 SumCU = SumCU + CountUpdate
+                 CountEdit = CountEdit + 1
+               End If
+            Next TempEPDI
+          End If
+      glbErrorLog.LocalErrorMsg = TempStr & "สำเร็จ " & SumCU & " รายการ จากทั้งหมด " & CountEdit & " รายการ"
+      glbErrorLog.ShowUserError
+   Else
+      Unload frmVerifyAccRight
+      Set frmVerifyAccRight = Nothing
+      Exit Sub
+   End If
+   Call LoadDeclareCountList(cboDeclareCount, , id, Area)
+   Call cmdSearch_Click
+End Sub
+
+Private Sub cmdApproved_Click()
+   If m_HasModify Or ((Not m_HasModify) And (ShowMode = SHOW_ADD)) Then
+      glbErrorLog.LocalErrorMsg = "กรุณาทำการบันทึกข้อมูลให้เรียบร้อยก่อน"
+      glbErrorLog.ShowUserError
+      Exit Sub
+   End If
+   
+   Call CONDITION(3)
+   Call QueryData(True)
 End Sub
 
 Private Sub cmdAuto_Click()
@@ -524,6 +821,8 @@ Dim No As String
            No = "PP" & No
          ElseIf Area = 4 Then
            No = "PD" & No
+         ElseIf Area = 5 Then
+           No = "PPE" & No
          End If
          txtPackageNo.Text = No
    End If
@@ -543,6 +842,9 @@ Private Sub cmdDelete_Click()
 Dim ID1 As Long
 Dim ID2 As Long
 
+   ID2 = GridEX1.Value(2)
+   ID1 = GridEX1.Value(1)
+   
    If Not VerifyGrid(GridEX1.Value(1)) Then
       Exit Sub
    End If
@@ -551,11 +853,16 @@ Dim ID2 As Long
       Exit Sub
    End If
    
-   ID2 = GridEX1.Value(2)
-   ID1 = GridEX1.Value(1)
+
    
    If Area = 1 Then
-      If TabStrip1.SelectedItem.Index = 1 Then
+         If TabStrip1.SelectedItem.Index = 1 Then
+            If m_ExWorksPrice.ExWorksPriceItem.Item(ID2).APPROVED_FLAG = "Y" Then
+               glbErrorLog.LocalErrorMsg = MapText("ข้อมูล") & " " & GridEX1.Value(3) & " " & MapText("ได้รับการอนุมัติแล้วไม่สามารถลบได้")
+               glbErrorLog.ShowUserError
+               Exit Sub
+            End If
+   
          If ID1 <= 0 Then
             m_ExWorksPrice.ExWorksPriceItem.Remove (ID2)
          Else
@@ -580,7 +887,7 @@ Dim ID2 As Long
       m_HasModify = True
       End If
    
-   ElseIf Area = 3 Then
+   ElseIf Area = 3 Or Area = 5 Then
       If TabStrip1.SelectedItem.Index = 1 Then
          If ID1 <= 0 Then
             m_ExWorksPrice.ExPromotionPart.Remove (ID2)
@@ -592,6 +899,18 @@ Dim ID2 As Long
       GridEX1.Rebind
       m_HasModify = True
       End If
+   ElseIf Area = 4 Then
+      If TabStrip1.SelectedItem.Index = 1 Then
+         If ID1 <= 0 Then
+            m_ExWorksPrice.ExPromotionDlc.Remove (ID2)
+         Else
+            m_ExWorksPrice.ExPromotionDlc.Item(ID2).Flag = "D"
+         End If
+
+      GridEX1.ItemCount = CountItem(m_ExWorksPrice.ExPromotionDlc)
+      GridEX1.Rebind
+      m_HasModify = True
+      End If
    End If
 
 End Sub
@@ -600,7 +919,7 @@ Private Sub cmdEdit_Click()
 Dim IsOK As Boolean
 Dim ItemCount As Long
 Dim IsCanLock As Boolean
-Dim ID As Long
+Dim id As Long
 Dim ID2 As Long
 Dim OKClick As Boolean
 Dim lMenuChosen As Long
@@ -612,8 +931,15 @@ Dim RateType_Cus As Long
       Exit Sub
    End If
 
-   ID = Val(GridEX1.Value(2))
+   id = Val(GridEX1.Value(2))
    ID2 = Val(GridEX1.Value(1))
+   
+'   If m_ExWorksPrice.ExWorksPriceItem.Item(ID).APPROVED_FLAG = "Y" Then
+'      glbErrorLog.LocalErrorMsg = MapText("ข้อมูล") & " " & GridEX1.Value(3) & " " & MapText("ได้รับการอนุมัติแล้วไม่สามารถแก้ไขได้")
+'      glbErrorLog.ShowUserError
+'      Exit Sub
+'   End If
+   
    lMenuChosen = Val(GridEX1.Value(6))
    OKClick = False
    
@@ -621,7 +947,7 @@ Dim RateType_Cus As Long
      If Area = 1 Then
       Set frmAddEditExWorksPriceItem.ParentForm = Me
       frmAddEditExWorksPriceItem.SocPartType = 3
-      frmAddEditExWorksPriceItem.ID = ID
+      frmAddEditExWorksPriceItem.id = id
       frmAddEditExWorksPriceItem.SocCode = txtPackageNo.Text
       Set frmAddEditExWorksPriceItem.TempCollection = m_ExWorksPrice.ExWorksPriceItem
       Set frmAddEditExWorksPriceItem.m_ExWorkPricesItem = m_ExWorkPricesItem
@@ -630,6 +956,7 @@ Dim RateType_Cus As Long
       If lMenuChosen = 3 Then
       frmAddEditExWorksPriceItem.HeaderText = MapText("แก้ไขสินค้า/วัตถุดิบ")
       End If
+      frmAddEditExWorksPriceItem.canShowGP = canShowGP
       frmAddEditExWorksPriceItem.ShowMode = SHOW_EDIT
       Load frmAddEditExWorksPriceItem
       frmAddEditExWorksPriceItem.Show 1
@@ -641,14 +968,14 @@ Dim RateType_Cus As Long
 
       If OKClick Then
          GridEX1.ItemCount = CountItem(m_ExWorksPrice.ExWorksPriceItem)
-         GridEX1.Rebind
+        GridEX1.Rebind
       End If
       ElseIf Area = 2 Then
 
          RateType = Val(GridEX1.Value(14))
          RateType_Cus = Val(GridEX1.Value(15))
          Set frmAddEditExDeliveryCostItem.ParentForm = Me
-         frmAddEditExDeliveryCostItem.ID = ID
+         frmAddEditExDeliveryCostItem.id = id
          frmAddEditExDeliveryCostItem.PackageCode = txtPackageNo.Text
          If RateType = 1 Then
             frmAddEditExDeliveryCostItem.HeaderText = MapText("แก้ไขค่าขนส่งสินค้า BAG")
@@ -680,14 +1007,17 @@ Dim RateType_Cus As Long
             GridEX1.ItemCount = CountItem(m_ExWorksPrice.ExDeliveryCost)
             GridEX1.Rebind
          End If
-      ElseIf Area = 3 Then
+      ElseIf Area = 3 Or Area = 5 Then
          RateType = Val(GridEX1.Value(9))
-'         RateType_Cus = Val(GridEX1.Value(15))
          Set frmAddEditExPromotionPartItem.ParentForm = Me
-         frmAddEditExPromotionPartItem.ID = ID
+         frmAddEditExPromotionPartItem.id = id
          frmAddEditExPromotionPartItem.SocCode = txtPackageNo.Text
          If RateType = 1 Then
-            frmAddEditExPromotionPartItem.HeaderText = MapText("แก้ไขราคาโปรโมชั่นสินค้า BAG")
+            If Area = 3 Then
+               frmAddEditExPromotionPartItem.HeaderText = MapText("แก้ไขราคาส่วนลดสินค้า BAG")
+            ElseIf Area = 5 Then
+               frmAddEditExPromotionPartItem.HeaderText = MapText("แก้ไขราคาส่วนลดพิเศษสินค้า BAG")
+            End If
             frmAddEditExWorksPriceItem.PartType = 10
             frmAddEditExWorksPriceItem.ProductType = 1
           ElseIf RateType = 2 Then
@@ -715,14 +1045,14 @@ Dim RateType_Cus As Long
    ElseIf Area = 4 Then
          RateType_Cus = Val(GridEX1.Value(10))
          Set frmAddEditExPromotionDlcItem.ParentForm = Me
-         frmAddEditExPromotionDlcItem.ID = ID
+         frmAddEditExPromotionDlcItem.id = id
          frmAddEditExPromotionDlcItem.PackageCode = txtPackageNo.Text
          If RateType = 1 Then
-            frmAddEditExPromotionDlcItem.HeaderText = MapText("แก้ไขโปรโมชั่นค่าขนส่งสินค้า BAG")
+            frmAddEditExPromotionDlcItem.HeaderText = MapText("แก้ไขส่วนลดค่าขนส่งสินค้า BAG")
             frmAddEditExPromotionDlcItem.UnitType = 1
             frmAddEditExPromotionDlcItem.UnitTypeCus = 1
           ElseIf RateType = 2 Then
-            frmAddEditExPromotionDlcItem.HeaderText = MapText("แก้ไขโปรโมชั่นค่าขนส่งสินค้า BULK")
+            frmAddEditExPromotionDlcItem.HeaderText = MapText("แก้ไขส่วนลดค่าขนส่งสินค้า BULK")
             frmAddEditExPromotionDlcItem.UnitType = 2
             frmAddEditExPromotionDlcItem.UnitTypeCus = 2
           End If
@@ -752,13 +1082,33 @@ Dim RateType_Cus As Long
 End Sub
 
 Private Sub cmdOK_Click()
-   If Not SaveData Then
+Dim oMenu As cPopupMenu
+Dim lMenuChosen  As Long
+
+   Set oMenu = New cPopupMenu
+   lMenuChosen = oMenu.Popup("บันทึก", "-", "บันทึกและออกจากหน้าจอ")
+   If lMenuChosen = 0 Then
       Exit Sub
    End If
    
-'   Call LoadAccessRight(Nothing, glbAccessRight, glbUser.GROUP_ID)
-   OKClick = True
-   Unload Me
+   If lMenuChosen = 1 Then
+      If Not SaveData Then
+         Exit Sub
+      End If
+      
+      ShowMode = SHOW_EDIT
+      id = m_ExWorksPrice.EX_WORKS_PRICE_ID
+      m_ExWorksPrice.QueryFlag = 1
+      QueryData (True)
+      m_HasModify = False
+   ElseIf lMenuChosen = 3 Then
+      If Not SaveData Then
+         Exit Sub
+      End If
+      
+      OKClick = True
+      Unload Me
+   End If
 End Sub
 
 Private Sub InitGrid1()
@@ -790,62 +1140,107 @@ If Area = 1 Then
    Col.Caption = MapText("ชื่อสินค้า/บริการ")
 
    Set Col = GridEX1.Columns.add '5
-   Col.Width = 1800
+   Col.Width = 1000
    Col.Caption = MapText("ราคา/ถุง")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '6
-   Col.Width = 1500
-   Col.Caption = MapText("ประเภทสินค้า")
+   Col.Width = 900
+   Col.Caption = MapText("ประเภท")
+   Col.TextAlignment = jgexAlignCenter
+   
+   
+   If canShowGP Then
+      Set Col = GridEX1.Columns.add '7
+      Col.Width = 800
+      Col.Caption = MapText("% GP")
+     Col.TextAlignment = jgexAlignRight
+   End If
+   
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '10
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้ตรวจสอบ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '11
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้อนุมัติ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '12
+   Col.Width = 1200
+   Col.Caption = MapText("แก้ไขราคา")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '13
+   Col.Width = 1200
+   Col.Caption = MapText("ประกาศใหม่")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '14
+   Col.Width = 1000
+   Col.Caption = MapText("ครั้งที่")
+   Col.TextAlignment = jgexAlignCenter
 ElseIf Area = 2 Then
    Set Col = GridEX1.Columns.add '1
-   Col.Width = 1200
+   Col.Width = 1000
    Col.Caption = MapText("รหัสลูกค้า")
    
    Set Col = GridEX1.Columns.add '2
-   Col.Width = 3500
+   Col.Width = 2700
    Col.Caption = MapText("ชื่อลูกค้า")
    
    Set Col = GridEX1.Columns.add '3
-   Col.Width = 1300
-   Col.Caption = MapText("รหัสสถานที")
+   Col.Width = 1200
+   Col.Caption = MapText("รหัสสถานที่")
 
    Set Col = GridEX1.Columns.add '4
-   Col.Width = 3500
+   Col.Width = 2800
    Col.Caption = MapText("สถานที่จัดส่ง")
 
    Set Col = GridEX1.Columns.add '5
-   Col.Width = 1600
-   Col.Caption = MapText("ค่าขนส่ง/หน่วย")
+   Col.Width = 1100
+   Col.Caption = MapText("ค่าขนส่ง/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '6
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '7
-   Col.Width = 1300
-   Col.Caption = MapText("น้ำหนัก(กก.)")
+   Col.Width = 850
+   Col.Caption = MapText("นน.(กก.)")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '8
-   Col.Width = 2000
-   Col.Caption = MapText("ประเภทรถขนส่ง")
+   Col.Width = 1000
+   Col.Caption = MapText("ประเภท")
+   Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '9
-   Col.Width = 1600
-   Col.Caption = MapText("คิดลูกค้า/หน่วย")
+   Col.Width = 1100
+   Col.Caption = MapText("คิดลูกค้า/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '10
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '11
-   Col.Width = 1300
-   Col.Caption = MapText("น้ำหนัก(กก.)")
+   Col.Width = 850
+   Col.Caption = MapText("นน.(กก.)")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '12
@@ -855,9 +1250,44 @@ ElseIf Area = 2 Then
    Set Col = GridEX1.Columns.add '13
    Col.Width = 0
    Col.Caption = MapText("rate_type_cus")
-ElseIf Area = 3 Then
-   Set Col = GridEX1.Columns.add '1
+   
+   Set Col = GridEX1.Columns.add '8
    Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '14
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้ตรวจสอบ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '15
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้อนุมัติ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '16
+   Col.Width = 1200
+   Col.Caption = MapText("แก้ไขราคา")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '17
+   Col.Width = 1200
+   Col.Caption = MapText("ประกาศใหม่")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '18
+   Col.Width = 1000
+   Col.Caption = MapText("ครั้งที่")
+   Col.TextAlignment = jgexAlignCenter
+ElseIf Area = 3 Or Area = 5 Then
+   Set Col = GridEX1.Columns.add '1
+   Col.Width = 1000
    Col.Caption = MapText("รหัสลูกค้า")
    
    Set Col = GridEX1.Columns.add '2
@@ -873,57 +1303,123 @@ ElseIf Area = 3 Then
    Col.Caption = MapText("ชื่อสินค้า")
 
    Set Col = GridEX1.Columns.add '5
-   Col.Width = 1600
-   Col.Caption = MapText("ส่วนลด/หน่วย")
+   Col.Width = 900
+   Col.Caption = MapText("ส่วนลด/")
    Col.TextAlignment = jgexAlignRight
    
    Set Col = GridEX1.Columns.add '6
-   Col.Width = 800
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
    Set Col = GridEX1.Columns.add '7
    Col.Width = 0
    Col.Caption = MapText("rate_type_cus")
+   
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้ตรวจสอบ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '9
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้อนุมัติ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '10
+   Col.Width = 1200
+   Col.Caption = MapText("แก้ไขราคา")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '11
+   Col.Width = 1200
+   Col.Caption = MapText("ประกาศใหม่")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '12
+   Col.Width = 1000
+   Col.Caption = MapText("ครั้งที่")
+   Col.TextAlignment = jgexAlignCenter
 ElseIf Area = 4 Then
-   Set Col = GridEX1.Columns.add '1
+   Set Col = GridEX1.Columns.add '3
    Col.Width = 1200
    Col.Caption = MapText("รหัสลูกค้า")
    
-   Set Col = GridEX1.Columns.add '2
+   Set Col = GridEX1.Columns.add '4
    Col.Width = 3500
    Col.Caption = MapText("ชื่อลูกค้า")
    
-   Set Col = GridEX1.Columns.add '3
+   Set Col = GridEX1.Columns.add '5
    Col.Width = 1300
-   Col.Caption = MapText("รหัสสถานที")
+   Col.Caption = MapText("รหัสสถานที่")
 
-   Set Col = GridEX1.Columns.add '4
+   Set Col = GridEX1.Columns.add '6
    Col.Width = 3500
    Col.Caption = MapText("สถานที่จัดส่ง")
    
-   Set Col = GridEX1.Columns.add '5
-   Col.Width = 1600
-   Col.Caption = MapText("ส่วนลด/หน่วย")
+   Set Col = GridEX1.Columns.add '7
+   Col.Width = 900
+   Col.Caption = MapText("ส่วนลด/")
    Col.TextAlignment = jgexAlignRight
    
-   Set Col = GridEX1.Columns.add '6
-   Col.Width = 800
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 600
    Col.Caption = MapText("หน่วย")
    Col.TextAlignment = jgexAlignCenter
    
-   Set Col = GridEX1.Columns.add '7
+   Set Col = GridEX1.Columns.add '9
    Col.Width = 1300
    Col.Caption = MapText("น้ำหนัก(กก.)")
    Col.TextAlignment = jgexAlignRight
    
-   Set Col = GridEX1.Columns.add '8
+   Set Col = GridEX1.Columns.add '10
    Col.Width = 0
    Col.Caption = MapText("rate_type")
    
+   Set Col = GridEX1.Columns.add '8
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้สร้าง")
+   Col.TextAlignment = jgexAlignCenter
+   
    Set Col = GridEX1.Columns.add '9
-   Col.Width = 0
-   Col.Caption = MapText("rate_type_cus")
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้แก้ไข")
+   Col.TextAlignment = jgexAlignCenter
+   
+    Set Col = GridEX1.Columns.add '11
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้ตรวจสอบ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '12
+   Col.Width = 1200
+   Col.Caption = MapText("ผู้อนุมัติ")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '13
+   Col.Width = 1200
+   Col.Caption = MapText("แก้ไขราคา")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '14
+   Col.Width = 1200
+   Col.Caption = MapText("ประกาศใหม่")
+   Col.TextAlignment = jgexAlignCenter
+   
+   Set Col = GridEX1.Columns.add '12
+   Col.Width = 1000
+   Col.Caption = MapText("ครั้งที่")
+   Col.TextAlignment = jgexAlignCenter
 End If
 End Sub
 
@@ -935,9 +1431,10 @@ Dim ItemCount As Long
    If Flag Then
       Call EnableForm(Me, False)
       
-      m_ExWorksPrice.EX_WORKS_PRICE_ID = ID
+      m_ExWorksPrice.EX_WORKS_PRICE_ID = id
       m_ExWorksPrice.QueryFlag = 1
-      If Area = 1 Or Area = 3 Then
+      
+      If Area = 1 Or Area = 3 Or Area = 5 Then
          m_ExWorksPrice.PART_NO_SEARCH = txtPartNo.Text
       ElseIf Area = 2 Or Area = 4 Then
          m_ExWorksPrice.CUSTOMER_CODE_SEARCH = txtPartNo.Text
@@ -954,10 +1451,21 @@ Dim ItemCount As Long
 
       txtPackageNo.Text = m_ExWorksPrice.EX_WORKS_PRICE_CODE
       txtDesc.Text = m_ExWorksPrice.EX_WORKS_PRICE_DESC
+      txtNote.Text = m_ExWorksPrice.EX_WORKS_PRICE_NOTE
       chkMarket.Value = FlagToCheck(m_ExWorksPrice.EX_WORKS_PRICE_LEVEL)
       uctlDocumentDate.ShowDate = m_ExWorksPrice.EX_WORKS_PRICE_DATE
       uctlFromActiveDate.ShowDate = m_ExWorksPrice.FROM_ACTIVE_DATE
       uctlToValidDate.ShowDate = m_ExWorksPrice.TO_VALID_DATE
+      
+      If Area = 1 Then
+         Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 2, -1, -1, "")
+      ElseIf Area = 2 Then
+         Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 4, -1, -1, "")
+      ElseIf Area = 3 Or Area = 5 Then
+         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 2, -1, -1, "", Area)
+      ElseIf Area = 4 Then
+         Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 3, -1, -1, "")
+      End If
       
       TabStrip1_Click
    End If
@@ -972,9 +1480,112 @@ Dim ItemCount As Long
 End Sub
 
 Private Sub cmdSearch_Click()
+   If m_HasModify Or ((Not m_HasModify) And (ShowMode = SHOW_ADD)) Then
+      glbErrorLog.LocalErrorMsg = "กรุณาทำการบันทึกข้อมูลให้เรียบร้อยก่อน"
+      glbErrorLog.ShowUserError
+      Exit Sub
+   End If
+   
+     Call CONDITION(-1)
      Call QueryData(True)
 End Sub
 
+Private Sub cmdVerify_Click()
+   If m_HasModify Or ((Not m_HasModify) And (ShowMode = SHOW_ADD)) Then
+      glbErrorLog.LocalErrorMsg = "กรุณาทำการบันทึกข้อมูลให้เรียบร้อยก่อน"
+      glbErrorLog.ShowUserError
+      Exit Sub
+   End If
+   Call CONDITION(1)
+   Call QueryData(True)
+End Sub
+Function CONDITION(Con As Long)
+m_ExWorksPrice.APPROVED_FLAG = ""
+m_ExWorksPrice.VERIFY_FLAG = ""
+m_ExWorksPrice.LAST_EDIT_FLAG = ""
+m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+m_ExWorksPrice.DECLARE_COUNT = Val(cboDeclareCount.Text)
+
+If Con = 1 Then 'รายการรอการตรวจสอบ
+   If Area = 1 Then
+       m_ExWorksPrice.APPROVED_FLAG = ""
+       m_ExWorksPrice.VERIFY_FLAG = "N"
+       m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+   ElseIf Area = 2 Then
+       m_ExWorksPrice.APPROVED_FLAG = ""
+       m_ExWorksPrice.VERIFY_FLAG = "N"
+       m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+    ElseIf Area = 3 Or Area = 5 Then
+       m_ExWorksPrice.APPROVED_FLAG = ""
+       m_ExWorksPrice.VERIFY_FLAG = "N"
+       m_ExWorksPrice.LAST_EDIT_FLAG = "Y"
+       m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+   ElseIf Area = 4 Then
+       m_ExWorksPrice.APPROVED_FLAG = ""
+       m_ExWorksPrice.VERIFY_FLAG = "N"
+       m_ExWorksPrice.LAST_EDIT_FLAG = "Y"
+       m_ExWorksPrice.DECLARE_NEW_FLAG = ""
+    End If
+ElseIf Con = 3 Then 'รายการรอการอนุมัติ
+   If Area = 1 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y"
+      m_ExWorksPrice.APPROVED_FLAG = "N"
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"
+   ElseIf Area = 2 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y"
+      m_ExWorksPrice.APPROVED_FLAG = "N"
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"
+   ElseIf Area = 3 Or Area = 5 Then
+      m_ExWorksPrice.APPROVED_FLAG = "N"
+      m_ExWorksPrice.VERIFY_FLAG = "Y"
+      m_ExWorksPrice.LAST_EDIT_FLAG = "Y"
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"
+   ElseIf Area = 4 Then
+      m_ExWorksPrice.APPROVED_FLAG = "N"
+      m_ExWorksPrice.VERIFY_FLAG = "Y"
+      m_ExWorksPrice.LAST_EDIT_FLAG = "Y"
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"
+   End If
+ElseIf Con = 5 Then 'รายการประกาศใหม่ที่อนุมัติแล้ว
+     If Area = 1 Then
+         m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+         m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+         m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+      ElseIf Area = 2 Then
+         m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+         m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+         m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+      ElseIf Area = 3 Or Area = 5 Then
+         m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+         m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+         m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+      ElseIf Area = 4 Then
+         m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+         m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+         m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+      End If
+ElseIf Con = 7 Then 'รายการประกาศทั้งหมดที่อนุมัติแล้ว
+   If Area = 1 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+      m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+   ElseIf Area = 2 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+      m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+   ElseIf Area = 3 Or Area = 5 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+      m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+   ElseIf Area = 4 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+      m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+   End If
+ElseIf Con = 11 Then 'ใบประกาศราคาอาหารสัตว์ในเครือมิตรภาพ
+   If Area = 1 Then
+      m_ExWorksPrice.VERIFY_FLAG = "Y" 'ต้องผ่านการตรวจสอบมาก่อน
+      m_ExWorksPrice.APPROVED_FLAG = "Y" 'ต้องเคยอนุมัติมาก่อน
+      m_ExWorksPrice.DECLARE_NEW_FLAG = "Y"  'ต้องเป็นเอกสารที่ประกาศใหม่เท่านั้น
+   End If
+End If
+End Function
 Private Sub Form_Unload(Cancel As Integer)
   Set m_ExWorkPricesItem = Nothing
   Set m_ExDeliveryCostItem = Nothing
@@ -989,141 +1600,220 @@ End Sub
 Private Sub GridEX1_UnboundReadData(ByVal RowIndex As Long, ByVal Bookmark As Variant, ByVal Values As GridEX20.JSRowData)
 On Error GoTo ErrorHandler
 Dim RealIndex As Long
-
+Dim I As Long
+I = 0
    glbErrorLog.ModuleName = Me.NAME
    glbErrorLog.RoutineName = "UnboundReadData"
 
    If TabStrip1.SelectedItem.Index = 1 Then
-   If Area = 1 Then
-      If m_ExWorksPrice.ExWorksPriceItem Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EWPI As CExWorksPriceItem
-      If m_ExWorksPrice.ExWorksPriceItem.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EWPI = GetItem(m_ExWorksPrice.ExWorksPriceItem, RowIndex, RealIndex)
-      If EWPI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EWPI.EX_WORKS_PRICE_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EWPI.PART_NO
-      Values(4) = EWPI.PART_DESC
-      Values(5) = FormatNumber(EWPI.PACKAGE_RATE)
-      If EWPI.PART_TYPE = 10 Then
-         Values(6) = "BAG"
-      ElseIf EWPI.PART_TYPE = 21 Then
-         Values(6) = "BULK"
-      Else
-         Values(6) = ""
-      End If
-   ElseIf Area = 2 Then
-      If m_ExWorksPrice.ExDeliveryCost Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EDCI As CExDeliveryCostItem
-      If m_ExWorksPrice.ExDeliveryCost.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EDCI = GetItem(m_ExWorksPrice.ExDeliveryCost, RowIndex, RealIndex)
-      If EDCI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EDCI.EX_DELIVERY_COST_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EDCI.CUSTOMER_CODE
-      Values(4) = EDCI.CUSTOMER_NAME
-      Values(5) = EDCI.DELIVERY_CUS_ITEM_CODE
-      Values(6) = EDCI.DELIVERY_CUS_ITEM_NAME
+      If Area = 1 Then
+         If m_ExWorksPrice.ExWorksPriceItem Is Nothing Then
+            Exit Sub
+         End If
       
-      Values(7) = FormatNumber(EDCI.RATE_DELIVERY, 3)
-      Values(8) = DeliveryUnit(EDCI.RATE_TYPE)
-      Values(9) = FormatNumber(EDCI.WEIGHT_PER_PACK, 0)
-      Values(10) = DeliveryType(EDCI.RATE_TYPE)
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
       
-      Values(11) = FormatNumber(EDCI.RATE_CUSTOMER, 3)
-      Values(12) = DeliveryUnit(EDCI.RATE_TYPE_CUS)
-      Values(13) = FormatNumber(EDCI.WEIGHT_PER_PACK_CUS, 0)
+         Dim EWPI As CExWorksPriceItem
+         If m_ExWorksPrice.ExWorksPriceItem.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EWPI = GetItem(m_ExWorksPrice.ExWorksPriceItem, RowIndex, RealIndex)
+         If EWPI Is Nothing Then
+            Exit Sub
+         End If
       
+         Values(1) = EWPI.EX_WORKS_PRICE_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EWPI.PART_NO
+         Values(4) = EWPI.PART_DESC
+         Values(5) = FormatNumber(EWPI.PACKAGE_RATE)
+         Values(6) = ConvertPerPack(EWPI.PART_TYPE)
+         I = 7
+         If canShowGP Then
+            Values(I) = FormatNumber(EWPI.GP_VALUE)
+            I = I + 1
+          End If
+          
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EWPI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(I) = Temp_LTK.USER_NAME
+         Else
+            Values(I) = ""
+         End If
+         
+         I = I + 1
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EWPI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(I) = Temp_LTK.USER_NAME
+         Else
+            Values(I) = ""
+         End If
+         
+         I = I + 1
+         Values(I) = EWPI.VERIFY_NAME
+         I = I + 1
+         Values(I) = EWPI.APPROVED_NAME
+         I = I + 1
+         Values(I) = EWPI.LAST_EDIT_FLAG
+         I = I + 1
+         Values(I) = EWPI.DECLARE_NEW_FLAG
+         I = I + 1
+         Values(I) = IIf(EWPI.DECLARE_COUNT <= 0, "", FormatNumber(EWPI.DECLARE_COUNT, 0))
+      ElseIf Area = 2 Then
+         If m_ExWorksPrice.ExDeliveryCost Is Nothing Then
+            Exit Sub
+         End If
       
-      Values(14) = EDCI.RATE_TYPE
-      Values(15) = EDCI.RATE_TYPE_CUS
-   ElseIf Area = 3 Then
-      If m_ExWorksPrice.ExPromotionPart Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EPPI    As CExPromotionPartItem
-      If m_ExWorksPrice.ExPromotionPart.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EPPI = GetItem(m_ExWorksPrice.ExPromotionPart, RowIndex, RealIndex)
-      If EPPI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EPPI.EX_PROMOTION_PART_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EPPI.CUSTOMER_CODE
-      Values(4) = EPPI.CUSTOMER_NAME
-      Values(5) = EPPI.PART_NO
-      Values(6) = EPPI.PART_DESC
-      Values(7) = FormatNumber(EPPI.DISCOUNT_AMOUNT)
-      If EPPI.PART_TYPE = 10 Then
-         Values(8) = "BAG"
-      ElseIf EPPI.PART_TYPE = 21 Then
-         Values(8) = "BULK"
-      Else
-         Values(8) = ""
-      End If
-      Values(9) = EPPI.RATE_TYPE
-   ElseIf Area = 4 Then
-      If m_ExWorksPrice.ExPromotionDlc Is Nothing Then
-         Exit Sub
-      End If
-   
-      If RowIndex <= 0 Then
-         Exit Sub
-      End If
-   
-      Dim EPDI As CExPromotionDlcItem
-      If m_ExWorksPrice.ExPromotionDlc.Count <= 0 Then
-         Exit Sub
-      End If
-      Set EPDI = GetItem(m_ExWorksPrice.ExPromotionDlc, RowIndex, RealIndex)
-      If EPDI Is Nothing Then
-         Exit Sub
-      End If
-   
-      Values(1) = EPDI.EX_PROMOTION_DLC_ITEM_ID
-      Values(2) = RealIndex
-      Values(3) = EPDI.CUSTOMER_CODE
-      Values(4) = EPDI.CUSTOMER_NAME
-      Values(5) = EPDI.DELIVERY_CUS_ITEM_CODE
-      Values(6) = EPDI.DELIVERY_CUS_ITEM_NAME
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
       
-      Values(7) = FormatNumber(EPDI.DISCOUNT_AMOUNT, 3)
-      Values(8) = DeliveryUnit(EPDI.RATE_TYPE_CUS)
-      Values(9) = FormatNumber(EPDI.WEIGHT_PER_PACK_CUS, 0)
-      Values(10) = EPDI.RATE_TYPE_CUS
-   End If
+         Dim EDCI As CExDeliveryCostItem
+         If m_ExWorksPrice.ExDeliveryCost.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EDCI = GetItem(m_ExWorksPrice.ExDeliveryCost, RowIndex, RealIndex)
+         If EDCI Is Nothing Then
+            Exit Sub
+         End If
+      
+         Values(1) = EDCI.EX_DELIVERY_COST_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EDCI.CUSTOMER_CODE
+         Values(4) = EDCI.CUSTOMER_NAME
+         Values(5) = EDCI.DELIVERY_CUS_ITEM_CODE
+         Values(6) = EDCI.DELIVERY_CUS_ITEM_NAME
+         
+         Values(7) = FormatNumber(EDCI.RATE_DELIVERY, 3)
+         Values(8) = DeliveryUnit(EDCI.RATE_TYPE)
+         Values(9) = FormatNumber(EDCI.WEIGHT_PER_PACK, 0)
+         Values(10) = DeliveryType(EDCI.RATE_TYPE)
+         
+         Values(11) = FormatNumber(EDCI.RATE_CUSTOMER, 3)
+         Values(12) = DeliveryUnit(EDCI.RATE_TYPE_CUS)
+         Values(13) = FormatNumber(EDCI.WEIGHT_PER_PACK_CUS, 0)
+         
+         
+         Values(14) = EDCI.RATE_TYPE
+         Values(15) = EDCI.RATE_TYPE_CUS
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EDCI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(16) = Temp_LTK.USER_NAME
+         Else
+            Values(16) = ""
+         End If
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EDCI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(17) = Temp_LTK.USER_NAME
+         Else
+            Values(17) = ""
+         End If
+         
+         Values(18) = EDCI.VERIFY_NAME
+         Values(19) = EDCI.APPROVED_NAME
+         Values(20) = EDCI.LAST_EDIT_FLAG
+         Values(21) = EDCI.DECLARE_NEW_FLAG
+         Values(22) = IIf(EDCI.DECLARE_COUNT <= 0, "", FormatNumber(EDCI.DECLARE_COUNT, 0))
+      ElseIf Area = 3 Or Area = 5 Then
+         If m_ExWorksPrice.ExPromotionPart Is Nothing Then
+            Exit Sub
+         End If
+      
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
+      
+         Dim EPPI    As CExPromotionPartItem
+         If m_ExWorksPrice.ExPromotionPart.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EPPI = GetItem(m_ExWorksPrice.ExPromotionPart, RowIndex, RealIndex)
+         If EPPI Is Nothing Then
+            Exit Sub
+         End If
+      
+         Values(1) = EPPI.EX_PROMOTION_PART_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EPPI.CUSTOMER_CODE
+         Values(4) = EPPI.CUSTOMER_NAME
+         Values(5) = EPPI.PART_NO
+         Values(6) = EPPI.PART_DESC
+         Values(7) = FormatNumber(EPPI.DISCOUNT_AMOUNT)
+         Values(8) = ConvertPerPack(EPPI.PART_TYPE)
+         Values(9) = EPPI.RATE_TYPE
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPPI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(10) = Temp_LTK.USER_NAME
+         Else
+            Values(10) = ""
+         End If
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPPI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(11) = Temp_LTK.USER_NAME
+         Else
+            Values(11) = ""
+         End If
+         
+         Values(12) = EPPI.VERIFY_NAME
+         Values(13) = EPPI.APPROVED_NAME
+         Values(14) = EPPI.LAST_EDIT_FLAG
+         Values(15) = EPPI.DECLARE_NEW_FLAG
+         Values(16) = IIf(EPPI.DECLARE_COUNT <= 0, "", FormatNumber(EPPI.DECLARE_COUNT, 0))
+      ElseIf Area = 4 Then
+         If m_ExWorksPrice.ExPromotionDlc Is Nothing Then
+            Exit Sub
+         End If
+      
+         If RowIndex <= 0 Then
+            Exit Sub
+         End If
+      
+         Dim EPDI As CExPromotionDlcItem
+         If m_ExWorksPrice.ExPromotionDlc.Count <= 0 Then
+            Exit Sub
+         End If
+         Set EPDI = GetItem(m_ExWorksPrice.ExPromotionDlc, RowIndex, RealIndex)
+         If EPDI Is Nothing Then
+            Exit Sub
+         End If
+      
+         Values(1) = EPDI.EX_PROMOTION_DLC_ITEM_ID
+         Values(2) = RealIndex
+         Values(3) = EPDI.CUSTOMER_CODE
+         Values(4) = EPDI.CUSTOMER_NAME
+         Values(5) = EPDI.DELIVERY_CUS_ITEM_CODE
+         Values(6) = EPDI.DELIVERY_CUS_ITEM_NAME
+         
+         Values(7) = FormatNumber(EPDI.DISCOUNT_AMOUNT, 3)
+         Values(8) = DeliveryUnit(EPDI.RATE_TYPE_CUS)
+         Values(9) = FormatNumber(EPDI.WEIGHT_PER_PACK_CUS, 0)
+         Values(10) = EPDI.RATE_TYPE_CUS
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPDI.CREATE_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(11) = Temp_LTK.USER_NAME
+         Else
+            Values(11) = ""
+         End If
+         
+         Set Temp_LTK = GetObject("CLoginTracking", m_LoginTracking, Trim(EPDI.MODIFY_BY), False)
+         If Not Temp_LTK Is Nothing Then
+            Values(12) = Temp_LTK.USER_NAME
+         Else
+            Values(12) = ""
+         End If
+         Values(13) = EPDI.VERIFY_NAME
+         Values(14) = EPDI.APPROVED_NAME
+         Values(15) = EPDI.LAST_EDIT_FLAG
+         Values(16) = EPDI.DECLARE_NEW_FLAG
+         Values(17) = IIf(EPDI.DECLARE_COUNT <= 0, "", FormatNumber(EPDI.DECLARE_COUNT, 0))
+      End If
    End If
    
    Exit Sub
@@ -1152,7 +1842,7 @@ Dim IsOK As Boolean
       Exit Function
    End If
    
-   If Not CheckUniqueNs(WORKS_PRICE_ACTIVE_DATE_UNIQUE, Trim(DateToStringInt(uctlFromActiveDate.ShowDate)), ID, , 4, , Area) Then
+   If Not CheckUniqueNs(WORKS_PRICE_ACTIVE_DATE_UNIQUE, Trim(DateToStringInt(uctlFromActiveDate.ShowDate)), id, , 4, , Area) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล ช่วงวันทีมีผล ") & " " & uctlFromActiveDate.ShowDate & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Call EnableForm(Me, True)
@@ -1161,7 +1851,7 @@ Dim IsOK As Boolean
       Exit Function
    End If
    
-   If Not CheckUniqueNs(WORKS_PRICE_ACTIVE_DATE_UNIQUE, Trim(DateToStringInt(uctlToValidDate.ShowDate)), ID, , 4, , Area) Then
+   If Not CheckUniqueNs(WORKS_PRICE_ACTIVE_DATE_UNIQUE, Trim(DateToStringInt(uctlToValidDate.ShowDate)), id, , 4, , Area) Then
       glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล ช่วงวันทีสิ้นสุด ") & " " & uctlToValidDate.ShowDate & " " & MapText("อยู่ในระบบแล้ว")
       glbErrorLog.ShowUserError
       Call EnableForm(Me, True)
@@ -1170,35 +1860,22 @@ Dim IsOK As Boolean
       Exit Function
    End If
    
-'   If Not CheckUniqueNs(SOCNO_UNIQUE, txtDesc.Text, ID) Then
-'      glbErrorLog.LocalErrorMsg = MapText("มีข้อมูล") & " " & txtDesc.Text & " " & MapText("อยู่ในระบบแล้ว")
-'      glbErrorLog.ShowUserError
-'      Exit Function
-'   End If
-   
    If Not m_HasModify Then
       SaveData = True
       Exit Function
    End If
    
-   m_ExWorksPrice.EX_WORKS_PRICE_ID = ID
+   m_ExWorksPrice.EX_WORKS_PRICE_ID = id
    m_ExWorksPrice.AddEditMode = ShowMode
    m_ExWorksPrice.EX_WORKS_PRICE_LEVEL = Check2Flag(chkMarket.Value)
    m_ExWorksPrice.EX_WORKS_PRICE_CODE = txtPackageNo.Text
    m_ExWorksPrice.EX_WORKS_PRICE_DESC = txtDesc.Text
+   m_ExWorksPrice.EX_WORKS_PRICE_NOTE = txtNote.Text
    m_ExWorksPrice.EX_WORKS_PRICE_STATUS = 0
    m_ExWorksPrice.EX_WORKS_PRICE_DATE = uctlDocumentDate.ShowDate
    m_ExWorksPrice.FROM_ACTIVE_DATE = uctlFromActiveDate.ShowDate
    m_ExWorksPrice.TO_VALID_DATE = uctlToValidDate.ShowDate
-   If Area = 1 Then
-      m_ExWorksPrice.EX_WORKS_PRICE_TYPE = 1 'ค่าสินค้า
-   ElseIf Area = 2 Then
-      m_ExWorksPrice.EX_WORKS_PRICE_TYPE = 2 'ค่าขนส่ง
-   ElseIf Area = 3 Then
-      m_ExWorksPrice.EX_WORKS_PRICE_TYPE = 3 'โปรโมชั่น สินค้า
-   ElseIf Area = 4 Then
-      m_ExWorksPrice.EX_WORKS_PRICE_TYPE = 4 'โปรโมชั่น ขนส่ง
-   End If
+   m_ExWorksPrice.EX_WORKS_PRICE_TYPE = Area ' 1 'ค่าสินค้า,2 'ค่าขนส่ง,3 ส่วนลดสินค้า,4 'ส่วนลด ขนส่ง,5 ส่วนลดพิเศษสินค้า
    
    Call EnableForm(Me, False)
    If Not glbDaily.AddEditExWorksPrice(m_ExWorksPrice, IsOK, True, glbErrorLog) Then
@@ -1227,22 +1904,17 @@ Private Sub Form_Activate()
       uctlFromActiveDate.ShowDate = Now
       uctlToValidDate.ShowDate = Now
       
+     If VerifyAccessRight("PACKAGE-CENTER_EX-WORKS-PRICE_SHOW-GP", "แสดงเปอร์เซ็นต์ GP", 2) Then
+         canShowGP = True
+     End If
+   
       If ShowMode = SHOW_EDIT Then
          Call QueryData(True)
+         Call LoadDeclareCountList(cboDeclareCount, , id, Area)
       ElseIf ShowMode = SHOW_ADD Then
-         ID = 0
+         id = 0
       End If
-      
-      If Area = 1 Then
-         Call LoadExWorksPriceItem(Nothing, m_ExWorkPricesItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 2, -1, -1)
-      ElseIf Area = 2 Then
-         Call LoadExDeliveryCusItem(Nothing, m_ExDeliveryCostItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 4, -1, -1)
-      ElseIf Area = 3 Then
-         Call LoadExPromotionPartItem(Nothing, m_ExPromotionPartItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 2, -1, -1)
-      ElseIf Area = 4 Then
-         Call LoadExPromotionDlcItem(Nothing, m_ExPromotionDlcItem, m_ExWorksPrice.EX_WORKS_PRICE_ID, 3, -1, -1)
-      End If
-      
+
       m_HasModify = False
    End If
 End Sub
@@ -1292,18 +1964,21 @@ Private Sub InitFormLayout()
    
    Call InitNormalLabel(lblPackageNo, MapText("แพคเกจ"))
    Call InitNormalLabel(lblDesc, MapText("ข้อมูลแพคเกจ"))
+   Call InitNormalLabel(lblNote, MapText("หมายเหตุ"))
    Call InitNormalLabel(lblDocumentDate, MapText("วันที่ประกาศ"))
    Call InitNormalLabel(lblFromActiveDate, MapText("วันที่มีผล"))
    Call InitNormalLabel(lblToValidDate, MapText("วันที่สิ้นสุด"))
-   If Area = 1 Or Area = 3 Then
+   If Area = 1 Or Area = 3 Or Area = 5 Then
       Call InitNormalLabel(lblPartNo, MapText("รหัสสินค้า"))
    ElseIf Area = 2 Or Area = 4 Then
       Call InitNormalLabel(lblPartNo, MapText("รหัสลูกค้า"))
    End If
+   Call InitNormalLabel(lblDeclareCount, MapText("ประกาศครั้งที่"))
+   Call InitCombo(cboDeclareCount)
    
-   'lblPartNo
+   'lblDeclareCount
    
-   Call InitCheckBox(chkMarket, "เปิดใช้งาน")
+   Call InitCheckBox(chkMarket, "แสดง")
    If ShowMode = SHOW_ADD Then
       chkMarket.Value = ssCBChecked
    End If
@@ -1312,7 +1987,7 @@ Private Sub InitFormLayout()
    Call txtPackageNo.SetTextLenType(TEXT_STRING, glbSetting.CODE_TYPE)
    Call txtPartNo.SetTextLenType(TEXT_STRING, glbSetting.DESC_TYPE)
    
-   If Area = 1 Or Area = 3 Then
+   If Area = 1 Or Area = 3 Or Area = 5 Then
       Call txtPartNo.SetKeySearch("PART_NO")
    ElseIf Area = 2 Or Area = 4 Then
       Call txtPartNo.SetKeySearch("CUSTOMER_CODE")
@@ -1327,20 +2002,28 @@ Private Sub InitFormLayout()
    cmdAuto.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdExit.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdOK.Picture = LoadPicture(glbParameterObj.NormalButton1)
+   cmdApprove.Picture = LoadPicture(glbParameterObj.NormalButton1)
+   cmdPrint.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdAdd.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdEdit.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdDelete.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdSearch.Picture = LoadPicture(glbParameterObj.NormalButton1)
    cmdClear.Picture = LoadPicture(glbParameterObj.NormalButton1)
+   cmdVerify.Picture = LoadPicture(glbParameterObj.NormalButton1)
+   cmdApproved.Picture = LoadPicture(glbParameterObj.NormalButton1)
    
    Call InitMainButton(cmdAuto, MapText("A"))
    Call InitMainButton(cmdExit, MapText("ยกเลิก (ESC)"))
    Call InitMainButton(cmdOK, MapText("ตกลง (F2)"))
+   Call InitMainButton(cmdApprove, MapText("อื่นๆ"))
+   Call InitMainButton(cmdPrint, MapText("พิมพ์"))
    Call InitMainButton(cmdAdd, MapText("เพิ่ม (F7)"))
    Call InitMainButton(cmdEdit, MapText("แก้ไข (F3)"))
    Call InitMainButton(cmdDelete, MapText("ลบ (F6)"))
    Call InitMainButton(cmdSearch, MapText("ค้นหา (F5)"))
    Call InitMainButton(cmdClear, MapText("เคลียร์ (F4)"))
+   Call InitMainButton(cmdVerify, MapText("รอตรวจสอบ"))
+   Call InitMainButton(cmdApproved, MapText("รออนุมัติ"))
    
    TabStrip1.Font.Bold = True
    TabStrip1.Font.NAME = GLB_FONT
@@ -1383,6 +2066,119 @@ End Sub
 Private Sub txtLastName_Change()
    m_HasModify = True
 End Sub
+Private Sub cmdPrint_Click()
+Dim Report As CReportInterface
+Dim oMenu As cPopupMenu
+Dim lMenuChosen As Long
+Dim ReportKey As String
+Dim ReportFlag As Boolean
+Dim Rc As CReportConfig
+Dim iCount As Long
+Dim EditMode As SHOW_MODE_TYPE
+Dim ReportMode As Long
+
+   If m_HasModify Or ((Not m_HasModify) And (ShowMode = SHOW_ADD)) Then
+      glbErrorLog.LocalErrorMsg = "กรุณาทำการบันทึกข้อมูลให้เรียบร้อยก่อน"
+      glbErrorLog.ShowUserError
+      Exit Sub
+   End If
+
+   ReportMode = 1
+   
+   Set oMenu = New cPopupMenu
+   lMenuChosen = oMenu.Popup("รายการรอการตรวจสอบ", "-", "รายการรอการอนุมัติ", "-", "รายการประกาศใหม่ที่อนุมัติแล้ว", "-", "รายการประกาศทั้งหมดที่อนุมัติแล้ว", "-", "ปรับค่าหน้ากระดาษ", "-", "ใบประกาศราคาอาหารสัตว์ในเครือมิตรภาพ", "-", "ปรับค่าหน้ากระดาษ")
+   If lMenuChosen = 0 Then
+      Exit Sub
+   End If
+
+   Call EnableForm(Me, False)
+   Call CONDITION(lMenuChosen)
+    If lMenuChosen = 1 Or lMenuChosen = 3 Or lMenuChosen = 5 Or lMenuChosen = 7 Then
+         Call QueryData(True)
+         ReportKey = "CReportExWPAppr"
+         Set Report = New CReportExWPAppr
+         ReportFlag = True
+         Call Report.AddParam(1, "PREVIEW_TYPE")
+   ElseIf lMenuChosen = 11 Then
+         Call QueryData(True)
+         ReportKey = "CReportExWPDeclare"
+         Set Report = New CReportExWPDeclare
+         ReportFlag = True
+         Call Report.AddParam(1, "PREVIEW_TYPE")
+         Call Report.AddParam(Val(cboDeclareCount.Text), "DECLARE_COUNT")
+   End If
+      If Not Report Is Nothing Then
+         Call Report.AddParam(lMenuChosen, "DOCUMENT_TYPE")
+         If Area = 1 Then
+            Call Report.AddParam(m_ExWorksPrice.ExWorksPriceItem, "EX_WORK_PRICE_APPROVED")
+         ElseIf Area = 2 Then
+            Call Report.AddParam(m_ExWorksPrice.ExDeliveryCost, "EX_WORK_PRICE_APPROVED")
+         ElseIf Area = 3 Or Area = 5 Then
+            Call Report.AddParam(m_ExWorksPrice.ExPromotionPart, "EX_WORK_PRICE_APPROVED")
+         ElseIf Area = 4 Then
+            Call Report.AddParam(m_ExWorksPrice.ExPromotionDlc, "EX_WORK_PRICE_APPROVED")
+         End If
+         Call Report.AddParam(m_ExWorksPrice.EX_WORKS_PRICE_CODE, "DOCUMENT_NO")
+         Call Report.AddParam(m_ExWorksPrice.EX_WORKS_PRICE_DESC, "DOCUMENT_DESC")
+         Call Report.AddParam(m_ExWorksPrice.EX_WORKS_PRICE_NOTE, "DOCUMENT_NOTE")
+         Call Report.AddParam(m_ExWorksPrice.EX_WORKS_PRICE_DATE, "DOCUMENT_DATE")
+         Call Report.AddParam(m_ExWorksPrice.FROM_ACTIVE_DATE, "FROM_DATE")
+         Call Report.AddParam(m_ExWorksPrice.TO_VALID_DATE, "TO_DATE")
+         Call Report.AddParam(canShowGP, "CAN_SHOW_GP")
+         Call Report.AddParam(Area, "AREA")
+         Call Report.AddParam(lMenuChosen, "REPORT_TYPE")
+         Call Report.AddParam(ReportKey, "REPORT_KEY")
+      End If
+
+   If ReportFlag Then
+      frmReport.ClassName = ReportKey
+      Set frmReport.ReportObject = Report
+      
+      frmReport.HeaderText = pnlHeader.Caption
+      Load frmReport
+      frmReport.Show 1
+      
+      Unload frmReport
+      Set frmReport = Nothing
+      Set Report = Nothing
+   Else
+   If lMenuChosen = 9 Then
+      ReportKey = "CReportExWPAppr"
+      ReportMode = 1
+   ElseIf lMenuChosen = 13 Then
+      ReportKey = "CReportExWPDeclare"
+      ReportMode = 1
+   End If
+      
+      Set Rc = New CReportConfig
+      Rc.REPORT_KEY = ReportKey
+      Call Rc.QueryData(m_Rs, iCount)
+   
+      If Not m_Rs.EOF Then
+         Call Rc.PopulateFromRS(1, m_Rs)
+         frmReportConfig.ShowMode = SHOW_EDIT
+         frmReportConfig.id = Rc.REPORT_CONFIG_ID
+      Else
+         frmReportConfig.ShowMode = SHOW_ADD
+      End If
+   
+      frmReportConfig.ReportMode = ReportMode
+      frmReportConfig.ReportKey = ReportKey
+      frmReportConfig.HeaderText = HeaderText
+      Load frmReportConfig
+      frmReportConfig.Show 1
+      
+      Unload frmReportConfig
+      Set frmReportConfig = Nothing
+      Set Rc = Nothing
+   End If
+
+   Call EnableForm(Me, True)
+End Sub
+
+Private Sub SSCommand2_Click()
+
+End Sub
 
 Private Sub TabStrip1_Click()
    If TabStrip1.SelectedItem.Index = 1 Then
@@ -1393,7 +2189,7 @@ Private Sub TabStrip1_Click()
       ElseIf Area = 2 Then
          GridEX1.ItemCount = CountItem(m_ExWorksPrice.ExDeliveryCost)
          GridEX1.Rebind
-      ElseIf Area = 3 Then
+      ElseIf Area = 3 Or Area = 5 Then
          GridEX1.ItemCount = CountItem(m_ExWorksPrice.ExPromotionPart)
          GridEX1.Rebind
       ElseIf Area = 4 Then
@@ -1405,6 +2201,10 @@ Private Sub TabStrip1_Click()
    ElseIf TabStrip1.SelectedItem.Index = 4 Then
    ElseIf TabStrip1.SelectedItem.Index = 5 Then
    End If
+End Sub
+
+Private Sub txtNote_Change()
+   m_HasModify = True
 End Sub
 
 Private Sub txtPackageNo_Change()
